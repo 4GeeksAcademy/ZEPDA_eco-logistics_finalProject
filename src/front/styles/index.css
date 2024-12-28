@@ -1,3 +1,30 @@
 /* 
     General Styles used on every website (Don't Repeat Yourself)
 */
+.nav-item:hover{
+    color: #426B1F;
+}
+.btn{
+    background-color: #426B1F;
+    color:white;
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+.navbar-nav .nav-link {
+    margin-right: 50px; /* Espaciado horizontal entre los enlaces */
+  }
+  
+  .navbar-nav {
+    justify-content: flex-end; /* Alineación de los enlaces a la derecha */
+  }
+  
+  .navbar-logo img {
+    max-height: 80px; /* Ajusta según el tamaño deseado para el logo */
+  }
+
+  .navbar-nav .nav-link:hover {
+    color: #426B1F !important; /* Cambia el color al hacer hover */
+    transition: color 0.3s ease-in-out; /* Suaviza la transición del color */
+  }
+  
