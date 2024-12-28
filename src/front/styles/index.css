@@ -24,7 +24,24 @@
   }
 
   .navbar-nav .nav-link:hover {
-    color: #426B1F !important; /* Cambia el color al hacer hover */
-    transition: color 0.3s ease-in-out; /* Suaviza la transición del color */
+    color: #6ebe29 !important; /* Cambia el color al hacer hover */
+    
   }
+
+  .jumbotron-carousel {
+    height: 500px;  /* Establece la altura del jumbotron */
+    width: 100%;  /* Asegura que el jumbotron ocupe todo el ancho */
+    overflow: hidden;  /* Evita que se vea contenido fuera del contenedor */
+  }
+  
+  .carousel-inner {
+    height: 100%;  /* Asegura que las imágenes ocupen todo el alto del jumbotron */
+  }
+  
+  .carousel-item img {
+    width: 100%;
+    height: 100%;  /* Las imágenes deben llenar todo el espacio disponible */
+    object-fit:cover;  /* Asegura que las imágenes se ajusten sin deformarse */
+  }
+  
   
