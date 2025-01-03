@@ -24,6 +24,7 @@
 			"url": "http://github.com/nachovz"
 		}
 	],
+	
 	"license": "ISC",
 	"devDependencies": {
 		"@babel/cli": "^7.16.0",

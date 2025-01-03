@@ -30,9 +30,9 @@ export const Navbar = () => {
         </li>
       </ul>
       
-        <button className="btn" type="submit">Login</button>
       
     </div>
+        <button className="btn" type="submit">Login</button>
   </div>
 </nav>
 	</>

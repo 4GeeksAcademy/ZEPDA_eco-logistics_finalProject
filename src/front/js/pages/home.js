@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { Context } from "../store/appContext";
 import { JumbotronCarousel } from "../component/jumbocarousel";
 import "../../styles/home.css";
+import { NewsSection } from "../component/NewsSection";
 
 export const Home = () => {
 	const { store, actions } = useContext(Context);
@@ -29,6 +30,8 @@ export const Home = () => {
 			Sólo tienes que crear una cuenta en nuestra plataforma y empezar a disfrutar de los beneficios de ser eco-friendly.
 			</p>
 			<button className="btn">súmate al cambio</button>
+
+			<NewsSection/>
 
 		</div>
 		</>

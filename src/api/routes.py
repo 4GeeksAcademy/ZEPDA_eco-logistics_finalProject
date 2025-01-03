@@ -12,11 +12,16 @@ api = Blueprint('api', __name__)
 CORS(api)
 
 
-@api.route('/hello', methods=['POST', 'GET'])
-def handle_hello():
+@api.route('/news', methods=['GET'])
+def handle_news():
+    url = "https://newsapi.org/v2/everything?q=sostenibilidad+medioambiental&apiKey=66922d250edf41b0be44aae6d0911a11&language=es"
+    payload=()
+    headers=()
 
-    response_body = {
-        "message": "Hello! I'm a message that came from the backend, check the network tab on the google inspector and you will see the GET request"
-    }
+    response = requests.request("GET", url, headers=headers, data=payload)
+    data = response.json()
+    articles = data.get('articles', [])
 
-    return jsonify(response_body), 200
+    articles_list = [article for article in articles if article]
+
+    return jsonify(articles_list), 200
