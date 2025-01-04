@@ -35,7 +35,7 @@ export const Home = () => {
 			</p>
 			<button className="btn">súmate al cambio</button>
 
-			<NewsSection/>
+			
 
 			<div className="mt-4">
 
@@ -44,16 +44,20 @@ export const Home = () => {
 				para sus diferentes actividades, principalmente en los aspectos logísticos como el packaging de sus productos, 
 				transportes, materiales, gestión de residuos y/o digitalización de su negocio, centralizando en un solo sitio web 
 				todos los servicios disponibles y haciendo más facil los procesos de búsqueda y contratación. Si quieres formar 
-				parte de nuestras empresas colaboradoras <Link className="links" to={"/"}> <strong>únete a nosotros.</strong></Link></p>	
+				parte de nuestro equipo <Link className="links" to={"/"}> <strong>únete a nosotros como empresa colaboradora.</strong></Link></p>	
 
 			</div>
+			<p>Nuestros colaboradores:</p>
 			<div className="logos-container">
+				
             {logos.map((logo, index) => (
               <div className="logo-item" key={index}>
                 <img src={logo} alt={`logo-${index}`} className="logo-image" />
               </div>
             ))}
           </div>
+
+		  <NewsSection/>
 
 
 		</div>

@@ -20,13 +20,13 @@ export const Navbar = () => {
           <Link to={"/"} className="nav-link text-black" href="#">Empresas</Link>
         </li>
         <li className="nav-item dropdown">
-          <Link to={"/"} className="nav-link text-black" href="#" >
+          <Link to={"/quienes-somos"} className="nav-link text-black" href="#" >
             Quiénes somos
           </Link>
    
         </li>
         <li className="nav-item">
-          <Link to={"/"} className="nav-link text-black">Contacto</Link>
+          <Link to={"/contacto"} className="nav-link text-black">Contacto</Link>
         </li>
       </ul>
       

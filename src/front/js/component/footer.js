@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import zepdaImagotipo from "../../img/zepdaimagotipoz.png";
+import { Link } from "react-router-dom";
 
 export const Footer = () => (
 	<footer className="container footer d-flex mt-5 ">
@@ -11,7 +12,7 @@ export const Footer = () => (
 		</div>
 
 		<div className="text-end">
-			<p>Contacto</p>
+			<Link className="links" to="/contacto"><p>Contacto</p></Link>
 			<p>Quiénes somos</p>
 		</div>
 
