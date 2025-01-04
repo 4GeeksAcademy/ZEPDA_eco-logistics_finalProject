@@ -3,6 +3,10 @@ import { Context } from "../store/appContext";
 import { JumbotronCarousel } from "../component/jumbocarousel";
 import "../../styles/home.css";
 import { NewsSection } from "../component/NewsSection";
+import { Link } from "react-router-dom";
+import { importAllImages } from "../../utils/importAllImages";
+
+const logos = importAllImages(require.context("../../img/logos", false, /\.(png|jpe?g|svg|webp)$/));
 
 export const Home = () => {
 	const { store, actions } = useContext(Context);
@@ -32,6 +36,25 @@ export const Home = () => {
 			<button className="btn">súmate al cambio</button>
 
 			<NewsSection/>
+
+			<div className="mt-4">
+
+				<h1>Empresas colaboradoras</h1>
+			<p>Nuestra plataforma ofrece servicios para empresas que necesitan encontrar soluciones ecológicas y sostenibles 
+				para sus diferentes actividades, principalmente en los aspectos logísticos como el packaging de sus productos, 
+				transportes, materiales, gestión de residuos y/o digitalización de su negocio, centralizando en un solo sitio web 
+				todos los servicios disponibles y haciendo más facil los procesos de búsqueda y contratación. Si quieres formar 
+				parte de nuestras empresas colaboradoras <Link className="links" to={"/"}> <strong>únete a nosotros.</strong></Link></p>	
+
+			</div>
+			<div className="logos-container">
+            {logos.map((logo, index) => (
+              <div className="logo-item" key={index}>
+                <img src={logo} alt={`logo-${index}`} className="logo-image" />
+              </div>
+            ))}
+          </div>
+
 
 		</div>
 		</>

@@ -17,6 +17,14 @@ h1{
 
 }
 
+.links {
+  color: #426B1F; 
+}
+.links:hover{
+  color: #6ebe29;
+}
+  
+
 
 .navbar-nav .nav-link {
     margin-right: 50px; /* Espaciado horizontal entre los enlaces */
@@ -107,4 +115,38 @@ h1{
 .carouselnws-control-prev-icon,
 .carouselnws-control-next-icon {
   background-color: #2980b9;
+}
+
+footer{
+
+  border-top: solid 1px #000000;
+  
+}
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+
+
+.logos-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.logo-item {
+  flex: 1 1 30%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+}
+
+.logo-image {
+  max-width: 150px;
+  height: auto;
 }
