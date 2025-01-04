@@ -17,7 +17,7 @@ export const Navbar = () => {
           <Link to={"/"} className="nav-link text-black" aria-current="page" href="#">Servicios</Link>
         </li>
         <li className="nav-item">
-          <Link to={"/"} className="nav-link text-black" href="#">Empresas</Link>
+          <Link to={"/companies"} className="nav-link text-black" href="#">Empresas</Link>
         </li>
         <li className="nav-item dropdown">
           <Link to={"/"} className="nav-link text-black" href="#" >
