@@ -29,9 +29,9 @@ export const Home = () => {
 			podrás conocer el impacto positivo que generas al adquirir estos productos y servicios.
 			Sólo tienes que crear una cuenta en nuestra plataforma y empezar a disfrutar de los beneficios de ser eco-friendly.
 			</p>
-			<button className="btn">súmate al cambio</button>
+			{/* <button className="btn">súmate al cambio</button>
 
-			<NewsSection/>
+			<NewsSection/> */}
 
 		</div>
 		</>

@@ -19,9 +19,12 @@ def setup_commands(app):
     def insert_test_users(count):
         print("Creating test users")
         for x in range(1, int(count) + 1):
+            bpassword = bytes('12345', 'utf-8')
+            salt = bcrypt.gensalt(14)
+            hashed_password = bcrypt.hashpw(password=bpassword, salt=salt)
             user = User()
             user.email = "test_user" + str(x) + "@test.com"
-            user.password = "123456"
+            user.password = hashed_password.decode('utf-8')
             user.is_active = True
             db.session.add(user)
             db.session.commit()
