@@ -6,3 +6,39 @@
     transition: color 0.5s ease-in-out; 
     transition: background-color 0.5s ease-in-out; 
 }
+
+.company-carousel { 
+    display: flex; 
+    overflow: hidden; 
+    width: 100%; 
+    position: relative; 
+} 
+
+.company-carousel-inner { 
+    display: flex; 
+    transition: transform 0.5s ease; 
+} 
+
+.company-carousel-item { 
+    min-width: 100%; 
+    box-sizing: border-box; 
+} 
+
+.company-carousel-button { 
+    position: absolute; 
+    top: 50%; 
+    transform: translateY(-50%); 
+    background-color: rgba(0, 0, 0, 0.5); 
+    color: white; 
+    border: none; 
+    padding: 10px; 
+    cursor: pointer; 
+} 
+
+.company-carousel-button.left { 
+    left: 10px; 
+} 
+
+.company-carousel-button.right { 
+    right: 10px; 
+}

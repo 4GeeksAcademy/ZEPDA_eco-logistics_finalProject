@@ -5,11 +5,11 @@ export const CompanyCard = () => {
     return (
         <>
             <div className="col-4 p-3"> 
-                <div className="card"> 
-                    <div className="card-header border-0 bg-white"> 
+                <div className="card rounded-5"> 
+                    <div className="card-header border-0 bg-white rounded-5 rounded-bottom"> 
                         <img className="img-fluid rounded mx-auto d-block" src={naiteclogo} alt="NAITEC Logo" /> 
                     </div> 
-                    <div className="card-body bg-light pt-0"> 
+                    <div className="card-body bg-light pt-0 rounded-5 rounded-top rounded-top-0"> 
                         <div className="d-flex justify-content-between">
                             <div className="my-auto">
                                 <h5 className="card-title fw-bold m-0 pt-2 text-start">NAITEC</h5> 
