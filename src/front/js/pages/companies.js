@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { Context } from "../store/appContext";
-import { CompanyCard } from "../component/companyCard";
 import "../../styles/companies.css";
 import { CompanyCarousel } from "../component/companyCarousel";
 
