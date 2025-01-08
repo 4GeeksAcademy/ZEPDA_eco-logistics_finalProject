@@ -1,0 +1,8 @@
+.clickable {
+    cursor: pointer
+}
+.icon-hover:hover { 
+    color: green;
+    transition: color 0.5s ease-in-out; 
+    transition: background-color 0.5s ease-in-out; 
+}
