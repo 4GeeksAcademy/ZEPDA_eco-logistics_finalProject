@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Context } from "../store/appContext";
-import imagen from "../../img/zepda-web-img/Driving-Green-Email-Marketing-for-Eco-Friendly-Products-scaled-1-2.jpg";
+import imagen from "../../img/zepda-web-img/Driving-Green-Email-Marketing-for-Eco-Friendly-Products-scaled-1-2.webp";
 
 
 export const Contacto = () => {

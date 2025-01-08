@@ -48,20 +48,24 @@ h1{
   /* Carousel */
 
   .jumbotron-carousel {
-    height: 450px;  
-    width: 100%;  
-    overflow: hidden;  
-  }
-  
-  .carousel-inner {
-    height: 100%;  
-  }
-  
-  .carousel-item img {
+    height: 500px; /* Ajusta la altura según tus necesidades */
     width: 100%;
-    height: 100%;  
-    object-fit:cover;
-    object-position: bottom;  
+    overflow: hidden;
+  }
+  
+  .jumbotron-carousel .carousel-inner {
+    height: 100%;
+  }
+  
+  .jumbotron-carousel .carousel-item {
+    height: 100%;
+  }
+  
+  .jumbotron-carousel .carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
   }
   
 
