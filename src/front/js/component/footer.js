@@ -11,9 +11,10 @@ export const Footer = () => (
 			<h5>ZEPDA Eco-logistics © 2025 </h5>
 		</div>
 
-		<div className="text-end">
+		<div className="text-end footerlinks mt-3">
+		<Link className="links" to="/contacto"><p>Área de socios</p></Link>
 			<Link className="links" to="/contacto"><p>Contacto</p></Link>
-			<p>Quiénes somos</p>
+			<Link className="links" to="/quienes-somos"><p>Quiénes somos</p></Link>
 		</div>
 
 	</footer>

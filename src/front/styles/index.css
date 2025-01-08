@@ -161,3 +161,17 @@ footer{
   height: auto; /* Mantener la proporción de la imagen */
   
 }
+
+.btn-socios{
+  background-color: #000000;
+  color:white;
+  padding-right: 10px;
+    padding-left: 10px;
+  }
+
+  .footerlinks{
+    line-height:10px;
+  }
+  
+
+

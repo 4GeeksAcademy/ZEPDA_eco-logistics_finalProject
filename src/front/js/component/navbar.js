@@ -33,6 +33,8 @@ export const Navbar = () => {
       
     </div>
         <button className="btn" type="submit">Login</button>
+        
+        
   </div>
 </nav>
 	</>
