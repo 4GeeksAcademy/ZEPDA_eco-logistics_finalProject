@@ -126,16 +126,13 @@ footer{
   max-width: 20%;
 }
 
-.news-item {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
+
+
 
 .news-item img {
   height: 100%;
   object-fit: cover;
+  border-radius: 10px;
 }
 
 .carousel-caption {

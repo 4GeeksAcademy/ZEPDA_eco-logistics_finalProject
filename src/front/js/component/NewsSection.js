@@ -24,11 +24,11 @@ export const NewsSection = () => {
                   className={`carousel-item-nws ${index === 0 ? "active" : ""}`}
                   key={index}
                 >
-                  <div className="news-item">
+                  <div className="news-item m-2">
                     <Link to={`/news/${index}`}>
                       <img src={article.urlToImage} className="d-block w-100" alt={`news-${index}`} />
                       <div className="carousel-caption d-none d-md-block">
-                        <h5>{article.title}</h5>
+                        <p>{article.title}</p>
                       </div>
                     </Link>
                   </div>
