@@ -29,6 +29,7 @@ export const Navbar = () => {
           <Link to={"/"} className="nav-link text-black" href="#" >
             Quiénes somos
           </Link>
+   
         </li>
         <li className="nav-item">
           <Link to={"/"} className="nav-link text-black">Contacto</Link>
