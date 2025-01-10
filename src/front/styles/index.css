@@ -95,11 +95,12 @@ footer{
 }
 
 .logo-item {
-  flex: 1 1 30%;
+  flex: 1 1 10%;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 10px;
+  
 }
 
 .logo-image {
