@@ -1,6 +1,8 @@
 import mockData from "../../utils/mockData_Companies.json"
 
 const getState = ({ getStore, getActions, setStore }) => {
+
+    
     return {
         store: {
             news: [],
@@ -9,8 +11,8 @@ const getState = ({ getStore, getActions, setStore }) => {
         actions: {
             fetchNews: async (setLoading) => {
                 try {
-                    // setLoading(true);
-                    const resp = await fetch(process.env.BACKEND_URL + "news");
+                    setLoading(true);
+                    const resp = await fetch(process.env.BACKEND_URL + "api/news");
                     if (!resp.ok) {
                         throw new Error('Network response was not ok');
                     }

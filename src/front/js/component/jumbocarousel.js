@@ -2,7 +2,7 @@ import React from "react";
 import { importAllImages } from "../../utils/importAllImages";
 
 // Cargar todas las imágenes
-const images = importAllImages(require.context("../../img/zepda-web-img", false, /\.(png|jpe?g|svg)$/));
+const images = importAllImages(require.context("../../img/zepda-web-img", false, /\.(png|jpe?g|svg|webp)$/));
 
 export const JumbotronCarousel = () => {
   return (
