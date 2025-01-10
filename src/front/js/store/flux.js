@@ -1,9 +1,12 @@
+import mockData from "../../utils/mockData_Companies.json"
+
 const getState = ({ getStore, getActions, setStore }) => {
 
     
     return {
         store: {
-            news: []
+            news: [],
+            companies: {}
         },
         actions: {
             fetchNews: async (setLoading) => {
@@ -15,11 +18,27 @@ const getState = ({ getStore, getActions, setStore }) => {
                     }
                     const data = await resp.json();
                     console.log(data);
+
                     setStore({ news: data });
                 } catch (error) {
                     console.log(error);
                 } finally {
-                    setLoading(false);
+                    // setLoading(false);
+                }
+            },
+            loadDummyCompanies: async () => {
+                try {
+                    // Reestructuramos los datos para almacenarlos como un objeto
+                    const companies = mockData.reduce((acc, category) => {
+                        const [key, value] = Object.entries(category)[0];
+                        acc[key] = value;
+                        return acc;
+                    }, {});
+
+                    console.log(companies);
+                    setStore({ companies });
+                } catch (error) {
+                    console.log(error);
                 }
             }
         },
