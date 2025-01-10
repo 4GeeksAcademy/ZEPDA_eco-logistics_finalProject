@@ -14,22 +14,26 @@ export const Contacto = () => {
      
         
         <div className="container mt-4">
-            <h1>Contacto</h1>
-            <div className="contacto-img-container">
+            
+            {/* <div className="contacto-img-container">
                 <img src={imagen} className="contacto-img" alt="contacto" />
-            </div>
-        
+            </div> */}
+            <div className="contacto-container m-auto col-md-6 border border-2 p-4 rounded">
+            <h1>Contacto</h1>
+
         <p className="mt-5">Tienes alguna duda o necesitas información sobre nuestros servicios? Escríbenos sin compromiso y te ayudaremos a resolver tus dudas.</p>
-            <div className="mb-3 col-md-6">
+            <div className="mb-3  m-auto">
                 <label for="exampleFormControlInput1" className="form-label">Email</label>
                 <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="name@example.com" />
             </div>
-            <div className="mb-3 col-md-6">
+            <div className="mb-3  m-auto">
                 <label for="exampleFormControlTextarea1" className="form-label">Mensaje</label>
                 <textarea className="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                 <button className="btn mt-2">Enviar</button>
             </div>
             </div>
+            </div>
+        
         </>
     )
 }

@@ -20,19 +20,19 @@ export const Navbar = () => {
     <div className="collapse navbar-collapse" id="navbarSupportedContent">
       <ul className="navbar-nav ms-auto d-flex gap-3">
         <li className="nav-item">
-          <Link to={"/"} className="nav-link text-black" aria-current="page" href="#">Servicios</Link>
+          <Link to={"/servicios"} className="nav-link text-black" aria-current="page" href="#">Servicios</Link>
         </li>
         <li className="nav-item">
-          <Link to={"/"} className="nav-link text-black" href="#">Empresas</Link>
+          <Link to={"/companies"} className="nav-link text-black" href="#">Empresas</Link>
         </li>
         <li className="nav-item dropdown">
-          <Link to={"/"} className="nav-link text-black" href="#" >
+          <Link to={"/quienes-somos"} className="nav-link text-black" href="#" >
             Quiénes somos
           </Link>
    
         </li>
         <li className="nav-item">
-          <Link to={"/"} className="nav-link text-black">Contacto</Link>
+          <Link to={"/contacto"} className="nav-link text-black">Contacto</Link>
         </li>
       </ul>
       <button className="btn" onClick={handleShowModal}>
