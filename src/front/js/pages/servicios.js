@@ -3,6 +3,7 @@ import { Context } from "../store/appContext";
 import imgpackaging from "../../img/zepda-web-img/packaging-sostenible.webp"
 import imgtransporte from "../../img/zepda-web-img/furgonetas-w.webp"
 import imgresiduos from "../../img/1533057826357.jpeg"
+import { Link } from "react-router-dom";
 
 
 
@@ -30,7 +31,7 @@ export const Servicios = () => {
                 </div>
                 
                 </div>
-                <button className="btn mb-2">Empresas</button>
+                <Link to="/companies"><button className="btn mb-2">Empresas</button></Link>
                 
 
             </div>
@@ -51,7 +52,7 @@ export const Servicios = () => {
                 </div>
                 
                 </div>
-                <button className="btn mb-2">Empresas</button>
+                <Link to="/companies"><button className="btn mb-2">Empresas</button></Link>
                 
 
             </div>
@@ -74,7 +75,7 @@ export const Servicios = () => {
                 </div>
                 
                 </div>
-                <button className="btn mb-2">Empresas</button>
+                <Link to="/companies"><button className="btn mb-2">Empresas</button></Link>
                 
 
             </div>
