@@ -4,12 +4,12 @@ const getState = ({ getStore, getActions, setStore }) => {
     return {
         store: {
             news: [],
-            companies: []
+            companies: {}
         },
         actions: {
             fetchNews: async (setLoading) => {
                 try {
-                    setLoading(true);
+                    // setLoading(true);
                     const resp = await fetch(process.env.BACKEND_URL + "news");
                     if (!resp.ok) {
                         throw new Error('Network response was not ok');
@@ -21,13 +21,20 @@ const getState = ({ getStore, getActions, setStore }) => {
                 } catch (error) {
                     console.log(error);
                 } finally {
-                    setLoading(false);
+                    // setLoading(false);
                 }
             },
             loadDummyCompanies: async () => {
                 try {
-                    setStore({ companies: mockData });
-                    console.log(mockData);
+                    // Reestructuramos los datos para almacenarlos como un objeto
+                    const companies = mockData.reduce((acc, category) => {
+                        const [key, value] = Object.entries(category)[0];
+                        acc[key] = value;
+                        return acc;
+                    }, {});
+
+                    console.log(companies);
+                    setStore({ companies });
                 } catch (error) {
                     console.log(error);
                 }
