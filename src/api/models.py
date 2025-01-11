@@ -20,7 +20,7 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     contraseña = db.Column(db.String(200), unique=False, nullable=False)
     esta_activo = db.Column(db.Boolean(), unique=False, nullable=False)
-    favorite_company= db.relationship('Companies', secondary=favorite_company_table, backref='users_favorite')
+    favorite_company= db.relationship('Company', secondary=favorite_company_table, backref='users_favorite')
 
     def __init__(self, nombre, email, contraseña):
         self.nombre = nombre
