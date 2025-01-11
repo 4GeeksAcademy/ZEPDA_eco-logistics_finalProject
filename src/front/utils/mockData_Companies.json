@@ -42,6 +42,34 @@
                 "nif": "ES654321987",
                 "contraseña": "PackBenefit123!",
                 "password_check": "PackBenefit123!"
+            },
+            {
+                "nombre": "PackTech Innovations",
+                "pais": "Spain",
+                "ubicacion": "Madrid, Spain",
+                "sector": "Packaging",
+                "email": "info@packtech.es",
+                "telefono": "+34 91 234 5678",
+                "web": "https://www.packtech.es",
+                "direccion": "456 Packaging Street, Madrid, Spain",
+                "descripcion": "Empresa líder en soluciones de embalaje ecológicas y sostenibles.",
+                "nif": "ES987654321",
+                "contraseña": "EcoPack2025!",
+                "password_check": "EcoPack2025!"
+            },
+            {
+                "nombre": "EcoPack Solutions",
+                "pais": "Netherlands",
+                "ubicacion": "Amsterdam, Netherlands",
+                "sector": "Packaging",
+                "email": "info@ecopack.nl",
+                "telefono": "+31 20 1234 5678",
+                "web": "https://www.ecopack.nl",
+                "direccion": "101 Packaging Boulevard, Amsterdam, Netherlands",
+                "descripcion": "Especialistas en soluciones de embalaje ecológico y reciclable.",
+                "nif": "NL789123456",
+                "contraseña": "EcoPackNL2025!",
+                "password_check": "EcoPackNL2025!"
             }
         ]
     },
@@ -88,6 +116,34 @@
                 "nif": "ES987654321",
                 "contraseña": "ExpotransSecure!",
                 "password_check": "ExpotransSecure!"
+            },
+            {
+                "nombre": "TransLogistics Solutions",
+                "pais": "Germany",
+                "ubicacion": "Berlin, Germany",
+                "sector": "Transportes",
+                "email": "contact@translogistics.de",
+                "telefono": "+49 30 1234 5678",
+                "web": "https://www.translogistics.de",
+                "direccion": "789 Transport Avenue, Berlin, Germany",
+                "descripcion": "Proveedor global de soluciones logísticas y de transporte eficientes.",
+                "nif": "DE123987654",
+                "contraseña": "LogiTrans2025!",
+                "password_check": "LogiTrans2025!"
+            },
+            {
+                "nombre": "GlobalTransit Solutions",
+                "pais": "Belgium",
+                "ubicacion": "Brussels, Belgium",
+                "sector": "Transportes",
+                "email": "contact@globaltransit.be",
+                "telefono": "+32 2 1234 5678",
+                "web": "https://www.globaltransit.be",
+                "direccion": "55 Transit Lane, Brussels, Belgium",
+                "descripcion": "Expertos en servicios de transporte y logística a nivel mundial.",
+                "nif": "BE123456789",
+                "contraseña": "TransitGlobal2025!",
+                "password_check": "TransitGlobal2025!"
             }
         ]
     },
@@ -134,6 +190,34 @@
                 "nif": "ES345678912",
                 "contraseña": "ActecoResiduos",
                 "password_check": "ActecoResiduos"
+            },
+            {
+                "nombre": "EcoWaste Management",
+                "pais": "France",
+                "ubicacion": "Paris, France",
+                "sector": "Gestión de Residuos",
+                "email": "info@ecowaste.fr",
+                "telefono": "+33 1 2345 6789",
+                "web": "https://www.ecowaste.fr",
+                "direccion": "321 Waste Management Blvd, Paris, France",
+                "descripcion": "Líder en la gestión sostenible de residuos y reciclaje.",
+                "nif": "FR456123789",
+                "contraseña": "EcoManage2025!",
+                "password_check": "EcoManage2025!"
+            },
+            {
+                "nombre": "GreenWaste Solutions",
+                "pais": "Italy",
+                "ubicacion": "Rome, Italy",
+                "sector": "Gestión de Residuos",
+                "email": "contact@greenwaste.it",
+                "telefono": "+39 06 1234 5678",
+                "web": "https://www.greenwaste.it",
+                "direccion": "15 Eco Lane, Rome, Italy",
+                "descripcion": "Empresa líder en el manejo de residuos ecológicos y reciclaje innovador.",
+                "nif": "IT456789123",
+                "contraseña": "GreenEco2025!",
+                "password_check": "GreenEco2025!"
             }
         ]
     }

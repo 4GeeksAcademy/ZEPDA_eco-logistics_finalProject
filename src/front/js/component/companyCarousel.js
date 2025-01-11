@@ -7,9 +7,10 @@ export const CompanyCarousel = ({sector}) => {
     // App Store
     const { store } = useContext(Context);
     const sectorCompanies = store.companies[sector];
+    console.log(sectorCompanies.length);
     // Component Logic Variables
     const [currentIndex, setCurrentIndex] = useState(0); 
-    const totalItems = 4; // los que hay -2
+    const totalItems = sectorCompanies.length - 2; // los que hay -2
     const itemsToShow = 3; 
     
     const handleMoveCarousel = (direction) => { 
