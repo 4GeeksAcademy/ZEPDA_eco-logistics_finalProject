@@ -1,54 +1,48 @@
+import mockData from "../../utils/mockData_Companies.json"
+
 const getState = ({ getStore, getActions, setStore }) => {
-	return {
-		store: {
-			message: null,
-			demo: [
-				{
-					title: "FIRST",
-					background: "white",
-					initial: "white"
-				},
-				{
-					title: "SECOND",
-					background: "white",
-					initial: "white"
-				}
-			]
-		},
-		actions: {
-			// Use getActions to call a function within a fuction
-			exampleFunction: () => {
-				getActions().changeColor(0, "green");
-			},
 
-			getMessage: async () => {
-				try{
-					// fetching data from the backend
-					const resp = await fetch(process.env.BACKEND_URL + "/api/hello")
-					const data = await resp.json()
-					setStore({ message: data.message })
-					// don't forget to return something, that is how the async resolves
-					return data;
-				}catch(error){
-					console.log("Error loading message from backend", error)
-				}
-			},
-			changeColor: (index, color) => {
-				//get the store
-				const store = getStore();
+    
+    return {
+        store: {
+            news: [],
+            companies: {}
+        },
+        actions: {
+            fetchNews: async (setLoading) => {
+                try {
+                    setLoading(true);
+                    const resp = await fetch(process.env.BACKEND_URL + "api/news");
+                    if (!resp.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const data = await resp.json();
+                    console.log(data);
 
-				//we have to loop the entire demo array to look for the respective index
-				//and change its color
-				const demo = store.demo.map((elm, i) => {
-					if (i === index) elm.background = color;
-					return elm;
-				});
+                    setStore({ news: data });
+                } catch (error) {
+                    console.log(error);
+                } finally {
+                    // setLoading(false);
+                }
+            },
+            loadDummyCompanies: async () => {
+                try {
+                    // Reestructuramos los datos para almacenarlos como un objeto
+                    const companies = mockData.reduce((acc, category) => {
+                        const [key, value] = Object.entries(category)[0];
+                        acc[key] = value;
+                        return acc;
+                    }, {});
 
-				//reset the global store
-				setStore({ demo: demo });
-			}
-		}
-	};
+                    console.log(companies);
+                    setStore({ companies });
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        },
+    };
 };
 
 export default getState;
