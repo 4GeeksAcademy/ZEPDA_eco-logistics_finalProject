@@ -21,7 +21,23 @@ const getState = ({ getStore, getActions, setStore }) => {
                 } finally {
                     setLoading(false);
                 }
-            }
+            },
+            createUser: async (user) => {
+                try {
+                  const resp = await fetch(process.env.BACKEND_URL + "api/register", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(user),
+                  });
+                  const data = await resp.json();
+                  return true;
+                } catch (err) {
+                  console.log("Error sending customer to back backend", err);
+                }
+              },
+      
         },
     };
 };

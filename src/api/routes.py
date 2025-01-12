@@ -7,6 +7,11 @@ from api.models import db, User
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 import requests
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import jwt_required
+import re
+import bcrypt
 
 api = Blueprint('api', __name__)
 
@@ -25,6 +30,24 @@ def get_news():
         return jsonify(articles_list)
     else:
         return jsonify({"error": "Error fetching news"}), response.status_code
+    
+@api.route('/register', methods=['POST'])
+def register_user():
+    
+    body = request.get_json()
+    user_nombre = body.get('nombre', None)
+    user_email = body.get('email', None)
+    user_contraseña = body.get('contraseña', None)
+    if user_nombre is None or user_email is None or user_contraseña is None:
+        return {'message': 'Missing arguments'}      
+    bpassword = bytes(user_contraseña, 'utf-8')
+    salt = bcrypt.gensalt(14)
+    hashed_password = bcrypt.hashpw(password=bpassword, salt=salt)       
+    user = User(user_nombre, user_email, hashed_password.decode('utf-8'))    
+    #return {'message': f'nombre: {user.nombre} email: {user.email} contraseña: {contraseña}'}
+    db.session.add(user)
+    db.session.commit()
+    return {'message': f'User {user.email} was created'}
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
