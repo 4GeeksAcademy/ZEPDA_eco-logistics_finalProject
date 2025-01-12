@@ -102,7 +102,7 @@ export const Navbar = () => {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav ms-auto d-flex gap-3">
             <li className="nav-item">
-                <Link to={"/dashboard"} className="nav-link text-black" aria-current="page" href="#">Dashboard</Link>
+                <Link to={"/dashboard"} className="nav-link text-black" aria-current="page" href="#">Dashboard</Link> {/*Aqui se redirige al dashboard de pruebas*/}
               </li>
               <li className="nav-item">
                 <Link to={"/servicios"} className="nav-link text-black" aria-current="page" href="#">Servicios</Link>
