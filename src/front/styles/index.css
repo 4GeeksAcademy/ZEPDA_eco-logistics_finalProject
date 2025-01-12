@@ -17,6 +17,19 @@ h1{
 
 }
 
+.btn-rojo {
+  background-color: red;
+  border-color: red;
+  color: white;
+}
+
+.btn-rojo:hover {
+  background-color: darkred;
+  border-color: darkred;
+}
+
+
+
 .links {
   color: #426B1F; 
   text-decoration: none;
