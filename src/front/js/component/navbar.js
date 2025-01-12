@@ -29,7 +29,6 @@ export const Navbar = () => {
           <Link to={"/"} className="nav-link text-black">Contacto</Link>
         </li>
       </ul>
-      
         <button className="btn" type="submit">Login</button>
       
     </div>
