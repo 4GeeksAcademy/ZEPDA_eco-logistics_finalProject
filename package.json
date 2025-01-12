@@ -24,7 +24,6 @@
 			"url": "http://github.com/nachovz"
 		}
 	],
-	
 	"license": "ISC",
 	"devDependencies": {
 		"@babel/cli": "^7.16.0",
@@ -76,7 +75,10 @@
 	"dependencies": {
 		"prop-types": "^15.6.1",
 		"react": "^16.8.4",
+		"react-awesome-slider": "^4.1.0",
+		"react-bootstrap": "^2.10.7",
 		"react-dom": "^16.8.4",
+		"react-icons": "^5.4.0",
 		"react-polyfills": "0.0.1",
 		"react-router-dom": "^6.3.0"
 	}

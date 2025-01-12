@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Context } from "../store/appContext";
-import { Link } from "react-router-dom";
+import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
 export const NewsSection = () => {
   const { actions, store } = useContext(Context);
@@ -11,6 +11,16 @@ export const NewsSection = () => {
     actions.fetchNews(setLoading);
   }, []);
 
+  useEffect(() => {
+    // Cambiar de noticias automáticamente cada 5 segundos
+    const interval = setInterval(() => {
+      nextSlide(); // Llamamos a nextSlide para cambiar el índice
+    }, 5000);
+
+    // Limpiar el intervalo al desmontarse el componente
+    return () => clearInterval(interval);
+  }, [currentIndex]);
+  
   // Función para avanzar al siguiente conjunto de 4 noticias
   const nextSlide = () => {
     if (currentIndex + 4 < store.news.length) {
@@ -30,7 +40,7 @@ export const NewsSection = () => {
   };
 
   return (
-    <div className="container mt-5 news-section">
+    <div className="container mt-5 news-section position-relative">
       <h1>Últimas noticias sobre sostenibilidad</h1>
       <div className="carousel-container-nws">
         {loading ? (
@@ -41,7 +51,13 @@ export const NewsSection = () => {
             {store.news.slice(currentIndex, currentIndex + 4).map((article, index) => (
               <div className="col-md-3 mb-4" key={article.title}>
                 <div className="card h-100">
-                  <Link to={`/news/${index}`}>
+                  {/* Link a la fuente completa del artículo */}
+                  <a
+                    href={article.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-decoration-none text-dark"
+                  >
                     <div className="overflow-hidden">
                       <img
                         src={article.urlToImage}
@@ -61,7 +77,7 @@ export const NewsSection = () => {
                         {article.description}
                       </p>
                     </div>
-                  </Link>
+                  </a>
                 </div>
               </div>
             ))}
@@ -71,21 +87,26 @@ export const NewsSection = () => {
         )}
       </div>
 
-      {/* Controles para el slider abajo */}
-      <div className="d-flex justify-content-between mt-4">
+      {/* Controles para el slider dentro del contenedor */}
+      <div className="position-absolute top-50 start-0 translate-middle-y">
         <button
-          className="btn btn-primary"
+          className="btn btn-link text-white"
           onClick={prevSlide}
           disabled={currentIndex === 0}
+          style={{ backgroundColor: 'transparent', border: 'none', padding: '10px' }}
         >
-          Anterior
+          <FaArrowLeft size={30} />
         </button>
+      </div>
+
+      <div className="position-absolute top-50 end-0 translate-middle-y">
         <button
-          className="btn btn-primary"
+          className="btn btn-link text-white"
           onClick={nextSlide}
           disabled={currentIndex + 4 >= store.news.length}
+          style={{ backgroundColor: 'transparent', border: 'none', padding: '10px' }}
         >
-          Siguiente
+          <FaArrowRight size={30} />
         </button>
       </div>
     </div>
