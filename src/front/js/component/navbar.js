@@ -18,23 +18,23 @@ export const Navbar = () => {
     password_check: "",
   });
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalMessage, setModalMessage] = useState("");
+  // const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [modalMessage, setModalMessage] = useState("");
 
-  const toggleModal = (message) => {
-    setModalMessage(message);
-    setIsModalOpen(!isModalOpen);
-  };
+  // const toggleModal = (message) => {
+  //   setModalMessage(message);
+  //   setIsModalOpen(!isModalOpen);
+  // };
 
   const { store, actions } = useContext(Context);
   const [isShow, setIsShown] = useState(false);
   const registerUser = async (event) => {
     event.preventDefault();
-    console.log("funciona")
+    // console.log("funciona")
     if (user.contraseña === user.password_check && user.contraseña !== "") {
       const createUser = await actions.createUser(user);
       if (createUser) {
-         toggleModal("Usuario creado sastisfactoriamente!");
+        //  toggleModal("Usuario creado sastisfactoriamente!");
         setUser({
           ...user,
           nombre: "",
@@ -42,55 +42,55 @@ export const Navbar = () => {
           contraseña: "",
           password_check: "",
         });
-       setIsShown(!isShow);
-      } else {
-        toggleModal("Upss! ocurrió un error inesperado!");
+      //  setIsShown(!isShow);
+      // } else {
+        // toggleModal("Upss! ocurrió un error inesperado!");
       }
-    } else {
-      toggleModal("Contraseñas no coinciden!");
+    // } else {
+      // toggleModal("Contraseñas no coinciden!");
       setUser({ ...user, contraseña: "", password_check: "" });
     }
   };
 
-  const [user1, setUser1] = useState({
-    nif: "",
-    nombre: "",
-    sector: "",
-    direccion: "",
-    email: "",
-    descripcion: "",
-    web: "",
-    contraseña: "",
-    password_check: "",
-  });
+  // const [user1, setUser1] = useState({
+  //   nif: "",
+  //   nombre: "",
+  //   sector: "",
+  //   direccion: "",
+  //   email: "",
+  //   descripcion: "",
+  //   web: "",
+  //   contraseña: "",
+  //   password_check: "",
+  // });
 
-  const registerEmpresa = async (event) => {
-    event.preventDefault();
-    if (user1.contraseña === user1.password_check && user1.contraseña !== "") {
-      const createUser1 = await actions.createCompany(user1);
-      if (createUser1) {
-        toggleModal("Empresa creada satisfactoriamente!");
-        setUser1({
-          ...user1,
-          nif: "",
-          nombre: "",
-          sector: "",
-          direccion: "",
-          email: "",
-          descripcion: "",
-          web: "",
-          contraseña: "",
-          password_check: "",
-        });
-        setIsShown(!isShow);
-      } else {
-        toggleModal("Upss! ocurrió un error inesperado!");
-      }
-    } else {
-      toggleModal("Contraseñas no coinciden!");
-      setUser1({ ...user1, contraseña: "", password_check: "" });
-    }
-  };
+  // const registerEmpresa = async (event) => {
+  //   event.preventDefault();
+  //   if (user1.contraseña === user1.password_check && user1.contraseña !== "") {
+  //     const createUser1 = await actions.createCompany(user1);
+  //     if (createUser1) {
+  //       toggleModal("Empresa creada satisfactoriamente!");
+  //       setUser1({
+  //         ...user1,
+  //         nif: "",
+  //         nombre: "",
+  //         sector: "",
+  //         direccion: "",
+  //         email: "",
+  //         descripcion: "",
+  //         web: "",
+  //         contraseña: "",
+  //         password_check: "",
+  //       });
+  //       setIsShown(!isShow);
+  //     } else {
+  //       toggleModal("Upss! ocurrió un error inesperado!");
+  //     }
+  //   } else {
+  //     toggleModal("Contraseñas no coinciden!");
+  //     setUser1({ ...user1, contraseña: "", password_check: "" });
+  //   }
+  // };
   return (
     <>
       <nav className="container navbar navbar-expand-lg bg-body-white">
@@ -101,6 +101,9 @@ export const Navbar = () => {
           </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav ms-auto d-flex gap-3">
+            <li className="nav-item">
+                <Link to={"/dashboard"} className="nav-link text-black" aria-current="page" href="#">Dashboard</Link>
+              </li>
               <li className="nav-item">
                 <Link to={"/servicios"} className="nav-link text-black" aria-current="page" href="#">Servicios</Link>
               </li>
@@ -111,7 +114,6 @@ export const Navbar = () => {
                 <Link to={"/quienes-somos"} className="nav-link text-black" href="#" >
                   Quiénes somos
                 </Link>
-
               </li>
               <li className="nav-item">
                 <Link to={"/contacto"} className="nav-link text-black">Contacto</Link>
