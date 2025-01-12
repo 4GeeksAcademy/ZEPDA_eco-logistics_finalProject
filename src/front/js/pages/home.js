@@ -17,7 +17,7 @@ export const Home = () => {
 		
 		<JumbotronCarousel/>
 		<div className="container mt-4">
-			<div className="d-flex">
+			<div className="d-flex col-12 flex-wrap">
 				<div className="col-12 col-md-6 p-4 sumate">
 			<h3> 
 				El cambio ya empezó, el momento de sumarse es ahora!
@@ -49,8 +49,9 @@ export const Home = () => {
 				transportes, materiales, gestión de residuos y/o digitalización de su negocio, centralizando en un solo sitio web 
 				todos los servicios disponibles y haciendo más facil los procesos de búsqueda y contratación. Si quieres formar 
 				parte de nuestro equipo únete a nosotros como empresa colaboradora.</p>
-				 <p>
-					<Link className="links" to={"/"}> <button className="btn">Unirse</button></Link></p>	
+				 <p className="text-center pt-4">
+					<Link className="links" to={"/"}> <button className="btn">Colabora con nosotros</button></Link>
+					</p>	
 
 			</div>
 			</div>
