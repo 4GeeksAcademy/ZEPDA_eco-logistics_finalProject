@@ -8,21 +8,33 @@ export const Navbar = () => {
   const [isLogin, setIsLogin] = useState(true);
   const handleCloseModal = () => setShowModal(false);
   const handleShowModal = () => setShowModal(true);
-  const toggleForm = () => setIsLogin(!isLogin); //cambia entre login y registro
+  const toggleForm = () => setIsLogin(!isLogin);
+  
+  // const navigate = useNavigate();
   const [user, setUser] = useState({
     nombre: "",
     email: "",
     contraseña: "",
     password_check: "",
   });
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+
+  const toggleModal = (message) => {
+    setModalMessage(message);
+    setIsModalOpen(!isModalOpen);
+  };
+
   const { store, actions } = useContext(Context);
+  const [isShow, setIsShown] = useState(false);
   const registerUser = async (event) => {
     event.preventDefault();
-    console.log("dunciona")
+    console.log("funciona")
     if (user.contraseña === user.password_check && user.contraseña !== "") {
       const createUser = await actions.createUser(user);
       if (createUser) {
-        // toggleModal("Usuario creado sastisfactoriamente!");
+         toggleModal("Usuario creado sastisfactoriamente!");
         setUser({
           ...user,
           nombre: "",
@@ -30,13 +42,53 @@ export const Navbar = () => {
           contraseña: "",
           password_check: "",
         });
-        // setIsShown(!isShow);
+       setIsShown(!isShow);
       } else {
-        // toggleModal("Upss! ocurrió un error inesperado!");
+        toggleModal("Upss! ocurrió un error inesperado!");
       }
     } else {
-      // toggleModal("Contraseñas no coinciden!");
+      toggleModal("Contraseñas no coinciden!");
       setUser({ ...user, contraseña: "", password_check: "" });
+    }
+  };
+
+  const [user1, setUser1] = useState({
+    nif: "",
+    nombre: "",
+    sector: "",
+    direccion: "",
+    email: "",
+    descripcion: "",
+    web: "",
+    contraseña: "",
+    password_check: "",
+  });
+
+  const registerEmpresa = async (event) => {
+    event.preventDefault();
+    if (user1.contraseña === user1.password_check && user1.contraseña !== "") {
+      const createUser1 = await actions.createCompany(user1);
+      if (createUser1) {
+        toggleModal("Empresa creada satisfactoriamente!");
+        setUser1({
+          ...user1,
+          nif: "",
+          nombre: "",
+          sector: "",
+          direccion: "",
+          email: "",
+          descripcion: "",
+          web: "",
+          contraseña: "",
+          password_check: "",
+        });
+        setIsShown(!isShow);
+      } else {
+        toggleModal("Upss! ocurrió un error inesperado!");
+      }
+    } else {
+      toggleModal("Contraseñas no coinciden!");
+      setUser1({ ...user1, contraseña: "", password_check: "" });
     }
   };
   return (
@@ -112,7 +164,7 @@ export const Navbar = () => {
             </div>
           ) : (
 
-            // se realiza el registro****************************************************************************************************
+            // se realiza el registro de usuario****************************************************************************************************
             <div>
               <form onSubmit={registerUser}>
                 <div className="mb-3">
@@ -180,3 +232,5 @@ export const Navbar = () => {
     </>
   );
 };
+
+//falta el registro de empresa!!!!
