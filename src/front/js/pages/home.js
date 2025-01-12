@@ -16,10 +16,12 @@ export const Home = () => {
 		<>
 		
 		<JumbotronCarousel/>
-		<div className="container mt-4">
-			<h1> 
+
+		<div className="container mt-4 d-flex">
+			<div>
+			<h3> 
 				El cambio ya empezó, el momento de sumarse es ahora!
-			</h1>
+			</h3>
 			<p>
 			Trabajamos para disminuir el impacto ambiental y generar acciones positivas para el planeta y la sociedad. 
 			Te ofrecemos las mejores soluciones eco-friendly para tu empresa. El cambio ya empezó, el momento de sumarse es ahora!
@@ -33,7 +35,7 @@ export const Home = () => {
 			podrás conocer el impacto positivo que generas al adquirir estos productos y servicios.
 			Sólo tienes que crear una cuenta en nuestra plataforma y empezar a disfrutar de los beneficios de ser eco-friendly. Súmate al cambio!
 			</p>
-			
+			</div>
 
 			
 
@@ -47,6 +49,9 @@ export const Home = () => {
 				parte de nuestro equipo <Link className="links" to={"/"}> <strong>únete a nosotros como empresa colaboradora.</strong></Link></p>	
 
 			</div>
+
+
+			
 			<p>Nuestros colaboradores:</p>
 			<div className="logos-container">
 				
