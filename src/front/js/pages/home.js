@@ -16,9 +16,11 @@ export const Home = () => {
 		<>
 		
 		<JumbotronCarousel/>
+
 		<div className="container mt-4">
 			<div className="d-flex col-12 flex-wrap">
 				<div className="col-12 col-md-6 p-4 sumate">
+
 			<h3> 
 				El cambio ya empezó, el momento de sumarse es ahora!
 			</h3>
@@ -36,8 +38,7 @@ export const Home = () => {
 			Sólo tienes que crear una cuenta en nuestra plataforma y empezar a disfrutar de los beneficios de ser eco-friendly. Súmate al cambio!
 			</p>
 			</div>
-			
-			
+
 
 			
 
@@ -54,8 +55,10 @@ export const Home = () => {
 					</p>	
 
 			</div>
+
 			</div>
 			
+
 			<div className="logos-container">
 				
             {logos.map((logo, index) => (
