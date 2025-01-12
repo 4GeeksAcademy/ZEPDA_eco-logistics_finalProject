@@ -28,13 +28,13 @@ class User(db.Model):
 
 class Company(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    nif = db.Column(db.String(20), unique=True, nullable=False)
+    nif = db.Column(db.String(20), unique=True, nullable=True)
     nombre = db.Column(db.String(120), nullable=False)
-    sector = db.Column(db.Text, nullable=False)
-    direccion = db.Column(db.String(255), nullable=False)
+    sector = db.Column(db.Text, nullable=True)
+    direccion = db.Column(db.String(255), nullable=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    descripcion = db.Column(db.Text, nullable=False)
-    web = db.Column(db.String(120), unique=True, nullable=False)
+    descripcion = db.Column(db.Text, nullable=True)
+    web = db.Column(db.String(120), unique=True, nullable=True)
     contraseña = db.Column(db.String(200), nullable=False)
     certificado = db.Column(db.String(120), nullable=True)
 
