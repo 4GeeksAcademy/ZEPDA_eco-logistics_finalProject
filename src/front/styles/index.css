@@ -197,9 +197,13 @@ footer{
     color:white;
     padding-right: 20px;
     padding-left: 20px;
+    border-top-left-radius: 20px; /* Esquina superior izquierda */
+    border-bottom-left-radius: 20px; /* Esquina inferior izquierda */
   }
   .empresas-colaboradoras{
-    border: solid 1px #000000;
+    border: solid 1px #44444450;
+    border-top-right-radius: 20px; /* Esquina superior izquierda */
+  border-bottom-right-radius: 20px; /* Esquina inferior izquierda */
   }
  
 
