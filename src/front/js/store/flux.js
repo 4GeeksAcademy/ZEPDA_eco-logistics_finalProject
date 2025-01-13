@@ -3,7 +3,7 @@ import mockData from "../../utils/mockData_Companies.json"
 const getState = ({ getStore, getActions, setStore }) => {
 
     
-                try {
+                
 
   return {
     store: {

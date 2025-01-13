@@ -14,6 +14,7 @@ import { Contacto } from "./pages/contacto";
 import { QuienesSomos } from "./pages/quienesSomos";
 import { Servicios } from "./pages/servicios";
 import Dashboard from "./pages/dashboard"; /*para probar el dashboard*/
+import Private from "./pages/private";
 
 //create your first component
 const Layout = () => {
