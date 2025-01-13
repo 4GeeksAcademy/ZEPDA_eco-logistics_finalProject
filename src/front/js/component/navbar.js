@@ -1,8 +1,9 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect} from "react";
 import { Link } from "react-router-dom";
 import zpdalogo from "../../img/zepdalogo.png"
 import { Modal, Button } from "react-bootstrap";
 import { Context } from "../store/appContext";
+import { useNavigate } from "react-router-dom";
 export const Navbar = () => {
 
   const [showModal, setShowModal] = useState(false);
@@ -11,7 +12,7 @@ export const Navbar = () => {
   const handleShowModal = () => setShowModal(true);
   const toggleForm = () => setIsLogin(!isLogin);
   
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const [user, setUser] = useState({
     nombre: "",
     email: "",
@@ -26,6 +27,17 @@ export const Navbar = () => {
   //   setModalMessage(message);
   //   setIsModalOpen(!isModalOpen);
   // };
+  // useEffect(() => {
+  //   store.token && navigate("../dashboard");
+  //   return () => {
+  //     setUser({
+  //       nombre: "",
+  //       email: "",
+  //       contraseña: "",
+  //       password_check: "",
+  //     });
+  //   };
+  // }, [store.token, navigate]);
 
   const { store, actions } = useContext(Context);
   const [isShow, setIsShown] = useState(false);
@@ -51,6 +63,24 @@ export const Navbar = () => {
     // } else {
       // toggleModal("Contraseñas no coinciden!");
       setUser({ ...user, contraseña: "", password_check: "" });
+    }
+  };
+
+  const loginCustomer = async (event) => {
+    event.preventDefault();
+    const login = await actions.loginUser(user);
+    console.log(login);
+    
+    if (login) {
+      setShowModal(false);
+      //toggleModal("Login satisfactorio!");
+      setTimeout(() => navigate("/private"), 1500);
+    } else {
+      //toggleModal("Imposible logearse, compruebe sus datos!!");
+      setUser({
+        ...user,
+        contraseña: "",
+      });
     }
   };
 
@@ -138,7 +168,7 @@ export const Navbar = () => {
         <Modal.Body>
           {isLogin ? (
             <div>
-              <form>
+              <form onSubmit={loginCustomer}>
                 <div className="mb-3">
                   <label htmlFor="email" className="form-label">
                     Correo electrónico
@@ -146,8 +176,10 @@ export const Navbar = () => {
                   <input
                     type="email"
                     className="form-control"
+                    value={user.email}
                     id="email"
                     placeholder="Ingresa tu correo"
+                    onChange={(e) => setUser({ ...user, email: e.target.value })}
                   />
                 </div>
                 <div className="mb-3">
@@ -157,8 +189,10 @@ export const Navbar = () => {
                   <input
                     type="password"
                     className="form-control"
+                    value={user.contraseña}
                     id="password"
                     placeholder="Ingresa tu contraseña"
+                    onChange={(e) => setUser({ ...user, contraseña: e.target.value })}
                   />
                 </div>
                 <Button variant="primary" type="submit">
@@ -178,6 +212,7 @@ export const Navbar = () => {
                   <input
                     type="text"
                     className="form-control"
+                    value={user.nombre}
                     id="name"
                     placeholder="Ingresa tu nombre"
                     onChange={(e) => setUser({ ...user, nombre: e.target.value })}
@@ -188,6 +223,7 @@ export const Navbar = () => {
                   <input
                     type="email"
                     className="form-control"
+                    value={user.email}
                     id="email"
                     placeholder="Ingresa tu correo"
                     onChange={(e) => setUser({ ...user, email: e.target.value })}
@@ -200,6 +236,7 @@ export const Navbar = () => {
                   <input
                     type="password"
                     className="form-control"
+                    value={user.contraseña}
                     id="password"
                     placeholder="Ingresa tu contraseña"
                     onChange={(e) => setUser({ ...user, contraseña: e.target.value })}
@@ -212,6 +249,7 @@ export const Navbar = () => {
                   <input
                     type="password"
                     className="form-control"
+                    value={user.password_check}
                     id="confirmPassword"
                     placeholder="Confirma tu contraseña"
                     onChange={(e) => setUser({ ...user, password_check: e.target.value })}

@@ -38,6 +38,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         }
       },
 
+//*********************************** **************************************************************** */
       getIsLogin: () => {
         return getStore();
       },
@@ -110,7 +111,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           console.log("Error sending customer to back backend", err);
         }
       },
-
+//************************************************************************************************ */
 
       createCompany: async (user1) => {
         try {

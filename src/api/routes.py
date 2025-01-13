@@ -57,6 +57,32 @@ def register_user():
     db.session.commit()
     return {'message': f'User {user.email} was created'}
 
+@api.route('/token', methods=['POST'])
+def create_token():
+    body = request.get_json()
+    email = body.get('email', None)
+    contraseña = body.get('contraseña', None)
+    if contraseña is None or email is None:
+        return {'message': f'missing parameters {email} {contraseña}', 'authorize': False}, 400
+    if check(email) is not True:
+        return {'message': 'email is not valid', 'authorize': False}, 400
+    user = User.query.filter_by(email=email).one_or_none()    
+    if user is None:
+        return {'mesasge': 'User doesnt exist', 'authorize': False}, 400
+    password_byte =bytes(contraseña, 'utf-8')
+    if bcrypt.checkpw(password_byte, user.contraseña.encode('utf-8')):
+        return {'token': create_access_token(identity = email), 'authorize': True},200
+    return {'message': 'Unauthorized', 'authorize': False}, 401
+
+@api.route('/profile/user')
+@jwt_required()
+def validate_user():
+    email = get_jwt_identity()    
+    user = User.query.filter_by(email=email).one_or_none()
+    if user is None:
+        return {'message': 'Unauthorized'}, 401
+    return user.serialize(), 200
+
 @api.route('/registerCompany', methods=['POST'])
 def register_company():
     
