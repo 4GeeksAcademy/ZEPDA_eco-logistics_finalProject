@@ -1,0 +1,67 @@
+import React from "react";
+import userPic from "../../img/rigo-baby.jpg"
+
+function getStringDate() {
+    const fecha = new Date(Date.now());
+
+    const dia = String(fecha.getDate()).padStart(2, '0');
+    const año = fecha.getFullYear();
+
+    const meses = [
+        "enero", "febrero", "marzo", "abril", "mayo", "junio",
+        "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+    ];
+
+    const mes = meses[fecha.getMonth()];
+
+    const fechaFormateada = `${dia} de ${mes} de ${año}`;
+
+    console.log(fechaFormateada); 
+
+    return fechaFormateada;
+}
+
+const user = {
+        "nombre": "ITENE RESEARCH CENTER",
+        "pais": "United Kingdom",
+        "ubicacion": "London, UK",
+        "sector": "Packaging",
+        "email": "contact@iteneuk.co.uk",
+        "telefono": "+44 20 1234 5678",
+        "web": "https://www.iteneuk.co.uk",
+        "direccion": "123 Packaging Ave, London, UK",
+        "descripcion": "Centro líder en investigación y desarrollo de soluciones innovadoras de embalaje.",
+        "nif": "GB123456789",
+        "contraseña": "SecurePass123!",
+        "password_check": "SecurePass123!",
+        "admission_day": getStringDate()
+    }
+
+export const UserPanel = () => {
+    return (
+        <>
+            <div className="col-6 p-3"> 
+                <h1 className="text-start fw-normal fs-5 mb-3">BIENVENIDO USUARIO</h1>
+                <div className="card rounded-5"> 
+                    <div className="card-header border-0 bg-white rounded-5 rounded-bottom-0 border-bottom"> 
+                        <div className="d-flex justify-content-around">
+                            <img src={userPic || "https://picsum.photos/id/237/536/354"} className="img-fluid rounded-circle" alt="user-image" style={{width:150,height:150}}/>
+                            <div className="my-auto float-end">
+                                <h5 className="card-title text-success fw-semibold m-0 py-2 text-start">{user.nombre}</h5> 
+                                <p className="card-text mb-2 fw-normal text-start">{user.email}</p> 
+                                <p className="card-text mb-2 fw-normal text-start">{user.direccion}</p> 
+                            </div>
+                        </div>
+                    </div> 
+                    <div className="card-body bg-light pt-0 rounded-5 rounded-top rounded-top-0 pb-2"> 
+                        <p className="mt-2 text-start">{user.descripcion}</p>
+                        <div className="d-flex justify-content-between">
+                            <p className="card-text m-0 text-secondary text-start">Usuario desde {user.admission_day}</p> 
+                            <a href="#" className="text-success float-end">editar perfil</a> 
+                        </div>
+                    </div> 
+                </div> 
+            </div>
+        </>
+    )
+};
