@@ -4,6 +4,7 @@ import zpdalogo from "../../img/zepdalogo.png"
 import { Modal, Button } from "react-bootstrap";
 import { Context } from "../store/appContext";
 export const Navbar = () => {
+
   const [showModal, setShowModal] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
   const handleCloseModal = () => setShowModal(false);
@@ -33,6 +34,7 @@ export const Navbar = () => {
     // console.log("funciona")
     if (user.contraseña === user.password_check && user.contraseña !== "") {
       const createUser = await actions.createUser(user);
+      setShowModal(false);
       if (createUser) {
         //  toggleModal("Usuario creado sastisfactoriamente!");
         setUser({
