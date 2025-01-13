@@ -23,7 +23,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 } catch (error) {
                     console.log(error);
                 } finally {
-                    // setLoading(false);
+                 setLoading(false);
                 }
             },
             loadDummyCompanies: async () => {
