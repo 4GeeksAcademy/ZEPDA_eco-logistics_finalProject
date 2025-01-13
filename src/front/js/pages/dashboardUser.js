@@ -8,6 +8,13 @@ import { HiringsPanel } from "../component/hiringsPanel";
 export const DashboardUser = () => {
     const { store } = useContext(Context);
 
+    useEffect(() => {
+        console.log(store.token);
+        !store.token && navigate("./navbar");
+    }, [store.token]);
+    console.log(store.profile);
+    // {store?.token ? <Dashboard nombre={store.profile?.nombre} /> : navigate("/")}
+
     const getSectorKeys = () => {
         if (store.companies && Object.keys(store.companies).length > 0) {
             return Object.keys(store.companies);
