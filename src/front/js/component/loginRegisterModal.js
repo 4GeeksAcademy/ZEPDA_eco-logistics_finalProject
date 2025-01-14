@@ -134,7 +134,7 @@ export const LoginRegisterModal = ({ showModal, handleCloseModal, isLogin, toggl
           contraseña: "",
           password_check: "",
         });  // Vaciar campos
-        navigate("/dashboard-user"); // Redirigir al dashboard de usuario
+        navigate("/"); // Redirigir al dashboard de usuario
       }, 200);  // Cierre instantáneo y redirección
     }
   };
