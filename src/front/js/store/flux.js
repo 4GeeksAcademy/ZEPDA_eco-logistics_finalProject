@@ -2,13 +2,12 @@ import mockData from "../../utils/mockData_Companies.json"
 
 const getState = ({ getStore, getActions, setStore }) => {
 
-    
-                
-
   return {
     store: {
       news: [],
-      companies: {}
+      companies: {},
+      token: "",
+      profile: {}
     },
     actions: {
       fetchNews: async (setLoading) => {
@@ -72,6 +71,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         try {
           // fetching data from the backend
           const resp = await fetch(process.env.BACKEND_URL + "api/token", {
+            method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
@@ -81,7 +81,8 @@ const getState = ({ getStore, getActions, setStore }) => {
           console.log(data);
           setStore({ token: data.token });
           localStorage.setItem("token", data.token);
-          getActions().getUserProfile();
+          const user = await getActions().getUserProfile();
+          console.log(user);
           // don't forget to return something, that is how the async resolves
           return data.authorize;
         } catch (error) {
@@ -105,6 +106,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           );
           if (resp.status == 200) {
             const data = await resp.json();
+            console.log(data);
             setStore({ profile: data });
             return true;
           }

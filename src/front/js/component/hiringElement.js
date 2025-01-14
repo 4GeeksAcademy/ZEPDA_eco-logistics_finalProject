@@ -7,10 +7,10 @@ export const HiringElement = () => {
                 <h5 className="text-success fw-semibold m-0 text-start">ITENE RESEARCH CENTER</h5> 
                 <div className="d-flex float-end">
                     <div className="px-3 rounded-pill icon-hover clickable" onClick={() => {}}>
-                        <i class="fa-solid fa-check"></i>
+                        <i className="fa-solid fa-check"></i>
                     </div>
                     <div className="px-3 rounded-pill icon-hover clickable" onClick={() => {}}>
-                        <i class="fa-solid fa-xmark"></i>
+                        <i className="fa-solid fa-xmark"></i>
                     </div>
                 </div>
             </div>
