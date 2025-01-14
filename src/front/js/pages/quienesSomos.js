@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Context } from "../store/appContext";
-import somos from "../../img/zepdalogo.png";
+import somos from "../../img/zepda-web-img/manos-carteles-eco.webp";
 import { Link } from "react-router-dom";
 
 
@@ -27,7 +27,15 @@ export const QuienesSomos = () => {
                 </p>
 
                 <p>
-                Tienes alguna pregunta de como funciona Zepda Eco-logistics? <Link className="links" to="/contacto"><strong>contáctanos</strong></Link>.</p>
+                Tienes alguna pregunta de como funciona Zepda Eco-logistics? <Link className="links" to="/contacto"><strong>contáctanos</strong></Link>.
+                </p>
+                <p>
+                    Estamos ubicados en:<br></br>
+                    calle del Sol,1<br></br>
+                    46001<br></br>
+                    Valencia, España
+                </p>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d8445.54790807675!2d-0.38343609177274723!3d39.41379124497601!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2ses!4v1736361006967!5m2!1ses!2ses" width="600" height="450" style={{border:0}} allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
 
         </div >
         
