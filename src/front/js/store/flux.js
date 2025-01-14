@@ -6,8 +6,8 @@ const getState = ({ getStore, getActions, setStore }) => {
     store: {
       news: [],
       companies: {},
-      token: "",
-      profile: {}
+      token: localStorage.getItem("token") || "",
+      profile: JSON.parse(localStorage.getItem("profile")) || {},
     },
     actions: {
       fetchNews: async (setLoading) => {
@@ -56,7 +56,23 @@ const getState = ({ getStore, getActions, setStore }) => {
           console.log("Error sending customer to back backend", err);
         }
       },
-
+        // Verificación si el correo ya está registrado
+        checkEmailExists: async (email) => {
+          try {
+            const resp = await fetch(process.env.BACKEND_URL + "api/check-email", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ email }),
+            });
+            const data = await resp.json();
+            return data.exists; // Regresa true si el correo existe, false si no
+          } catch (error) {
+            console.log("Error checking email:", error);
+            return false;
+          }
+        },
 //*********************************** **************************************************************** */
       getIsLogin: () => {
         return getStore();
@@ -78,6 +94,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             body: JSON.stringify({ email, contraseña }),
           });
           const data = await resp.json();
+          if(data.token){
           console.log(data);
           setStore({ token: data.token });
           localStorage.setItem("token", data.token);
@@ -85,6 +102,9 @@ const getState = ({ getStore, getActions, setStore }) => {
           console.log(user);
           // don't forget to return something, that is how the async resolves
           return data.authorize;
+          }else{
+            return false;
+          }
         } catch (error) {
           console.log("Error loading message from backend", error);
         }
@@ -108,6 +128,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             const data = await resp.json();
             console.log(data);
             setStore({ profile: data });
+            localStorage.setItem("profile", JSON.stringify(data)); 
             return true;
           }
           console.log("expired");
@@ -127,13 +148,19 @@ const getState = ({ getStore, getActions, setStore }) => {
             body: JSON.stringify(user),
           });
           const data = await resp.json();
-          console.log(data);
           return true;
         } catch (err) {
           console.log("Error sending customer to back backend", err);
         }
       },
 //************************************************************************************************ */
+
+      logoutUser: () => {
+          const store = getStore();
+            localStorage.removeItem("token");  // Remove token from localStorage
+            localStorage.removeItem("profile");  // Remove user profile from localStorage
+          setStore({ ...store, token: null, profile: null });  // Reset store state
+      },
 
       createCompany: async (user1) => {
         try {
