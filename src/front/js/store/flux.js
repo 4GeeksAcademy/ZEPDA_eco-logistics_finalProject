@@ -127,6 +127,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             body: JSON.stringify(user),
           });
           const data = await resp.json();
+          console.log(data);
           return true;
         } catch (err) {
           console.log("Error sending customer to back backend", err);

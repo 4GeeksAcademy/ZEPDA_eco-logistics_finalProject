@@ -9,8 +9,7 @@ class User(db.Model):
     contraseña = db.Column(db.String(200), unique=False, nullable=False)
     esta_activo = db.Column(db.Boolean(), unique=False, nullable=False)
 
-    def __init__(self, id, nombre, email, contraseña):
-        self.id = id
+    def __init__(self, nombre, email, contraseña):
         self.nombre = nombre
         self.email = email
         self.contraseña = contraseña
