@@ -22,9 +22,11 @@ const injectContext = PassedComponent => {
 		);
 
 		useEffect(() => {
-		
+			
 			state.actions.fetchNews(); // <---- calling this function from the flux.js actions
 			state.actions.loadDummyCompanies();
+			state.actions.recoverUser(); // si ya se ha logueado, recupera la ultima sesión
+
 		}, []);
 
 	

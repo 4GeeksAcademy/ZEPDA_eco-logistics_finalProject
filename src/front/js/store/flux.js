@@ -41,6 +41,19 @@ const getState = ({ getStore, getActions, setStore }) => {
             console.log(error);
         }
       },
+      saveUserData: (user, token) => {
+        localStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem("token", token);
+      },
+      recoverUser: () => {
+        const savedUser = JSON.parse(localStorage.getItem("user")) || null;
+        const savedToken = localStorage.getItem("token") || null;
+        
+        if (savedUser && savedToken) {
+          setStore({ profile: savedUser });
+          setStore({ token: savedToken });
+        }
+      },
       createUser: async (user) => {
         try {
           const resp = await fetch(process.env.BACKEND_URL + "api/register", {
@@ -81,8 +94,9 @@ const getState = ({ getStore, getActions, setStore }) => {
           console.log(data);
           setStore({ token: data.token });
           localStorage.setItem("token", data.token);
-          const user = await getActions().getUserProfile();
+          const user = await getActions().getUserProfile(); // actualiza profile
           console.log(user);
+          // getActions().saveUserData(user, data.token);
           // don't forget to return something, that is how the async resolves
           return data.authorize;
         } catch (error) {
