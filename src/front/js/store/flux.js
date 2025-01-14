@@ -6,8 +6,8 @@ const getState = ({ getStore, getActions, setStore }) => {
     store: {
       news: [],
       companies: {},
-      token: "",
-      profile: {}
+      token: localStorage.getItem("token") || "",
+      profile: JSON.parse(localStorage.getItem("user")) || {}
     },
     actions: {
       fetchNews: async (setLoading) => {
@@ -96,7 +96,6 @@ const getState = ({ getStore, getActions, setStore }) => {
           localStorage.setItem("token", data.token);
           const user = await getActions().getUserProfile(); // actualiza profile
           console.log(user);
-          // getActions().saveUserData(user, data.token);
           // don't forget to return something, that is how the async resolves
           return data.authorize;
         } catch (error) {
