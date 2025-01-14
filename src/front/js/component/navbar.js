@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect} from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import zpdalogo from "../../img/zepdalogo.png"
 import { Modal, Button } from "react-bootstrap";
@@ -11,7 +11,7 @@ export const Navbar = () => {
   const handleCloseModal = () => setShowModal(false);
   const handleShowModal = () => setShowModal(true);
   const toggleForm = () => setIsLogin(!isLogin);
-  
+
   const navigate = useNavigate();
   const [user, setUser] = useState({
     nombre: "",
@@ -56,11 +56,11 @@ export const Navbar = () => {
           contraseña: "",
           password_check: "",
         });
-      //  setIsShown(!isShow);
-      // } else {
+        //  setIsShown(!isShow);
+        // } else {
         // toggleModal("Upss! ocurrió un error inesperado!");
       }
-    // } else {
+      // } else {
       // toggleModal("Contraseñas no coinciden!");
       setUser({ ...user, contraseña: "", password_check: "" });
     }
@@ -70,7 +70,7 @@ export const Navbar = () => {
     event.preventDefault();
     const login = await actions.loginUser(user);
     console.log(login);
-    
+
     if (login) {
       setShowModal(false);
       //toggleModal("Login satisfactorio!");
@@ -133,9 +133,6 @@ export const Navbar = () => {
           </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav ms-auto d-flex gap-3">
-            <li className="nav-item">
-                <Link to={"/dashboard"} className="nav-link text-black" aria-current="page" href="#">Dashboard</Link> {/*Aqui se redirige al dashboard de pruebas*/}
-              </li>
               <li className="nav-item">
                 <Link to={"/servicios"} className="nav-link text-black" aria-current="page" href="#">Servicios</Link>
               </li>
@@ -157,10 +154,6 @@ export const Navbar = () => {
           </div>
         </div>
       </nav>
-      {/* Modal de Login y Registro */}
-
-      {/* se realiza el logeo */}
-
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>{isLogin ? "Login" : "Registro"}</Modal.Title>
@@ -201,8 +194,6 @@ export const Navbar = () => {
               </form>
             </div>
           ) : (
-
-            // se realiza el registro de usuario****************************************************************************************************
             <div>
               <form onSubmit={registerUser}>
                 <div className="mb-3">

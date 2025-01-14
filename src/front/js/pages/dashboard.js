@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useActionState } from "react";
 import "../../styles/dashboard.css";
-
+import { useContext } from "react";
+import { Context } from "../store/appContext";
+import { useNavigate } from "react-router-dom";
+ 
 const Dashboard = ({nombre}) => {
+  const { store, actions } = useContext(Context);
+  const navigate = useNavigate();
   return (
     <div className="dashboard">
       <div className="left">
-        <div className="sidebar11">
+        {/* <div className="sidebar11">
           <div className="wrapper">
             <div className="menu">
               <img src="https://i.ibb.co/B4Dn7CT/menu.png" />
@@ -22,7 +27,7 @@ const Dashboard = ({nombre}) => {
               <img src="https://www.seekclipart.com/clipng/middle/103-1032140_graphic-transparent-1-vector-flat-small-user-icon.png" />
             </div>
           </div>
-        </div>
+        </div> */}
         <div className="navigation">
           <div className="wrapper2">
             <button className="compose mt-3">
@@ -31,19 +36,19 @@ const Dashboard = ({nombre}) => {
                 <img src="https://i.ibb.co/v1HxGWj/add-1.png" />
               </span>
             </button>
-            <div className="folders">Carpetas</div>
+            {/* <div className="folders">Carpetas</div> */}
             <div className="folder-icons">
-              <div className="icon1">
+              {/* <div className="icon1">
                 <img src="https://i.ibb.co/qdgf3TJ/envelope.png" />
-              </div>
+              </div> */}
               <div className="icon-name1">
-                Buzon de Usuario
-                <button className="buton-span"> 5</button>
+                {nombre}
+                <button className="buton-span"> 5 emails nuevos</button>
               </div>
             </div>
             <div className="folder-icons">
               <div className="icon1">
-                <img src="https://i.ibb.co/2yLfX9W/sent-mail.png" />
+                <img src="https://</div>i.ibb.co/2yLfX9W/sent-mail.png" />
               </div>
               <div className="icon-name">Enviar Mail</div>
             </div>
@@ -71,7 +76,7 @@ const Dashboard = ({nombre}) => {
               </div>
               <div className="icon-name">Papelera</div>
             </div>
-            <div className="folders">Online Friends</div>
+            {/* <div className="folders">Online Friends</div>
             <div className="folder-icons">
               <div className="avatar">
                 <div className="online"></div>
@@ -126,7 +131,7 @@ const Dashboard = ({nombre}) => {
                   <img src="https://i.ibb.co/DMmSZW0/tag.png" />
                 </span>
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -134,8 +139,7 @@ const Dashboard = ({nombre}) => {
         <div className="right-header">
           <div className="top-bar">
             <div className="top-bar-justify">
-              <div className="big-inbox">Buzon</div>
-
+              <div className="big-inbox">Buzon de:  {nombre}</div>
               <div className="top-bar-items">
                 <div className="notif">
                   <div className="online pink"></div>
@@ -150,6 +154,9 @@ const Dashboard = ({nombre}) => {
               <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxskBELKkcItHXQFVTYI5p3_413uobvl2BHJLEM7PNg4cag9-l6n2mydDwws1CjV0ZTjw&usqp=CAU" />
               <div className="icon-name5">{nombre}</div>
             </div>
+            <button className="compose2" onClick={() => {actions.logOut("token"); navigate("/")}}>
+              LogOut
+          </button>
           </div>
           <hr className="new-hr" />
           <div className="right-bottom">
