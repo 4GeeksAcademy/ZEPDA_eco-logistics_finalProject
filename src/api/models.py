@@ -35,12 +35,13 @@ class Company(db.Model):
     direccion = db.Column(db.String(255), nullable=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     descripcion = db.Column(db.Text, nullable=True)
-    web = db.Column(db.String(120), unique=True, nullable=True)
+    web = db.Column(db.String(120), unique=True, nullable=False)
     contraseña = db.Column(db.String(200), nullable=False)
     certificado = db.Column(db.String(120), nullable=True)
+    imagen = db.Column(db.String(255), nullable=True)
 
 
-    def __init__(self,nif,nombre,sector,direccion,email,descripcion,web,contraseña,certificado):
+    def __init__(self,nif,nombre,sector,direccion,email,descripcion,web,contraseña,certificado,imagen):
         self.nif = nif
         self.nombre = nombre
         self.sector = sector
@@ -50,6 +51,7 @@ class Company(db.Model):
         self.web = web
         self.contraseña = contraseña
         self.certificado = certificado
+        self.imagen = imagen
 
     def __repr__(self):
         return f'<Company {self.nombre}>'
@@ -65,5 +67,6 @@ class Company(db.Model):
             "web": self.web,
             "contraseña": self.contraseña,
             "certificado": self.certificado,
+            "imagen": self.imagen
         }
     
