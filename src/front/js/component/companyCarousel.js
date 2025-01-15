@@ -7,9 +7,10 @@ export const CompanyCarousel = ({sector}) => {
     // App Store
     const { store } = useContext(Context);
     const sectorCompanies = store.companies[sector];
+    console.log(sectorCompanies.length);
     // Component Logic Variables
     const [currentIndex, setCurrentIndex] = useState(0); 
-    const totalItems = 4; // los que hay -2
+    const totalItems = sectorCompanies.length - 2; // los que hay -2
     const itemsToShow = 3; 
     
     const handleMoveCarousel = (direction) => { 
@@ -24,7 +25,7 @@ export const CompanyCarousel = ({sector}) => {
 
     return (
         <>
-            <h1 className="text-start fw-normal fs-5 mb-0">EMPRESAS DE {sector}</h1>
+            <h1 className="text-start fw-normal fs-5 mb-0">EMPRESAS DE {sector.toUpperCase()}</h1>
             <div className="company-carousel" style={{ width: '100%', overflow: 'hidden' }}> 
                 <div className="company-carousel-inner" style={{ display: 'flex', transition: 'transform 0.5s ease', ...getTransformStyle() }}> 
                     {
