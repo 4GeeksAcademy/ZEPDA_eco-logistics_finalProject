@@ -11,8 +11,8 @@ export const NewsSection = () => {
   }, []);
 
   return (
-    <div className="container mt-5 news-section">
-      <h1>Últimas noticias sobre sostenibilidad</h1>
+    <div className="container mt-5 news-section text-success">
+      <h4>ÚLTiMAS NOTICIAS SOBRE SOSTENIBILIDAD</h4>
       <div className="carousel-container-nws">
         {loading ? (
           <p>Cargando noticias...</p>

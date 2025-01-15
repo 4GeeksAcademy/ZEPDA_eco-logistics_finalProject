@@ -1,34 +1,42 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
+import { Context } from "../store/appContext";
+import "../../styles/companies.css";
+import { UserPanel } from "../component/userPanel";
+import { HiringsPanel } from "../component/hiringsPanel";
+import { FavoritesPanel } from "../component/favoritesPanel";
 
 export const DashboardUser = () => {
     const { store, actions } = useContext(Context);
+
+    useEffect(() => {
+        console.log(store.profile);
+        console.log(store.token);
+        actions.saveUserData(store.profile, store.token);
+    }, [store.token]);
+    console.log(store.profile);
+
     
+    // {store?.token ? <Dashboard nombre={store.profile?.nombre} /> : navigate("/")}
+
+    const getSectorKeys = () => {
+        if (store.companies && Object.keys(store.companies).length > 0) {
+            return Object.keys(store.companies);
+        }
+        return [];
+    };
 
     return (
         <>
-
-        <div className="favoritos">
-            <h2>Mis empresas favoritas</h2>
-            <div className="container">
-                <div className="row">
-                    {store.companies && Object.entries(store.companies).map(([key, value]) => {
-                        return (
-                            <div className="col-3" key={key}>
-                                <div className="card">
-                                    <img src={value.img} className="card-img-top" alt="..." />
-                                    <div className="card-body">
-                                        <h5 className="card-title">{key}</h5>
-                                        <p className="card-text">{value.description}</p>
-                                        <a href={value.website} className="btn btn-primary">Ir a la página</a>
-                                    </div>
-                                </div>
-                            </div>
-                        )
-                    })}
+            <div className="container text-center mt-5">
+                <h1 className="border-bottom border-2 text-start fw-normal fs-3">DASHBOARD</h1>
+                <div className="d-flex justify-content-around">
+                    <UserPanel user={store.profile} /> 
+                    <HiringsPanel /> 
                 </div>
-
-        </div>
-        </div>
+            </div>
+            <div className="container text-center mt-5 border-2 rounded">
+                <FavoritesPanel />
+            </div>
         </>
-    )
-}
+    );
+};
