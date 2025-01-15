@@ -17,12 +17,12 @@ export const Companies = () => {
         <>
         
         <div className="container text-center mt-5">
-            <h1 className="border-bottom border-2 text-start fw-normal fs-3">NUESTRAS EMPRESAS ASOCIADAS</h1>
+            <h1 className="border-bottom border-2 text-start fw-normal fs-3 mb-5">NUESTRAS EMPRESAS ASOCIADAS</h1>
             {
                 store.companies && Object.keys(store.companies).length > 0 ? 
                 (
                     getSectorKeys().map((sector, index) => ( 
-                        <div key={index} className="mt-5">
+                        <div key={index} className="p-3">
                             <CompanyCarousel sector={sector} />
                         </div>
                     ))

@@ -1,25 +1,7 @@
 import React from "react";
 import userPic from "../../img/rigo-baby.jpg"
-
-function getStringDate() {
-    const fecha = new Date(Date.now());
-
-    const dia = String(fecha.getDate()).padStart(2, '0');
-    const año = fecha.getFullYear();
-
-    const meses = [
-        "enero", "febrero", "marzo", "abril", "mayo", "junio",
-        "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
-    ];
-
-    const mes = meses[fecha.getMonth()];
-
-    const fechaFormateada = `${dia} de ${mes} de ${año}`;
-
-    console.log(fechaFormateada); 
-
-    return fechaFormateada;
-}
+const mockDesc = "Le encanta la programación, especialmente en Python y JavaScript. En su tiempo libre, disfruta de la jardinería y la cocina gourmet. Es un apasionado de la música clásica y toca el violín desde niño. Le gusta leer sobre ciencia ficción y es miembro activo de un club de lectura local. Los fines de semana, suele hacer senderismo por la Sierra de Guadarrama y le gusta capturar fotografías de la naturaleza."
+import { getStringDate } from "../../utils/formattedDate";
 
 const user = {
         "nombre": "ITENE RESEARCH CENTER",
@@ -45,18 +27,18 @@ export const UserPanel = ({user}) => {
                 <div className="card rounded-5" style={{height:'50vh'}}> 
                     <div className="card-header border-0 bg-white rounded-5 rounded-bottom-0 border-bottom"> 
                         <div className="d-flex justify-content-around">
-                            <img src={userPic || "https://picsum.photos/id/237/536/354"} className="img-fluid rounded-circle" alt="user-image" style={{width:150,height:150}}/>
+                            <img src={user.imagen || "rigo-baby.jpg"} className="img-fluid rounded-circle" alt="user-image" style={{width:150,height:150}}/>
                             <div className="my-auto float-end">
-                                <h5 className="card-title text-success fw-semibold m-0 py-2 text-start">{user.nombre}</h5> 
-                                <p className="card-text mb-2 fw-normal text-start">{user.email}</p> 
-                                <p className="card-text mb-2 fw-normal text-start">{user.direccion}</p> 
+                                <h5 className="card-title text-success fw-semibold m-0 py-2 text-start">{user.nombre || "Juan Martinez"}</h5> 
+                                <p className="card-text mb-2 fw-normal text-start">{user.email || "juan.martinez@example.com"}</p> 
+                                <p className="card-text mb-2 fw-normal text-start">{user.direccion || "Calle de la Primavera, 45, 4º B 28013 Madrid, España"}</p> 
                             </div>
                         </div>
                     </div> 
                     <div className="card-body bg-light pt-0 rounded-5 rounded-top rounded-top-0 pb-2"> 
-                        <p className="mt-2 text-start" style={{height:'75%'}}>{user.descripcion}</p>
+                        <p className="mt-2 text-start" style={{height:'75%'}}>{user.descripcion || mockDesc}</p>
                         <div className="d-flex justify-content-between">
-                            <p className="card-text m-0 text-secondary text-start">Usuario desde {user.admission_day}</p> 
+                            <p className="card-text m-0 text-secondary text-start">Usuario desde {user.admission_day || getStringDate()}</p> 
                             <a href="#" className="text-success float-end">editar perfil</a> 
                         </div>
                     </div> 
