@@ -4,7 +4,6 @@ import "../../styles/companies.css";
 import { UserPanel } from "../component/userPanel";
 import { HiringsPanel } from "../component/hiringsPanel";
 import { FavoritesPanel } from "../component/favoritesPanel";
-import { FavoritesPanel } from "../component/favoritesPanel";
 import { ServicesRow } from "../component/servicesRow";
 
 export const DashboardUser = () => {
@@ -15,17 +14,6 @@ export const DashboardUser = () => {
         console.log(store.token);
         actions.saveUserData(store.profile, store.token);
     }, [store.token]);
-    console.log(store.profile);
-
-    
-    // {store?.token ? <Dashboard nombre={store.profile?.nombre} /> : navigate("/")}
-
-    const getSectorKeys = () => {
-        if (store.companies && Object.keys(store.companies).length > 0) {
-            return Object.keys(store.companies);
-        }
-        return [];
-    };
 
     return (
         <>
@@ -41,12 +29,6 @@ export const DashboardUser = () => {
                 <div className="mt-3">
                     <ServicesRow />
                 </div>
-            </div>
-            <div className="container text-center mt-5 border-2 rounded">
-                <FavoritesPanel />
-            </div>
-            <div className="container text-center mt-5 border-2 rounded">
-                <FavoritesPanel />
             </div>
         </>
     );
