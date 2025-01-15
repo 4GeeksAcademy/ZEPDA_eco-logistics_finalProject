@@ -15,7 +15,7 @@ export const HiringElement = ({num, company}) => {
 
     return (
             isDivVisible && (
-                <div className="d-flex justify-content-between align-items-center border-bottom py-2 ps-4 pe-2 fs-5"
+                <div className="d-flex justify-content-between align-items-center border-bottom py-2 ps-4 pe-2 fs-5 flex-wrap"
                     style={{ backgroundColor: isChecked ? 'lightgreen' : 'transparent' }}>
                     <h5 className="text-success fw-semibold m-0 text-start">{num+1} - {company ? company.nombre.toUpperCase() : "COMPANY EXAMPLE"}</h5> 
                     <p className="fs-6 fw-light m-0 p-0">{company ? company.admission_day : getStringDate()}</p>

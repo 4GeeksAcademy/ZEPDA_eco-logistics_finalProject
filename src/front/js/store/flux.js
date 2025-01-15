@@ -7,7 +7,8 @@ const getState = ({ getStore, getActions, setStore }) => {
       news: [],
       companies: {},
       token: localStorage.getItem("token") || "",
-      profile: JSON.parse(localStorage.getItem("user")) || {}
+      profile: JSON.parse(localStorage.getItem("user")) || {},
+      favoriteCompanies: []
     },
     actions: {
       fetchNews: async (setLoading) => {
@@ -146,6 +147,19 @@ const getState = ({ getStore, getActions, setStore }) => {
           console.log("Error sending customer to back backend", err);
         }
       },
+      addFavoriteCompany: (company) => {
+        const store = getStore();
+        const updatedFavorites = [...store.favoriteCompanies, company];
+        setStore({ favoriteCompanies: updatedFavorites });
+        localStorage.setItem("favoriteCompanies", JSON.stringify(updatedFavorites));
+    },
+
+    removeFavoriteCompany: (company) => {
+      const store = getStore();
+      const updatedFavorites = store.favoriteCompanies.filter(fav => fav.id !== company.id);
+      setStore({ favoriteCompanies: updatedFavorites });
+      localStorage.setItem("favoriteCompanies", JSON.stringify(updatedFavorites));
+  },
 //************************************************************************************************ */
 
       createCompany: async (user1) => {
