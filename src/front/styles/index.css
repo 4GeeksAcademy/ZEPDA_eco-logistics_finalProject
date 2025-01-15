@@ -92,6 +92,9 @@ footer{
   flex-wrap: wrap;
   justify-content: space-between;
   margin-top: 20px;
+  border: solid 1px #0000002c;
+  border-radius: 10px; 
+  box-shadow: #0000003f 0px 0px 20px;
 }
 
 .logo-item {

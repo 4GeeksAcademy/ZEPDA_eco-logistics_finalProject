@@ -17,9 +17,7 @@ export const Home = () => {
 
 			<JumbotronCarousel />
 			<div className="container mt-4 d-flex justify-content-center">
-			<h1>
-				EL CAMBIO YA EMPEZÓ, EL MOMENTO DE SUMARSE ES AHORA!
-			</h1>
+			
 			</div>
 
 			<div className="container mt-4 ">
@@ -71,9 +69,10 @@ export const Home = () => {
 						</div>
 					))}
 				</div>
+				<div className="logos-container">
 
 				<NewsSection />
-
+				</div>
 
 			</div>
 		</>

@@ -5,7 +5,7 @@ export const CompanyCard = ({company}) => {
     return (
         <>
             <div className="col-4 p-3"> 
-                <div className="card rounded-5"> 
+                <div className="card rounded-2 shadow"> 
                     <div className="card-header border-0 bg-white rounded-5 rounded-bottom"> 
                         <img className="img-fluid object-fit-contain rounded mx-auto d-block" src={company.logo} alt={'logo: ' + company.logo} style={{height:'10vh'}} /> 
                     </div> 
