@@ -13,7 +13,8 @@
                 "descripcion": "Centro líder en investigación y desarrollo de soluciones innovadoras de embalaje.",
                 "nif": "GB123456789",
                 "contraseña": "SecurePass123!",
-                "password_check": "SecurePass123!"
+                "password_check": "SecurePass123!",
+                "logo": "logo-itene-research.png"
             },
             {
                 "nombre": "NAITEC",
@@ -27,7 +28,8 @@
                 "descripcion": "Empresa dedicada a ofrecer soluciones de embalaje sostenible.",
                 "nif": "FR987654321",
                 "contraseña": "NaiTecSecure!",
-                "password_check": "NaiTecSecure!"
+                "password_check": "NaiTecSecure!",
+                "logo": "logo-naitec-automotive.png"
             },
             {
                 "nombre": "PackBenefit",
@@ -41,7 +43,8 @@
                 "descripcion": "Proveedor de soluciones de embalaje innovadoras y ecológicas.",
                 "nif": "ES654321987",
                 "contraseña": "PackBenefit123!",
-                "password_check": "PackBenefit123!"
+                "password_check": "PackBenefit123!",
+                "logo": "logo-packbenefit.png"
             },
             {
                 "nombre": "PackTech Innovations",
@@ -55,7 +58,8 @@
                 "descripcion": "Empresa líder en soluciones de embalaje ecológicas y sostenibles.",
                 "nif": "ES987654321",
                 "contraseña": "EcoPack2025!",
-                "password_check": "EcoPack2025!"
+                "password_check": "EcoPack2025!",
+                "logo": "logo-packtech.png"
             },
             {
                 "nombre": "EcoPack Solutions",
@@ -69,7 +73,8 @@
                 "descripcion": "Especialistas en soluciones de embalaje ecológico y reciclable.",
                 "nif": "NL789123456",
                 "contraseña": "EcoPackNL2025!",
-                "password_check": "EcoPackNL2025!"
+                "password_check": "EcoPackNL2025!",
+                "logo": "logo-ecopack.png"
             }
         ]
     },
@@ -87,7 +92,8 @@
                 "descripcion": "Servicios logísticos completos y eficientes.",
                 "nif": "GB234567891",
                 "contraseña": "StockLogistic!",
-                "password_check": "StockLogistic!"
+                "password_check": "StockLogistic!",
+                "logo": "logo-stock-logistic.png"
             },
             {
                 "nombre": "MOLDTRANS",
@@ -101,7 +107,8 @@
                 "descripcion": "Líder en servicios de transporte y logística.",
                 "nif": "NL123456789",
                 "contraseña": "MoldTrans2025",
-                "password_check": "MoldTrans2025"
+                "password_check": "MoldTrans2025",
+                "logo": "logo-moldtrans.png"
             },
             {
                 "nombre": "Expotrans",
@@ -115,7 +122,8 @@
                 "descripcion": "Especialistas en transporte y logística internacional.",
                 "nif": "ES987654321",
                 "contraseña": "ExpotransSecure!",
-                "password_check": "ExpotransSecure!"
+                "password_check": "ExpotransSecure!",
+                "logo": "logo-expotrans.png"
             },
             {
                 "nombre": "TransLogistics Solutions",
@@ -129,7 +137,8 @@
                 "descripcion": "Proveedor global de soluciones logísticas y de transporte eficientes.",
                 "nif": "DE123987654",
                 "contraseña": "LogiTrans2025!",
-                "password_check": "LogiTrans2025!"
+                "password_check": "LogiTrans2025!",
+                "logo": "logo-translogistics.png"
             },
             {
                 "nombre": "GlobalTransit Solutions",
@@ -143,7 +152,8 @@
                 "descripcion": "Expertos en servicios de transporte y logística a nivel mundial.",
                 "nif": "BE123456789",
                 "contraseña": "TransitGlobal2025!",
-                "password_check": "TransitGlobal2025!"
+                "password_check": "TransitGlobal2025!",
+                "logo": "logo-globaltransit.png"
             }
         ]
     },
@@ -161,7 +171,8 @@
                 "descripcion": "Organización sin ánimo de lucro dedicada al reciclaje de envases.",
                 "nif": "ES123456789",
                 "contraseña": "Ecoembes2025",
-                "password_check": "Ecoembes2025"
+                "password_check": "Ecoembes2025",
+                "logo": "logo-ecoembes.png"
             },
             {
                 "nombre": "Ecologistic",
@@ -175,7 +186,8 @@
                 "descripcion": "Servicios de gestión integral de residuos.",
                 "nif": "ES234567891",
                 "contraseña": "EcoLogisticSecure",
-                "password_check": "EcoLogisticSecure"
+                "password_check": "EcoLogisticSecure",
+                "logo": "logo-ecologistic.png"
             },
             {
                 "nombre": "Acteco",
@@ -189,7 +201,8 @@
                 "descripcion": "Líder en soluciones de reciclaje y gestión de residuos.",
                 "nif": "ES345678912",
                 "contraseña": "ActecoResiduos",
-                "password_check": "ActecoResiduos"
+                "password_check": "ActecoResiduos",
+                "logo": "logo-acteco.png"
             },
             {
                 "nombre": "EcoWaste Management",
@@ -203,7 +216,8 @@
                 "descripcion": "Líder en la gestión sostenible de residuos y reciclaje.",
                 "nif": "FR456123789",
                 "contraseña": "EcoManage2025!",
-                "password_check": "EcoManage2025!"
+                "password_check": "EcoManage2025!",
+                "logo": "logo-ecowaste.png"
             },
             {
                 "nombre": "GreenWaste Solutions",
@@ -217,7 +231,8 @@
                 "descripcion": "Empresa líder en el manejo de residuos ecológicos y reciclaje innovador.",
                 "nif": "IT456789123",
                 "contraseña": "GreenEco2025!",
-                "password_check": "GreenEco2025!"
+                "password_check": "GreenEco2025!",
+                "logo": "logo-greenwaste.png"
             }
         ]
     }

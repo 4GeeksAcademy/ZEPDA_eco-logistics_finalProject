@@ -25,7 +25,7 @@ export const CompanyCarousel = ({sector}) => {
 
     return (
         <>
-            <h1 className="text-start fw-normal fs-5 mb-0">EMPRESAS DE {sector}</h1>
+            <h1 className="text-start fw-normal fs-5 mb-0">EMPRESAS DE {sector.toUpperCase()}</h1>
             <div className="company-carousel" style={{ width: '100%', overflow: 'hidden' }}> 
                 <div className="company-carousel-inner" style={{ display: 'flex', transition: 'transform 0.5s ease', ...getTransformStyle() }}> 
                     {
