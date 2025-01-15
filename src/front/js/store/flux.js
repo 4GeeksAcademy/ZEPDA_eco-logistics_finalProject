@@ -7,11 +7,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       news: [],
       companies: {},
       token: localStorage.getItem("token") || "",
-<<<<<<< HEAD
       profile: JSON.parse(localStorage.getItem("profile")) || {},
-=======
-      profile: JSON.parse(localStorage.getItem("user")) || {}
->>>>>>> dev2
     },
     actions: {
       fetchNews: async (setLoading) => {
