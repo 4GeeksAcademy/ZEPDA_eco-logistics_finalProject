@@ -42,7 +42,7 @@ export const UserPanel = () => {
         <>
             <div className="col-6 p-3"> 
                 <h1 className="text-start fw-normal fs-5 mb-3">BIENVENIDO USUARIO</h1>
-                <div className="card rounded-5"> 
+                <div className="card rounded-5" style={{height:'50vh'}}> 
                     <div className="card-header border-0 bg-white rounded-5 rounded-bottom-0 border-bottom"> 
                         <div className="d-flex justify-content-around">
                             <img src={userPic || "https://picsum.photos/id/237/536/354"} className="img-fluid rounded-circle" alt="user-image" style={{width:150,height:150}}/>
@@ -54,7 +54,7 @@ export const UserPanel = () => {
                         </div>
                     </div> 
                     <div className="card-body bg-light pt-0 rounded-5 rounded-top rounded-top-0 pb-2"> 
-                        <p className="mt-2 text-start">{user.descripcion}</p>
+                        <p className="mt-2 text-start" style={{height:'75%'}}>{user.descripcion}</p>
                         <div className="d-flex justify-content-between">
                             <p className="card-text m-0 text-secondary text-start">Usuario desde {user.admission_day}</p> 
                             <a href="#" className="text-success float-end">editar perfil</a> 
