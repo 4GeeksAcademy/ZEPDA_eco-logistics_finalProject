@@ -3,6 +3,8 @@ import { Context } from "../store/appContext";
 import "../../styles/companies.css";
 import { UserPanel } from "../component/userPanel";
 import { HiringsPanel } from "../component/hiringsPanel";
+import { FavoritesPanel } from "../component/favoritesPanel";
+import { ServicesRow } from "../component/servicesRow";
 
 export const DashboardUser = () => {
     const { store, actions } = useContext(Context);
@@ -20,6 +22,12 @@ export const DashboardUser = () => {
                 <div className="d-flex justify-content-around">
                     <UserPanel user={store.profile} /> 
                     <HiringsPanel /> 
+                </div>
+                <div className="mt-3">
+                    <FavoritesPanel />
+                </div>
+                <div className="mt-3">
+                    <ServicesRow />
                 </div>
             </div>
         </>
