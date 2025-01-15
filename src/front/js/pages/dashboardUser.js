@@ -4,6 +4,7 @@ import "../../styles/companies.css";
 import { UserPanel } from "../component/userPanel";
 import { HiringsPanel } from "../component/hiringsPanel";
 import { FavoritesPanel } from "../component/favoritesPanel";
+import { FavoritesPanel } from "../component/favoritesPanel";
 import { ServicesRow } from "../component/servicesRow";
 
 export const DashboardUser = () => {
@@ -40,6 +41,12 @@ export const DashboardUser = () => {
                 <div className="mt-3">
                     <ServicesRow />
                 </div>
+            </div>
+            <div className="container text-center mt-5 border-2 rounded">
+                <FavoritesPanel />
+            </div>
+            <div className="container text-center mt-5 border-2 rounded">
+                <FavoritesPanel />
             </div>
         </>
     );
