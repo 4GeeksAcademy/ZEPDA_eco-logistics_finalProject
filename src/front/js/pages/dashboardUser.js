@@ -3,16 +3,14 @@ import { Context } from "../store/appContext";
 import "../../styles/companies.css";
 import { UserPanel } from "../component/userPanel";
 import { HiringsPanel } from "../component/hiringsPanel";
-// import { CompanyCarousel } from "../component/companyCarousel";
-import { useNavigate } from "react-router-dom";
 
 export const DashboardUser = () => {
-    const { store } = useContext(Context);
-    const navigate = useNavigate();
+    const { store, actions } = useContext(Context);
 
     useEffect(() => {
+        console.log(store.profile);
         console.log(store.token);
-        !store.token 
+        actions.saveUserData(store.profile, store.token);
     }, [store.token]);
     console.log(store.profile);
 
@@ -34,20 +32,6 @@ export const DashboardUser = () => {
                     <UserPanel user={store.profile} /> 
                     <HiringsPanel /> 
                 </div>
-                {/* {
-                    store.companies && Object.keys(store.companies).length > 0 ? 
-                    (
-                        getSectorKeys().map((sector, index) => ( 
-                            <div key={index} className="mt-5">
-                                <CompanyCarousel sector={sector} />
-                            </div>
-                        ))
-                    ) 
-                    : 
-                    (
-                        <p>No se encontraron empresas...</p>
-                    )
-                } */}
             </div>
         </>
     );
