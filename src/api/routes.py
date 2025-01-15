@@ -86,6 +86,8 @@ def validate_user():
     if user is None:
         return {'message': 'Unauthorized'}, 401
     return user.serialize(), 200
+
+
 @api.route('/check-email', methods=['POST'])
 def check_email():
     body = request.get_json()

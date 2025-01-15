@@ -51,7 +51,7 @@ export const Navbar = () => {
             {!store.token ? (
               <button className="btn" onClick={handleShowModal}>Login</button>
             ) : (
-              <button className="btn" onClick={logoutUser}>Logout</button>
+              <button className="btn btn-danger" onClick={logoutUser}>Logout</button>
             )}
           </div>
         </div>

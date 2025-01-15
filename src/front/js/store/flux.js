@@ -77,7 +77,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       getIsLogin: () => {
         return getStore();
       },
-
+      
       resetLocalStorage: () => {
         const store = getStore();
         localStorage.removeItem("token");
@@ -177,11 +177,6 @@ const getState = ({ getStore, getActions, setStore }) => {
           console.log("Error sending customer to back backend", err);
         }
       },
-      // logOut: (type) => {
-      //   localStorage.removeItem(type);
-      //   setStore({ token: null, token1: null, profile: null });
-      // },
-
     },
   };
 };

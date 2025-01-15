@@ -13,6 +13,7 @@ export const LoginRegisterModal = ({ showModal, handleCloseModal, isLogin, toggl
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState(""); // Para el mensaje de éxito
   const [isFormValid, setIsFormValid] = useState(false);
+  
   const navigate = useNavigate();
 
   const validEmail = (email) => {
@@ -176,7 +177,7 @@ export const LoginRegisterModal = ({ showModal, handleCloseModal, isLogin, toggl
                 onChange={handlePasswordChange}
               />
             </div>
-            <Button variant="primary" type="submit" disabled={!isFormValid}>
+            <Button variant="secondary" type="submit" disabled={!isFormValid}>
               Iniciar sesión
             </Button>
           </form>
@@ -230,14 +231,14 @@ export const LoginRegisterModal = ({ showModal, handleCloseModal, isLogin, toggl
                 onChange={(e) => setUser({ ...user, password_check: e.target.value })}
               />
             </div>
-            <Button variant="primary" type="submit" disabled={!isFormValid}>
+            <Button variant="secondary" type="submit" disabled={!isFormValid}>
               Registrar
             </Button>
           </form>
         )}
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleCloseModal}>
+        <Button className="btn-danger" onClick={handleCloseModal}>
           Cerrar
         </Button>
         <Button variant="link" onClick={toggleForm}>

@@ -207,3 +207,15 @@ footer{
   }
  
 
+  .btn-danger{
+    background-color: red;
+    color:white;
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+.btn-danger:hover{
+  background-color:red;
+  color:white;
+
+}
