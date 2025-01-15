@@ -14,17 +14,6 @@ export const DashboardUser = () => {
         console.log(store.token);
         actions.saveUserData(store.profile, store.token);
     }, [store.token]);
-    console.log(store.profile);
-
-    
-    // {store?.token ? <Dashboard nombre={store.profile?.nombre} /> : navigate("/")}
-
-    const getSectorKeys = () => {
-        if (store.companies && Object.keys(store.companies).length > 0) {
-            return Object.keys(store.companies);
-        }
-        return [];
-    };
 
     return (
         <>

@@ -7,6 +7,8 @@ class User(db.Model):
     nombre = db.Column(db.String(120), unique=False, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     contraseña = db.Column(db.String(200), unique=False, nullable=False)
+    direccion = db.Column(db.String(120), unique=False, nullable=True)
+    descripcion = db.Column(db.String(500), unique=False, nullable=True)
     esta_activo = db.Column(db.Boolean(), unique=False, nullable=False)
 
     def __init__(self, nombre, email, contraseña):
@@ -23,6 +25,8 @@ class User(db.Model):
             "id": self.id,
             "nombre": self.nombre,
             "email": self.email,
+            "direccion": self.direccion,
+            "descripcion": self.descripcion,
             "esta_activo": True
             # do not serialize the password, its a security breach
         }

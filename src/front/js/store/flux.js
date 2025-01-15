@@ -28,17 +28,17 @@ const getState = ({ getStore, getActions, setStore }) => {
       },
       loadDummyCompanies: async () => {
         try {
-            // Reestructuramos los datos para almacenarlos como un objeto
-            const companies = mockData.reduce((acc, category) => {
-                const [key, value] = Object.entries(category)[0];
-                acc[key] = value;
-                return acc;
-            }, {});
+          // Reestructuramos los datos para almacenarlos como un objeto
+          const companies = mockData.reduce((acc, category) => {
+            const [key, value] = Object.entries(category)[0];
+            acc[key] = value;
+            return acc;
+          }, {});
 
-            console.log(companies);
-            setStore({ companies });
+          console.log(companies);
+          setStore({ companies });
         } catch (error) {
-            console.log(error);
+          console.log(error);
         }
       },
       saveUserData: (user, token) => {
@@ -48,12 +48,31 @@ const getState = ({ getStore, getActions, setStore }) => {
       recoverUser: () => {
         const savedUser = JSON.parse(localStorage.getItem("user")) || null;
         const savedToken = localStorage.getItem("token") || null;
-        
+
         if (savedUser && savedToken) {
           setStore({ profile: savedUser });
           setStore({ token: savedToken });
         }
       },
+      updateUser: async (id, newValues) => {
+        console.log(newValues);
+        try {
+          const resp = await fetch(`${process.env.BACKEND_URL}api/users/${id}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newValues),
+          });
+          const data = await resp.json();
+          setStore({ profile: data });
+          localStorage.setItem("user", JSON.stringify(data));
+          console.log(data);
+          return true;
+        } catch (err) {
+          console.log("Error updating user in backend", err);
+        }
+      }, 
       createUser: async (user) => {
         try {
           const resp = await fetch(process.env.BACKEND_URL + "api/register", {
@@ -70,7 +89,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         }
       },
 
-//*********************************** **************************************************************** */
+      //*********************************** **************************************************************** */
       getIsLogin: () => {
         return getStore();
       },
@@ -146,7 +165,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           console.log("Error sending customer to back backend", err);
         }
       },
-//************************************************************************************************ */
+      //************************************************************************************************ */
 
       createCompany: async (user1) => {
         try {
