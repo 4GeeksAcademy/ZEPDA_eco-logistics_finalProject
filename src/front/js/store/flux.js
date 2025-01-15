@@ -7,7 +7,11 @@ const getState = ({ getStore, getActions, setStore }) => {
       news: [],
       companies: {},
       token: localStorage.getItem("token") || "",
+<<<<<<< HEAD
       profile: JSON.parse(localStorage.getItem("profile")) || {},
+=======
+      profile: JSON.parse(localStorage.getItem("user")) || {}
+>>>>>>> dev2
     },
     actions: {
       fetchNews: async (setLoading) => {
@@ -39,6 +43,19 @@ const getState = ({ getStore, getActions, setStore }) => {
             setStore({ companies });
         } catch (error) {
             console.log(error);
+        }
+      },
+      saveUserData: (user, token) => {
+        localStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem("token", token);
+      },
+      recoverUser: () => {
+        const savedUser = JSON.parse(localStorage.getItem("user")) || null;
+        const savedToken = localStorage.getItem("token") || null;
+        
+        if (savedUser && savedToken) {
+          setStore({ profile: savedUser });
+          setStore({ token: savedToken });
         }
       },
       createUser: async (user) => {
@@ -98,7 +115,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           console.log(data);
           setStore({ token: data.token });
           localStorage.setItem("token", data.token);
-          const user = await getActions().getUserProfile();
+          const user = await getActions().getUserProfile(); // actualiza profile
           console.log(user);
           // don't forget to return something, that is how the async resolves
           return data.authorize;

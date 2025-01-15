@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { HiringElement } from "./hiringElement";
 
-export const HiringsPanel = () => {
+export const FavoritesPanel = () => {
     const [elements, setElements] = useState([]);
 
     useEffect(() => {
@@ -14,8 +14,8 @@ export const HiringsPanel = () => {
 
     return (
         <>
-            <div className="col-6 p-3"> 
-                <h1 className="text-start fw-normal fs-5 mb-3">CONTRATACIONES</h1>
+            <div className="col-12 p-3"> 
+                <h1 className="text-start fw-normal fs-5 mb-3">FAVORITOS</h1>
                 <div className="card rounded-5" style={{height:'50vh', overflowY: 'auto'}}> 
                     {elements}
                 </div> 
