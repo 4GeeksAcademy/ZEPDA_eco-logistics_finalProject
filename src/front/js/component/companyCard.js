@@ -2,6 +2,10 @@ import React from "react";
 import naiteclogo from "../../img/naitec-logo.png"
 
 export const CompanyCard = ({company}) => {
+    const navigateToQuienesSomos = () => {
+        window.location.href = "/info-empresa";
+    };
+
     return (
         <>
             <div className="col-4 p-3"> 
@@ -21,7 +25,7 @@ export const CompanyCard = ({company}) => {
                         </div>
 
                         <p className="card-text text-secondary text-start">Grown in {company.ubicacion}</p> 
-                        <a href="#" className="btn btn-success rounded-pill float-start">info</a> 
+                        <button className="btn btn-success rounded-pill float-start" onClick={navigateToQuienesSomos}>info</button>
                     </div> 
                 </div> 
             </div>
