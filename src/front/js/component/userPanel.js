@@ -37,11 +37,11 @@ const user = {
         "admission_day": getStringDate()
     }
 
-export const UserPanel = () => {
+export const UserPanel = ({user}) => {
     return (
         <>
             <div className="col-6 p-3"> 
-                <h1 className="text-start fw-normal fs-5 mb-3">BIENVENIDO USUARIO</h1>
+                <h1 className="text-start fw-normal fs-5 mb-3">BIENVENIDO {user.nombre.toUpperCase()}</h1>
                 <div className="card rounded-5" style={{height:'50vh'}}> 
                     <div className="card-header border-0 bg-white rounded-5 rounded-bottom-0 border-bottom"> 
                         <div className="d-flex justify-content-around">
