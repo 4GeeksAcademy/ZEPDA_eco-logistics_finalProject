@@ -15,6 +15,8 @@ export const DashboardUser = () => {
         !store.token 
     }, [store.token]);
     console.log(store.profile);
+
+    
     // {store?.token ? <Dashboard nombre={store.profile?.nombre} /> : navigate("/")}
 
     const getSectorKeys = () => {
