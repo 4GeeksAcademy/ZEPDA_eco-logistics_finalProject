@@ -48,7 +48,7 @@ export const Home = () => {
 
 					<div className="col-12 col-md-6 p-4 empresas-colaboradoras">
 
-						<h3>Empresas colaboradoras</h3>
+						<h3 className="text-success">Empresas colaboradoras</h3>
 						<p>Nuestra plataforma ofrece servicios para empresas que necesitan encontrar soluciones ecológicas y sostenibles
 							para sus diferentes actividades, principalmente en los aspectos logísticos como el packaging de sus productos,
 							transportes, materiales, gestión de residuos y/o digitalización de su negocio, centralizando en un solo sitio web
