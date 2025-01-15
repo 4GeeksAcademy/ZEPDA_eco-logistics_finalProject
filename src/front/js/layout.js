@@ -9,7 +9,6 @@ import injectContext from "./store/appContext";
 
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
-import { NewsDetail } from "./component/newsDetail";
 import { Contacto } from "./pages/contacto";
 import { QuienesSomos } from "./pages/quienesSomos";
 import { Servicios } from "./pages/servicios";
@@ -37,7 +36,6 @@ const Layout = () => {
                         <Route element={<QuienesSomos />} path="/quienes-somos" />
                         <Route element={<InfoEmpresa />} path="/info-empresa" />
                         <Route element={<DashboardUser />} path="/dashboard-user" />
-                        <Route path="/news/:index" element={<NewsDetail />} />
                         <Route element={<h1>Not found!</h1>} />
                     </Routes>
                     <Footer />
