@@ -23,7 +23,6 @@ const injectContext = PassedComponent => {
 
 		useEffect(() => {
 			
-			state.actions.fetchNews(); // <---- calling this function from the flux.js actions
 			state.actions.loadDummyCompanies();
 
 		}, []);

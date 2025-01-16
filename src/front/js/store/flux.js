@@ -18,7 +18,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             throw new Error('Network response was not ok');
           }
           const data = await resp.json();
-          console.log(data);
+          // console.log(data); // lista de noticias descargadas de la API
           setStore({ news: data });
         } catch (error) {
           console.log(error);
@@ -35,7 +35,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 return acc;
             }, {});
 
-            console.log(companies);
+            // console.log(companies); // empresas de ejemplo desde json local
             setStore({ companies });
         } catch (error) {
             console.log(error);
