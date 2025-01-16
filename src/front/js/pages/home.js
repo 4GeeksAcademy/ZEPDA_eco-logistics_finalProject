@@ -24,7 +24,7 @@ export const Home = () => {
 				<div className="d-flex col-12 flex-wrap justify-content-center infohome">
 
 					<div className="col-12 col-md-6 p-4 sumate">
-						<h3>Zepda Eco-logistics</h3>
+						<h3 className="text-light">Zepda Eco-logistics</h3>
 
 						<p>
 							Trabajamos para disminuir el impacto ambiental y generar acciones positivas para el planeta y la sociedad.
@@ -61,15 +61,25 @@ export const Home = () => {
 				</div>
 
 
-				<div className="logos-container">
-
-					{logos.map((logo, index) => (
-						<div className="logo-item" key={index}>
-							<img src={logo} alt={`logo-${index}`} className="logo-image" />
-						</div>
-					))}
-				</div>
-				<div className="logos-container">
+				<div className="carousel-logos-container mt-5">
+    <div className="carousel-logos-inner">
+        <div className="carousel-logos-track">
+            {logos.map((logo, index) => (
+                <div className="logo-item" key={index}>
+                    <img src={logo} alt={`logo-${index}`} className="logo-image" />
+                </div>
+            ))}
+        </div>
+        <div className="carousel-logos-track">
+            {logos.map((logo, index) => (
+                <div className="logo-item" key={index}>
+                    <img src={logo} alt={`logo-${index}`} className="logo-image" />
+                </div>
+            ))}
+        </div>
+    </div>
+</div>
+				<div className="news-container">
 
 				<NewsSection />
 				</div>
