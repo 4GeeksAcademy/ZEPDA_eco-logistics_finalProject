@@ -15,6 +15,10 @@ const handleAddFavorite = (company, actions, isFavorite, setIsFavorite) => {
 }
 
 export const CompanyCard = ({company}) => {
+    const navigateToQuienesSomos = () => {
+        window.location.href = "/info-empresa";
+    };
+
 
     const { actions } = useContext(Context);
     const [isFavorite, setIsFavorite] = useState(false);
@@ -40,7 +44,7 @@ export const CompanyCard = ({company}) => {
                         </div>
 
                         <p className="card-text text-secondary text-start">Grown in {company.ubicacion}</p> 
-                        <a href="#" className="btn btn-success rounded-pill float-start">info</a> 
+                        <button className="btn btn-success rounded-pill float-start" onClick={navigateToQuienesSomos}>info</button>
                     </div> 
                 </div> 
             </div>
