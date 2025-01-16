@@ -151,14 +151,14 @@ const getState = ({ getStore, getActions, setStore }) => {
         const store = getStore();
         const updatedFavorites = [...store.favoriteCompanies, company];
         setStore({ favoriteCompanies: updatedFavorites });
-        localStorage.setItem("favoriteCompanies", JSON.stringify(updatedFavorites));
+        
     },
 
     removeFavoriteCompany: (company) => {
       const store = getStore();
       const updatedFavorites = store.favoriteCompanies.filter(fav => fav.id !== company.id);
       setStore({ favoriteCompanies: updatedFavorites });
-      localStorage.setItem("favoriteCompanies", JSON.stringify(updatedFavorites));
+      
   },
 //************************************************************************************************ */
 
