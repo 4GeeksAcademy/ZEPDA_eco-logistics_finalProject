@@ -1,8 +1,13 @@
 import React, { useState, useContext } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { Context } from "../store/appContext";
+import { useNavigate } from "react-router-dom";
+import { DeletePopUp } from "./deletePopUp";
 
-export const EditUser = ({ show, closeModal }) => {
+export const EditUser = ({ show, openModal, closeModal }) => {
+    const navigate = useNavigate();
+    const [showPopup, setShowPopup] = useState(false);
+
     const { store, actions } = useContext(Context);
     const [userData, setUserData] = useState({
         id: store.profile.id,
@@ -22,19 +27,38 @@ export const EditUser = ({ show, closeModal }) => {
 
     const handleSave = () => {
         // Lógica para guardar los cambios del usuario
-        console.log('User saved:', userData);
-        actions.updateUser(userData.id, userData); // Asumiendo que tienes una acción para actualizar al usuario
+        console.log('User saved: ', userData);
+        actions.updateUser(userData.id, userData); 
         
         // Cerramos el modal después de guardar los cambios
-        // setShowModal(false);
         closeModal();
     };
 
     const handleCancel = () => {
         // Cerramos el modal sin guardar cambios
         closeModal();
-        // setShowModal(false);
-        // console.log(showModal);
+    };
+
+    // Ventanita emergente de confirmación => FEEDBACK 
+    const handleDeleteClick = () => { 
+        setShowPopup(true); 
+        closeModal();
+    } 
+    const handleDeleteCancel = () => { 
+        setShowPopup(false); 
+        openModal();
+    }
+
+    const handleDeleteConfirmation = () => {
+        // Lógica para guardar los cambios del usuario
+        console.log('User deleted: ', userData);
+        const check = actions.deleteUser(userData.id); 
+
+        if (check) {
+            // Cerramos el modal después de guardar los cambios
+            setShowPopup(false); 
+            navigate("/"); // Redirigir a la página principal o de login
+        }
     };
 
     return (
@@ -88,11 +112,23 @@ export const EditUser = ({ show, closeModal }) => {
                         </Form.Group>
                     </Form>
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="success" onClick={handleSave}>Guardar y cerrar</Button>
-                    <Button variant="secondary" onClick={handleCancel}>Cancelar</Button>
+                <Modal.Footer className="justify-content-between">
+                    <a href="#" className="text-danger float-start" onClick={(e) => { e.preventDefault(); handleDeleteClick(); }}>
+                        Eliminar usuario
+                    </a>
+                    <div>
+                        <Button variant="success" onClick={handleSave}>Guardar y cerrar</Button>
+                        <Button className="ms-2" variant="secondary" onClick={handleCancel}>Cancelar</Button>
+                    </div>
                 </Modal.Footer>
             </Modal>
+
+            <DeletePopUp
+                show={showPopup} 
+                userId={userData.id} 
+                onDelete={handleDeleteConfirmation} 
+                onCancel={handleDeleteCancel} 
+            />  
         </>
     );
 };

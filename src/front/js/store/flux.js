@@ -7,7 +7,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       news: [],
       companies: {},
       token: localStorage.getItem("token") || "",
-      profile: JSON.parse(localStorage.getItem("user")) || {}
+      profile: JSON.parse(localStorage.getItem("profile")) || {}
     },
     actions: {
       fetchNews: async (setLoading) => {
@@ -42,11 +42,11 @@ const getState = ({ getStore, getActions, setStore }) => {
         }
       },
       saveUserData: (user, token) => {
-        localStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem("profile", JSON.stringify(user));
         localStorage.setItem("token", token);
       },
       recoverUser: () => {
-        const savedUser = JSON.parse(localStorage.getItem("user")) || null;
+        const savedUser = JSON.parse(localStorage.getItem("profile")) || null;
         const savedToken = localStorage.getItem("token") || null;
 
         if (savedUser && savedToken) {
@@ -72,7 +72,28 @@ const getState = ({ getStore, getActions, setStore }) => {
         } catch (err) {
           console.log("Error updating user in backend", err);
         }
-      }, 
+      },
+      deleteUser: async (id) => {
+        try {
+          const resp = await fetch(`${process.env.BACKEND_URL}api/users/${id}`, {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          if (resp.ok) {
+            await getActions().logoutUser();
+            console.log("User deleted successfully");
+            return true;
+          } else {
+            const errorData = await resp.json();
+            console.error(errorData.message);
+          }
+        } catch (err) {
+          console.log("Error deleting user in backend", err);
+        }
+      },
       createUser: async (user) => {
         try {
           const resp = await fetch(process.env.BACKEND_URL + "api/register", {
@@ -92,6 +113,12 @@ const getState = ({ getStore, getActions, setStore }) => {
       //*********************************** **************************************************************** */
       getIsLogin: () => {
         return getStore();
+      },
+      logoutUser: () => {
+        const store = getStore();
+        localStorage.removeItem("token");  // Remove token from localStorage
+        localStorage.removeItem("profile");  // Remove user profile from localStorage
+        setStore({ ...store, token: null, profile: null });  // Reset store state
       },
 
       resetLocalStorage: () => {

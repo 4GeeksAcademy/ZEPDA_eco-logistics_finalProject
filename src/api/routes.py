@@ -87,6 +87,16 @@ def update_user(id):
     db.session.commit()
     return jsonify(user.serialize())
 
+@api.route("/users/<int:id>", methods=["DELETE"])
+def delete_user(id):
+    user = User.query.get(id)
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+
+    db.session.delete(user)
+    db.session.commit()
+    return jsonify({"message": "User deleted successfully"}), 200
+
 @api.route('/token', methods=['POST'])
 def create_token():
     body = request.get_json()
