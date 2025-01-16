@@ -51,21 +51,3 @@ export const UserPanel = ({ user }) => {
         </>
     );
 };
-
-UserPanel.propTypes = {
-    user: PropTypes.shape({
-        nombre: PropTypes.string.isRequired,
-        pais: PropTypes.string,
-        ubicacion: PropTypes.string,
-        sector: PropTypes.string,
-        email: PropTypes.string.isRequired,
-        telefono: PropTypes.string,
-        web: PropTypes.string,
-        direccion: PropTypes.string,
-        descripcion: PropTypes.string,
-        nif: PropTypes.string,
-        contraseña: PropTypes.string,
-        password_check: PropTypes.string,
-        admission_day: PropTypes.string
-    }).isRequired
-};
