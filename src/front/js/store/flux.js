@@ -7,7 +7,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       news: [],
       companies: {},
       token: localStorage.getItem("token") || "",
-      profile: JSON.parse(localStorage.getItem("profile")) || {},
+      profile: JSON.parse(localStorage.getItem("profile")) || {}
     },
     actions: {
       fetchNews: async (setLoading) => {
@@ -28,30 +28,70 @@ const getState = ({ getStore, getActions, setStore }) => {
       },
       loadDummyCompanies: async () => {
         try {
-            // Reestructuramos los datos para almacenarlos como un objeto
-            const companies = mockData.reduce((acc, category) => {
-                const [key, value] = Object.entries(category)[0];
-                acc[key] = value;
-                return acc;
-            }, {});
+          // Reestructuramos los datos para almacenarlos como un objeto
+          const companies = mockData.reduce((acc, category) => {
+            const [key, value] = Object.entries(category)[0];
+            acc[key] = value;
+            return acc;
+          }, {});
 
             // console.log(companies); // empresas de ejemplo desde json local
             setStore({ companies });
         } catch (error) {
-            console.log(error);
+          console.log(error);
         }
       },
       saveUserData: (user, token) => {
-        localStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem("profile", JSON.stringify(user));
         localStorage.setItem("token", token);
       },
       recoverUser: () => {
-        const savedUser = JSON.parse(localStorage.getItem("user")) || null;
+        const savedUser = JSON.parse(localStorage.getItem("profile")) || null;
         const savedToken = localStorage.getItem("token") || null;
-        
+
         if (savedUser && savedToken) {
           setStore({ profile: savedUser });
           setStore({ token: savedToken });
+        }
+      },
+      updateUser: async (id, newValues) => {
+        console.log(newValues);
+        try {
+          const resp = await fetch(`${process.env.BACKEND_URL}api/users/${id}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newValues),
+          });
+          const data = await resp.json();
+          setStore({ profile: data });
+          localStorage.setItem("user", JSON.stringify(data));
+          console.log(data);
+          return true;
+        } catch (err) {
+          console.log("Error updating user in backend", err);
+        }
+      },
+      deleteUser: async (id) => {
+        try {
+          const resp = await fetch(`${process.env.BACKEND_URL}api/users/${id}`, {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          if (resp.ok) {
+            await getActions().logoutUser();
+            console.log("User deleted successfully");
+            return true;
+          } else {
+            const errorData = await resp.json();
+            console.error(errorData.message);
+          }
+        } catch (err) {
+          console.log("Error deleting user in backend", err);
         }
       },
       createUser: async (user) => {
@@ -90,7 +130,12 @@ const getState = ({ getStore, getActions, setStore }) => {
       getIsLogin: () => {
         return getStore();
       },
-
+      logoutUser: () => {
+        const store = getStore();
+        localStorage.removeItem("token");  // Remove token from localStorage
+        localStorage.removeItem("profile");  // Remove user profile from localStorage
+        setStore({ ...store, token: null, profile: null });  // Reset store state
+      },
       resetLocalStorage: () => {
         const store = getStore();
         localStorage.removeItem("token");
@@ -122,7 +167,6 @@ const getState = ({ getStore, getActions, setStore }) => {
           console.log("Error loading message from backend", error);
         }
       },
-
       getUserProfile: async () => {
         const store = getStore();
         console.log(store.token);
@@ -170,24 +214,12 @@ const getState = ({ getStore, getActions, setStore }) => {
         const store = getStore();
         const updatedFavorites = [...store.favoriteCompanies, company];
         setStore({ favoriteCompanies: updatedFavorites });
-        
-    },
-
-    removeFavoriteCompany: (company) => {
-      const store = getStore();
-      const updatedFavorites = store.favoriteCompanies.filter(fav => fav.id !== company.id);
-      setStore({ favoriteCompanies: updatedFavorites });
-      
-  },
-//************************************************************************************************ */
-
-      logoutUser: () => {
-          const store = getStore();
-            localStorage.removeItem("token");  // Remove token from localStorage
-            localStorage.removeItem("profile");  // Remove user profile from localStorage
-          setStore({ ...store, token: null, profile: null });  // Reset store state
       },
-
+      removeFavoriteCompany: (company) => {
+          const store = getStore();
+          const updatedFavorites = store.favoriteCompanies.filter(fav => fav.id !== company.id);
+          setStore({ favoriteCompanies: updatedFavorites });
+      },
       createCompany: async (user1) => {
         try {
           const resp = await fetch(process.env.BACKEND_URL + "api/registerCompany", {
@@ -202,9 +234,8 @@ const getState = ({ getStore, getActions, setStore }) => {
         } catch (err) {
           console.log("Error sending customer to back backend", err);
         }
-      },
-  
-    },
+      }
+    }
   };
 };
 

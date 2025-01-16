@@ -13,7 +13,7 @@ export const getStringDate = () => {
 
     const fechaFormateada = `${dia} de ${mes} de ${año}`;
 
-    console.log(fechaFormateada); 
+    // console.log(fechaFormateada); 
 
     return fechaFormateada;
 }
