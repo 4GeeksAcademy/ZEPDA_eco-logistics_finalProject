@@ -1,5 +1,5 @@
 
-h1{
+h1, h2, h3, h4{
   color: #426B1F;
 }
 .nav-item:hover{
@@ -92,21 +92,12 @@ footer{
   flex-wrap: wrap;
   justify-content: space-between;
   margin-top: 20px;
+  border: solid 1px #0000002c;
+  border-radius: 10px; 
+  box-shadow: #0000003f 0px 0px 20px;
 }
 
-.logo-item {
-  flex: 1 1 10%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 10px;
-  
-}
 
-.logo-image {
-  max-width: 150px;
-  height: auto;
-}
 
 
 
@@ -152,11 +143,14 @@ footer{
   align-items: center;
   height: 400px;
   overflow: hidden;
+  
 }
 
-.contacto-img {
-  width: 100%; /* Ajustar el ancho al 100% del contenedor */
-  height: auto; /* Mantener la proporción de la imagen */
+.imagen-registro-empresa {
+  width: 100%; 
+  height: 400px;
+  object-fit: contain;
+   
   
 }
 
@@ -197,13 +191,104 @@ footer{
     color:white;
     padding-right: 20px;
     padding-left: 20px;
-    border-top-left-radius: 20px; /* Esquina superior izquierda */
-    border-bottom-left-radius: 20px; /* Esquina inferior izquierda */
+    
+   
   }
   .empresas-colaboradoras{
-    border: solid 1px #44444450;
-    border-top-right-radius: 20px; /* Esquina superior izquierda */
-  border-bottom-right-radius: 20px; /* Esquina inferior izquierda */
+    padding-right: 20px;
+    padding-left: 20px;
+   
   }
  
+  .infohome{
+    box-shadow: #0000003f 0px 0px 20px;
+    border-radius: 5px;
+    overflow: hidden;
+  }
 
+  .btn-danger{
+    background-color: red;
+    color:white;
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+.btn-danger:hover{
+  background-color:red;
+  color:white;
+
+}
+
+.btn-logout{
+  background-color: #426B1F;
+  color:white;
+  padding-right: 20px;
+  padding-left: 20px;
+}
+.btn-logout:hover{
+  background-color: red;
+  color:white;
+  padding-right: 20px;
+  padding-left: 20px;
+}
+.btn-register{
+  background-color: #426B1F;
+  color:white;
+  padding-right: 20px;
+  padding-left: 20px;
+}
+.btn-register:hover{
+  background-color: #426B1F;
+  color:white;
+  padding-right: 20px;
+  padding-left: 20px;
+}
+
+
+
+/* logos home */
+
+.carousel-logos-container {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+.carousel-logos-inner {
+  display: flex;
+  
+  width: 280%; /* Doble del ancho para permitir el desplazamiento infinito */
+  animation: scroll 20s linear infinite;
+}
+
+.carousel-logos-track {
+  display: flex;
+  flex-wrap: wrap;
+  width: 50%; /* Ajustar el ancho para que las imágenes se distribuyan en 2 filas */
+}
+
+.logo-item {
+  flex: 1 0 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  
+  
+}
+
+.logo-image {
+  max-width: 150px;
+  height: auto;
+  transition: filter 0.3s;
+  
+}
+
+@keyframes scroll {
+  0% {
+      transform: translateX(0);
+  }
+  100% {
+      transform: translateX(-50%);
+  }
+}
