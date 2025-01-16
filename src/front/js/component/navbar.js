@@ -22,9 +22,10 @@ export const Navbar = () => {
 
   useEffect(() => {
     if (store.token) {
+      console.log(store.token);
       actions.getUserProfile();
     }
-  }, [store.token, actions]);
+  }, [store.token]);
 
   return (
     <>

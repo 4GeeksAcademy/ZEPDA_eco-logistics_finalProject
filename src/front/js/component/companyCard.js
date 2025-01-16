@@ -1,10 +1,29 @@
-import React from "react";
+import React, { useState, useContext, useEffect } from "react";
+import { Context } from "../store/appContext";
 import naiteclogo from "../../img/naitec-logo.png"
+
+
+const handleAddFavorite = (company, actions, isFavorite, setIsFavorite) => {
+    if (!isFavorite) {
+        actions.addFavoriteCompany(company);
+        console.log('Added to favorites');
+    } else {
+        actions.removeFavoriteCompany(company);
+        console.log('Removed from favorites');
+    }
+    setIsFavorite(!isFavorite);
+}
 
 export const CompanyCard = ({company}) => {
     const navigateToQuienesSomos = () => {
         window.location.href = "/info-empresa";
     };
+
+
+    const { actions } = useContext(Context);
+    const [isFavorite, setIsFavorite] = useState(false);
+
+    
 
     return (
         <>
@@ -19,8 +38,8 @@ export const CompanyCard = ({company}) => {
                                 <h5 className="card-title fw-bold m-0 pt-2 text-start">{company.nombre}</h5> 
                                 <p className="card-text text-success fw-bold text-start">{company.pais}</p> 
                             </div>
-                            <div className="fs-1 rounded-pill icon-hover clickable" /*onClick={handleAddFavorite}*/>
-                                <i className="fa-regular fa-heart" />
+                            <div className="fs-1 rounded-pill icon-hover clickable" onClick={() => handleAddFavorite(company, actions, isFavorite, setIsFavorite)}>
+                            <i className={isFavorite ? "fa-solid fa-heart text-success" : "fa-regular fa-heart"} />
                             </div>
                         </div>
 

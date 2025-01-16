@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from 'prop-types';
-import userPic from "../../img/rigo-baby.jpg";
 const mockDesc = "Le encanta la programación, especialmente en Python y JavaScript. En su tiempo libre, disfruta de la jardinería y la cocina gourmet. Es un apasionado de la música clásica y toca el violín desde niño. Le gusta leer sobre ciencia ficción y es miembro activo de un club de lectura local. Los fines de semana, suele hacer senderismo por la Sierra de Guadarrama y le gusta capturar fotografías de la naturaleza.";
 import { getStringDate } from "../../utils/formattedDate";
 import { EditUser } from "./editUser";
@@ -24,10 +22,10 @@ export const UserPanel = ({ user }) => {
         <>
             <div className="col-6 p-3"> 
                 <h1 className="text-start fw-normal fs-5 mb-3">BIENVENIDO {user.nombre.toUpperCase()}</h1>
-                <div className="card rounded-5" style={{ height: '50vh' }}> 
+                <div className="card rounded-2 shadow" style={{ height: '50vh' }}> 
                     <div className="card-header border-0 bg-white rounded-5 rounded-bottom-0 border-bottom"> 
-                        <div className="d-flex justify-content-around">
-                            <img src={user.imagen || userPic} className="img-fluid rounded-circle" alt="user-image" style={{ width: 150, height: 150 }}/>
+                        <div className="d-flex justify-content-around flex-wrap">
+                            <img src={user.imagen || "rigo-baby.jpg"} className="img-fluid rounded-circle" alt="user-image" style={{width:150,height:150}}/>
                             <div className="my-auto float-end">
                                 <h5 className="card-title text-success fw-semibold m-0 py-2 text-start">{user.nombre || "Juan Martinez"}</h5> 
                                 <p className="card-text mb-2 fw-normal text-start">{user.email || "juan.martinez@example.com"}</p> 

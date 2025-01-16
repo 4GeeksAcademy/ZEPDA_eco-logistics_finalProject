@@ -18,7 +18,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             throw new Error('Network response was not ok');
           }
           const data = await resp.json();
-          console.log(data);
+          // console.log(data); // lista de noticias descargadas de la API
           setStore({ news: data });
         } catch (error) {
           console.log(error);
@@ -35,8 +35,8 @@ const getState = ({ getStore, getActions, setStore }) => {
             return acc;
           }, {});
 
-          console.log(companies);
-          setStore({ companies });
+            // console.log(companies); // empresas de ejemplo desde json local
+            setStore({ companies });
         } catch (error) {
           console.log(error);
         }
@@ -210,7 +210,16 @@ const getState = ({ getStore, getActions, setStore }) => {
           console.log("Error sending customer to back backend", err);
         }
       },
-      //************************************************************************************************ */
+      addFavoriteCompany: (company) => {
+        const store = getStore();
+        const updatedFavorites = [...store.favoriteCompanies, company];
+        setStore({ favoriteCompanies: updatedFavorites });
+      },
+      removeFavoriteCompany: (company) => {
+          const store = getStore();
+          const updatedFavorites = store.favoriteCompanies.filter(fav => fav.id !== company.id);
+          setStore({ favoriteCompanies: updatedFavorites });
+      },
       createCompany: async (user1) => {
         try {
           const resp = await fetch(process.env.BACKEND_URL + "api/registerCompany", {
