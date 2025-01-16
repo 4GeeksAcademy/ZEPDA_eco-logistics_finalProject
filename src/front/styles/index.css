@@ -274,11 +274,14 @@ footer{
   align-items: center;
   margin: 10px;
   
+  
 }
 
 .logo-image {
-  max-width: 120px;
+  max-width: 150px;
   height: auto;
+  transition: filter 0.3s;
+  
 }
 
 @keyframes scroll {

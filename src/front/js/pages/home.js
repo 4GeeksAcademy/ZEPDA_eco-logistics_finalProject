@@ -17,7 +17,7 @@ export const Home = () => {
 
 			<JumbotronCarousel />
 			<div className="container mt-4 d-flex justify-content-center">
-			
+
 			</div>
 
 			<div className="container mt-4 ">
@@ -62,26 +62,26 @@ export const Home = () => {
 
 
 				<div className="carousel-logos-container mt-5">
-    <div className="carousel-logos-inner">
-        <div className="carousel-logos-track">
-            {logos.map((logo, index) => (
-                <div className="logo-item" key={index}>
-                    <img src={logo} alt={`logo-${index}`} className="logo-image" />
-                </div>
-            ))}
-        </div>
-        <div className="carousel-logos-track">
-            {logos.map((logo, index) => (
-                <div className="logo-item" key={index}>
-                    <img src={logo} alt={`logo-${index}`} className="logo-image" />
-                </div>
-            ))}
-        </div>
-    </div>
-</div>
+					<div className="carousel-logos-inner">
+						<div className="carousel-logos-track">
+							{logos.map((logo, index) => (
+								<div className="logo-item" key={index}>
+									<img src={logo} alt={`logo-${index}`} className="logo-image" />
+								</div>
+							))}
+						</div>
+						<div className="carousel-logos-track">
+							{logos.map((logo, index) => (
+								<div className="logo-item" key={index}>
+									<img src={logo} alt={`logo-${index}`} className="logo-image" />
+								</div>
+							))}
+						</div>
+					</div>
+				</div>
 				<div className="news-container">
 
-				<NewsSection />
+					<NewsSection />
 				</div>
 
 			</div>
