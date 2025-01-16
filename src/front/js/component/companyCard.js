@@ -2,12 +2,16 @@ import React from "react";
 import naiteclogo from "../../img/naitec-logo.png"
 
 export const CompanyCard = ({company}) => {
+    const navigateToQuienesSomos = () => {
+        window.location.href = "/info-empresa";
+    };
+
     return (
         <>
             <div className="col-4 p-3"> 
-                <div className="card rounded-5"> 
+                <div className="card rounded-2 shadow"> 
                     <div className="card-header border-0 bg-white rounded-5 rounded-bottom"> 
-                        <img className="img-fluid rounded mx-auto d-block" src={company.logo} alt={'logo: ' + company.logo} style={{height:'30vh'}} /> 
+                        <img className="img-fluid object-fit-contain rounded mx-auto d-block" src={company.logo} alt={'logo: ' + company.logo} style={{height:'10vh'}} /> 
                     </div> 
                     <div className="card-body bg-light pt-0 rounded-5 rounded-top rounded-top-0"> 
                         <div className="d-flex justify-content-between">
@@ -21,7 +25,7 @@ export const CompanyCard = ({company}) => {
                         </div>
 
                         <p className="card-text text-secondary text-start">Grown in {company.ubicacion}</p> 
-                        <a href="#" className="btn btn-success rounded-pill float-start">info</a> 
+                        <button className="btn btn-success rounded-pill float-start" onClick={navigateToQuienesSomos}>info</button>
                     </div> 
                 </div> 
             </div>

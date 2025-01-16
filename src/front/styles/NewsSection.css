@@ -1,0 +1,71 @@
+/* CSS para las noticias */
+.news-section {
+    position: relative;
+  }
+  
+  .news-arrow-left, .news-arrow-right {
+    background-color: #4CAF50; /* Verde más claro */
+    border: none;
+    padding: 2px;
+    border-radius: 50%; /* Hace que las flechas sean circulares */
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .news-arrow-left:hover, .news-arrow-right:hover {
+
+    background-color: #66bb6a; /* Verde más claro al hacer hover */
+    color: white; /* Cambio de color del icono cuando se pasa el mouse */
+  }
+  
+  .news-arrow-left, .news-arrow-right {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .news-arrow-left {
+    left: 10px; /* Ajusta la distancia desde el borde izquierdo */
+  }
+  
+  .news-arrow-right {
+    right: 10px; /* Ajusta la distancia desde el borde derecho */
+  }
+  
+  /* Animación para las cards */
+  .card {
+    transition: transform 0.5s ease, opacity 0.5s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-10px); /* Desplaza ligeramente la tarjeta hacia arriba */
+  }
+  
+  .card-body {
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  /* Anima el desvanecimiento de las cards */
+  .card.animate__animated.animate__fadeIn {
+    animation: fadeIn 0.8s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Asegura que la imagen de la noticia tenga un estilo correcto */
+  .card-img-top {
+    object-fit: cover;
+    height: 200px;
+  }
+  

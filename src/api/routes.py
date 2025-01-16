@@ -46,8 +46,12 @@ def register_user():
     user_nombre = body.get('nombre', None)
     user_email = body.get('email', None)
     user_contraseña = body.get('contraseña', None)
+    user_exists = User.query.filter_by(email=user_email).first()
+    if user_exists:
+        return {'message': 'Email is already registered'}, 400  # Mensaje de error si ya está registrado
+    
     if user_nombre is None or user_email is None or user_contraseña is None:
-        return {'message': 'Missing arguments'}      
+        return {'message': 'Missing arguments'}, 400     
     bpassword = bytes(user_contraseña, 'utf-8')
     salt = bcrypt.gensalt(14)
     hashed_password = bcrypt.hashpw(password=bpassword, salt=salt)       
@@ -122,6 +126,22 @@ def validate_user():
     if user is None:
         return {'message': 'Unauthorized'}, 401
     return user.serialize(), 200
+
+
+@api.route('/check-email', methods=['POST'])
+def check_email():
+    body = request.get_json()
+    email = body.get('email', None)
+    if email is None:
+        return {'message': 'Email is required'}, 400
+
+    # Verificar si el correo existe en la base de datos
+    user = User.query.filter_by(email=email).first()  # Buscar usuario por correo electrónico
+    if user:
+        return jsonify({'exists': True})  # El correo ya está registrado
+    else:
+        return jsonify({'exists': False})  # El correo no está registrado
+
 
 @api.route('/registerCompany', methods=['POST'])
 def register_company():
