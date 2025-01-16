@@ -6,11 +6,23 @@ db = SQLAlchemy()
 
 #***********************************FAVORITES***********************************************
 
-favorite_company_table = db.Table(
-    'favorite_company_table',
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
-    db.Column('company_id', db.Integer, db.ForeignKey('company.id'), primary_key=True)
-)
+
+
+class Favorite(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    company_id = db.Column(db.Integer, db.ForeignKey('company.id'))
+
+    def __repr__(self):
+        return f'<Favorite {self.id}>'
+
+    def serialize(self):
+       return{
+              "id": self.id,
+              "user_id": self.user_id,
+              "company_id": self.company_id
+       }
+                           
 
 #*******************************************USER***************************************************
 
@@ -20,7 +32,8 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     contraseña = db.Column(db.String(200), unique=False, nullable=False)
     esta_activo = db.Column(db.Boolean(), unique=False, nullable=False)
-    favorite_company = db.relationship('Company', secondary=favorite_company_table, backref='users_favorite')
+    # favorite_company = db.relationship('Company', secondary=favorite_company_table, backref='users_favorite')
+    favorite_company = db.relationship('Favorite', backref='users_favorite', lazy=True)
 
     def __init__(self, nombre, email, contraseña):
         self.nombre = nombre
@@ -49,9 +62,9 @@ class Company(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     descripcion = db.Column(db.Text, nullable=True)
     web = db.Column(db.String(120), unique=True, nullable=False)
-    contraseña = db.Column(db.String(200), nullable=False)
     certificado = db.Column(db.String(120), nullable=True)
     imagen = db.Column(db.String(255), nullable=True)
+    favorited = db.relationship('Favorite', backref='company_favorite', lazy=True)
 
 
     def __init__(self,nif,nombre,sector,direccion,email,descripcion,web,contraseña,certificado,imagen):

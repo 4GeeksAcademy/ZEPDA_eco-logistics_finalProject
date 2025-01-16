@@ -53,7 +53,7 @@ export const Home = () => {
 							todos los servicios disponibles y haciendo más facil los procesos de búsqueda y contratación. Si quieres formar
 							parte de nuestro equipo únete a nosotros como empresa colaboradora.</p>
 						<p className="text-center pt-4">
-							<Link className="links" to={"/"}> <button className="btn">Colabora con nosotros</button></Link>
+							<Link className="links" to={"/registro-empresa"}> <button className="btn">Colabora con nosotros</button></Link>
 						</p>
 
 					</div>
