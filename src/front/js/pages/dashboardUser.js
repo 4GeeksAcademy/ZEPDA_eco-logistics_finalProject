@@ -9,12 +9,6 @@ import { ServicesRow } from "../component/servicesRow";
 export const DashboardUser = () => {
     const { store, actions } = useContext(Context);
 
-    useEffect(() => {
-        console.log(store.profile);
-        console.log(store.token);
-        actions.saveUserData(store.profile, store.token);
-    }, [store.token]);
-
     return (
         <>
             <div className="container text-center mt-5">

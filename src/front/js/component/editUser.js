@@ -13,8 +13,8 @@ export const EditUser = ({ show, openModal, closeModal }) => {
         id: store.profile.id,
         nombre: store.profile.nombre,
         email: store.profile.email,
-        direccion: store.profile.direccion,
-        descripcion: store.profile.descripcion
+        direccion: store.profile.direccion || undefined,
+        descripcion: store.profile.descripcion || undefined
     });
 
     const handleChange = (e) => {
@@ -27,7 +27,6 @@ export const EditUser = ({ show, openModal, closeModal }) => {
 
     const handleSave = () => {
         // Lógica para guardar los cambios del usuario
-        console.log('User saved: ', userData);
         actions.updateUser(userData.id, userData); 
         
         // Cerramos el modal después de guardar los cambios

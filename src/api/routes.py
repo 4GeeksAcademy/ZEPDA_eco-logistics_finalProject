@@ -92,6 +92,7 @@ def update_user(id):
     return jsonify(user.serialize())
 
 @api.route("/users/<int:id>", methods=["DELETE"])
+@jwt_required()
 def delete_user(id):
     user = User.query.get(id)
     if not user:

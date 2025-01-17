@@ -7,7 +7,8 @@ const getState = ({ getStore, getActions, setStore }) => {
       news: [],
       companies: {},
       token: localStorage.getItem("token") || "",
-      profile: JSON.parse(localStorage.getItem("profile")) || {}
+      profile: JSON.parse(localStorage.getItem("profile")) || {},
+      favoriteCompanies: []
     },
     actions: {
       fetchNews: async (setLoading) => {
@@ -55,7 +56,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         }
       },
       updateUser: async (id, newValues) => {
-        console.log(newValues);
+        // console.log(newValues);
         try {
           const resp = await fetch(`${process.env.BACKEND_URL}api/users/${id}`, {
             method: "PUT",
@@ -66,19 +67,21 @@ const getState = ({ getStore, getActions, setStore }) => {
           });
           const data = await resp.json();
           setStore({ profile: data });
-          localStorage.setItem("user", JSON.stringify(data));
-          console.log(data);
+          localStorage.setItem("profile", JSON.stringify(data));
+          // console.log(data);
           return true;
         } catch (err) {
           console.log("Error updating user in backend", err);
         }
       },
       deleteUser: async (id) => {
+        const store = getStore();
         try {
           const resp = await fetch(`${process.env.BACKEND_URL}api/users/${id}`, {
             method: "DELETE",
             headers: {
               "Content-Type": "application/json",
+              Authorization: "Bearer " + store.token,
             },
           });
 
@@ -87,10 +90,12 @@ const getState = ({ getStore, getActions, setStore }) => {
             console.log("User deleted successfully");
             return true;
           } else {
+            console.log("ALGO ESTÁ FALLANDO...");
             const errorData = await resp.json();
             console.error(errorData.message);
           }
         } catch (err) {
+          console.log("ALGO ESTÁ FALLANDO...");
           console.log("Error deleting user in backend", err);
         }
       },
@@ -109,23 +114,23 @@ const getState = ({ getStore, getActions, setStore }) => {
           console.log("Error sending customer to back backend", err);
         }
       },
-        // Verificación si el correo ya está registrado
-        checkEmailExists: async (email) => {
-          try {
-            const resp = await fetch(process.env.BACKEND_URL + "api/check-email", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ email }),
-            });
-            const data = await resp.json();
-            return data.exists; // Regresa true si el correo existe, false si no
-          } catch (error) {
-            console.log("Error checking email:", error);
-            return false;
-          }
-        },
+      // Verificación si el correo ya está registrado
+      checkEmailExists: async (email) => {
+        try {
+          const resp = await fetch(process.env.BACKEND_URL + "api/check-email", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email }),
+          });
+          const data = await resp.json();
+          return data.exists; // Regresa true si el correo existe, false si no
+        } catch (error) {
+          console.log("Error checking email:", error);
+          return false;
+        }
+      },
 //*********************************** **************************************************************** */
       getIsLogin: () => {
         return getStore();
@@ -153,13 +158,13 @@ const getState = ({ getStore, getActions, setStore }) => {
           });
           const data = await resp.json();
           if(data.token){
-          console.log(data);
-          setStore({ token: data.token });
-          localStorage.setItem("token", data.token);
-          const user = await getActions().getUserProfile(); // actualiza profile
-          console.log(user);
-          // don't forget to return something, that is how the async resolves
-          return data.authorize;
+            console.log(data);
+            setStore({ token: data.token });
+            localStorage.setItem("token", data.token);
+            const user = await getActions().getUserProfile(); // actualiza profile
+            console.log(user);
+            // don't forget to return something, that is how the async resolves
+            return data.authorize;
           }else{
             return false;
           }
@@ -169,7 +174,6 @@ const getState = ({ getStore, getActions, setStore }) => {
       },
       getUserProfile: async () => {
         const store = getStore();
-        console.log(store.token);
         try {
           const resp = await fetch(
             process.env.BACKEND_URL + "api/profile/user",
@@ -183,7 +187,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           );
           if (resp.status == 200) {
             const data = await resp.json();
-            console.log(data);
+            // console.log(data);
             setStore({ profile: data });
             localStorage.setItem("profile", JSON.stringify(data)); 
             return true;
