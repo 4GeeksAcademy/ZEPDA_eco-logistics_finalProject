@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 import app
-from flask import Flask, request, jsonify, url_for, Blueprint
+from flask import Flask, request, jsonify, url_for, Blueprint, current_app
 from api.models import db, User, Company
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
@@ -10,9 +10,9 @@ import requests
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
+from flask_mail import Message
 import re
 import bcrypt
-
 def check(email):
     regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
     # pass the regular expression
@@ -23,8 +23,31 @@ def check(email):
         return False
 api = Blueprint('api', __name__)
 
+
 # Allow CORS requests to this API
 CORS(api)
+
+
+@api.route('/test-email', methods=['GET'])
+def test_email():
+    from app import mail
+    try: 
+        sender_email = current_app.config['MAIL_USERNAME']  
+        msg = Message(
+            'Correo de prueba con enlace',  
+            sender=sender_email,
+            recipients=['empresasarn@gmail.com']  
+        )
+        frontend_url ="https://silver-space-pancake-4j9rvrxg7jrfjvw9-3000.app.github.dev/contacto"
+        msg.html = f'''
+            <p>Este es un correo de prueba enviado desde la aplicación Flask.</p>
+            <p>Puedes hacer clic en el siguiente enlace para más detalles:</p>
+            <p><a href="{frontend_url}">Haz clic aquí</a></p>
+        '''
+        mail.send(msg)
+        return jsonify({"message": "Correo enviado exitosamente"})
+    except Exception as e:
+        return jsonify({"error": "No se puede enviar el correo: " + str(e)}), 500
 
 
 @api.route('/news', methods=['GET'])
