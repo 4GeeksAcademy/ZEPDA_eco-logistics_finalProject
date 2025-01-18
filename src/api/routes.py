@@ -12,6 +12,7 @@ from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 import re
 import bcrypt
+import cloudinary.uploader
 
 def check(email):
     regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
@@ -142,121 +143,175 @@ def check_email():
         return jsonify({'exists': True})  # El correo ya está registrado
     else:
         return jsonify({'exists': False})  # El correo no está registrado
+    
 
 
-@api.route('/registerCompany', methods=['POST'])
+
+@api.route('api/register-company', methods=['POST'])
 def register_company():
+    try:
+        # Datos del formulario
+        nombre = request.form.get('nombre')
+        email = request.form.get('email')
+        direccion = request.form.get('direccion')
+        pais = request.form.get('pais')
+        telefono = request.form.get('telefono')
+        cif = request.form.get('cif')
+        web = request.form.get('web')
+        sector = request.form.get('sector')
+        descripcion = request.form.get('descripcion')
+
+        # Manejo del archivo (logotipo)
+        logo = request.files.get('logo')
+        logo_url = None
+
+        if logo:
+            # Subir el archivo a Cloudinary
+            upload_result = cloudinary.uploader.upload(logo, folder="logos_empresas")
+            logo_url = upload_result.get("secure_url")  # URL segura de la imagen subida
+
+        # Validación mínima
+        if not all([nombre, email, direccion, pais, telefono, web]):
+            return jsonify({"error": "Todos los campos obligatorios deben completarse"}), 400
+
+        # Crear la instancia de la empresa
+        new_company = Company(
+            nombre=nombre,
+            email=email,
+            direccion=direccion,
+            pais=pais,
+            telefono=telefono,
+            cif=cif,
+            web=web,
+            sector=sector,
+            imagen=logo_url,
+            descripcion=descripcion
+        )
+
+        # Guardar en la base de datos
+        db.session.add(new_company)
+        db.session.commit()
+
+        return jsonify({"message": "Empresa registrada exitosamente"}), 201
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
+
+# @api.route('/registerCompany', methods=['POST'])
+# def register_company():
     
-    body = request.get_json()
-    company_nif = body.get('nif', None)
-    company_nombre = body.get('nombre', None)
-    company_sector = body.get('sector', None)
-    company_direccion = body.get('direccion', None)
-    company_email = body.get('email', None)
-    company_descripcion = body.get('descripcion', None)
-    company_web= body.get('web', None)
-    company_contraseña = body.get('contraseña', None)
-    company_certificado = body.get('certificado', None)
-    if company_nombre is None or company_email is None or company_contraseña is None:
-        return {'message': 'Missing arguments'}      
-    bpassword = bytes(company_contraseña, 'utf-8')
-    salt = bcrypt.gensalt(14)
-    hashed_password = bcrypt.hashpw(password=bpassword, salt=salt)       
-    user = Company(company_nif, company_nombre, company_sector, company_direccion, company_email, company_descripcion, company_web, hashed_password.decode('utf-8'), company_certificado)    
-    #return {'message': f'nombre: {user.nombre} email: {user.email} contraseña: {contraseña}'}
-    db.session.add(user)
-    db.session.commit()
-    return {'message': f'User {user.email} was created'}
+#     body = request.get_json()
+#     company_nif = body.get('nif', None)
+#     company_nombre = body.get('nombre', None)
+#     company_sector = body.get('sector', None)
+#     company_direccion = body.get('direccion', None)
+#     company_email = body.get('email', None)
+#     company_descripcion = body.get('descripcion', None)
+#     company_web= body.get('web', None)
+#     company_contraseña = body.get('contraseña', None)
+#     company_certificado = body.get('certificado', None)
+#     if company_nombre is None or company_email is None or company_contraseña is None:
+#         return {'message': 'Missing arguments'}      
+#     bpassword = bytes(company_contraseña, 'utf-8')
+#     salt = bcrypt.gensalt(14)
+#     hashed_password = bcrypt.hashpw(password=bpassword, salt=salt)       
+#     user = Company(company_nif, company_nombre, company_sector, company_direccion, company_email, company_descripcion, company_web, hashed_password.decode('utf-8'), company_certificado)    
+#     #return {'message': f'nombre: {user.nombre} email: {user.email} contraseña: {contraseña}'}
+#     db.session.add(user)
+#     db.session.commit()
+#     return {'message': f'User {user.email} was created'}
 
-@api.route('/profile/companies', methods=['GET'])
-def get_companies():
-    """Obtiene todas las compañías"""
-    companies = Company.query.all()
-    companies_serialized = [company.serialize() for company in companies]
-    return jsonify(companies_serialized), 200
-
-
-@api.route('/profile/companies/<int:company_id>', methods=['GET'])
-def get_company(company_id):
-    """Obtiene una compañía por ID"""
-    company = Company.query.get(company_id)
-    if company is None:
-        return jsonify({"message": "Company not found"}), 404
-    return jsonify(company.serialize()), 200
+# @api.route('/profile/companies', methods=['GET'])
+# def get_companies():
+#     """Obtiene todas las compañías"""
+#     companies = Company.query.all()
+#     companies_serialized = [company.serialize() for company in companies]
+#     return jsonify(companies_serialized), 200
 
 
-@api.route('/profile/companies', methods=['POST'])
-def create_company():
-    """Crea una nueva compañía"""
-    body = request.get_json()
+# @api.route('/profile/companies/<int:company_id>', methods=['GET'])
+# def get_company(company_id):
+#     """Obtiene una compañía por ID"""
+#     company = Company.query.get(company_id)
+#     if company is None:
+#         return jsonify({"message": "Company not found"}), 404
+#     return jsonify(company.serialize()), 200
+
+
+# @api.route('/profile/companies', methods=['POST'])
+# def create_company():
+#     """Crea una nueva compañía"""
+#     body = request.get_json()
     
-    nif = body.get('nif', None)
-    nombre = body.get('nombre', None)
-    sector = body.get('sector', None)
-    direccion = body.get('direccion', None)
-    email = body.get('email', None)
-    descripcion = body.get('descripcion', None)
-    web = body.get('web', None)
-    contraseña = body.get('contraseña', None)
-    certificado = body.get('certificado', None)
+#     nif = body.get('nif', None)
+#     nombre = body.get('nombre', None)
+#     sector = body.get('sector', None)
+#     direccion = body.get('direccion', None)
+#     email = body.get('email', None)
+#     descripcion = body.get('descripcion', None)
+#     web = body.get('web', None)
+#     contraseña = body.get('contraseña', None)
+#     certificado = body.get('certificado', None)
     
-    if not all([nif, nombre, sector, direccion, email, descripcion, web]):
-        return jsonify({"message": "Missing required fields"}), 400
+#     if not all([nif, nombre, sector, direccion, email, descripcion, web]):
+#         return jsonify({"message": "Missing required fields"}), 400
 
-    # Verificar si ya existe una compañía con el mismo NIF o email
-    if Company.query.filter((Company.nif == nif) | (Company.email == email)).first():
-        return jsonify({"message": "Company with this NIF or email already exists"}), 400
+#     # Verificar si ya existe una compañía con el mismo NIF o email
+#     if Company.query.filter((Company.nif == nif) | (Company.email == email)).first():
+#         return jsonify({"message": "Company with this NIF or email already exists"}), 400
 
-    company = Company(
-        nif=nif,
-        nombre=nombre,
-        sector=sector,
-        direccion=direccion,
-        email=email,
-        descripcion=descripcion,
-        web=web,
-        contraseña=contraseña,
-        certificado=certificado
-    )
+#     company = Company(
+#         nif=nif,
+#         nombre=nombre,
+#         sector=sector,
+#         direccion=direccion,
+#         email=email,
+#         descripcion=descripcion,
+#         web=web,
+#         contraseña=contraseña,
+#         certificado=certificado
+#     )
     
-    db.session.add(company)
-    db.session.commit()
-    return jsonify(company.serialize()), 201
+#     db.session.add(company)
+#     db.session.commit()
+#     return jsonify(company.serialize()), 201
 
 
-@api.route('/profile/companies/<int:company_id>', methods=['PUT'])
-def update_company(company_id):
-    """Actualiza los datos de una compañía existente"""
-    body = request.get_json()
-    company = Company.query.get(company_id)
+# @api.route('/profile/companies/<int:company_id>', methods=['PUT'])
+# def update_company(company_id):
+#     """Actualiza los datos de una compañía existente"""
+#     body = request.get_json()
+#     company = Company.query.get(company_id)
     
-    if company is None:
-        return jsonify({"message": "Company not found"}), 404
+#     if company is None:
+#         return jsonify({"message": "Company not found"}), 404
 
-    company.nif = body.get('nif', company.nif)
-    company.nombre = body.get('nombre', company.nombre)
-    company.sector = body.get('sector', company.sector)
-    company.direccion = body.get('direccion', company.direccion)
-    company.email = body.get('email', company.email)
-    company.descripcion = body.get('descripcion', company.descripcion)
-    company.web = body.get('web', company.web)
-    company.contraseña = body.get('contraseña', company.contraseña)
-    company.certificado = body.get('certificado', company.certificado)
+#     company.nif = body.get('nif', company.nif)
+#     company.nombre = body.get('nombre', company.nombre)
+#     company.sector = body.get('sector', company.sector)
+#     company.direccion = body.get('direccion', company.direccion)
+#     company.email = body.get('email', company.email)
+#     company.descripcion = body.get('descripcion', company.descripcion)
+#     company.web = body.get('web', company.web)
+#     company.contraseña = body.get('contraseña', company.contraseña)
+#     company.certificado = body.get('certificado', company.certificado)
 
-    db.session.commit()
-    return jsonify(company.serialize()), 200
+#     db.session.commit()
+#     return jsonify(company.serialize()), 200
 
 
-@api.route('/profile/companies/<int:company_id>', methods=['DELETE'])
-def delete_company(company_id):
-    """Elimina una compañía por ID"""
-    company = Company.query.get(company_id)
-    if company is None:
-        return jsonify({"message": "Company not found"}), 404
+# @api.route('/profile/companies/<int:company_id>', methods=['DELETE'])
+# def delete_company(company_id):
+#     """Elimina una compañía por ID"""
+#     company = Company.query.get(company_id)
+#     if company is None:
+#         return jsonify({"message": "Company not found"}), 404
 
-    db.session.delete(company)
-    db.session.commit()
-    return jsonify({"message": f"Company {company_id} deleted"}), 200
+#     db.session.delete(company)
+#     db.session.commit()
+#     return jsonify({"message": f"Company {company_id} deleted"}), 200
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+# if __name__ == '__main__':
+#     app.run(host='0.0.0.0', port=5000)

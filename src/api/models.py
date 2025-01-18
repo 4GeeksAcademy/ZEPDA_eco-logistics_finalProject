@@ -58,40 +58,46 @@ class User(db.Model):
 
 class Company(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    nif = db.Column(db.String(20), unique=True, nullable=True)
     nombre = db.Column(db.String(120), nullable=False)
-    sector = db.Column(db.Text, nullable=True)
-    direccion = db.Column(db.String(255), nullable=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    descripcion = db.Column(db.Text, nullable=True)
+    direccion = db.Column(db.String(255), nullable=False)
+    telefono = db.Column(db.String(20), nullable=False)
+    pais = db.Column(db.String(20), nullable=False)
+    cif = db.Column(db.String(20), unique=True, nullable=True)
     web = db.Column(db.String(120), unique=True, nullable=False)
+    sector = db.Column(db.Text, nullable=True)
     imagen = db.Column(db.String(255), nullable=True)
+    descripcion = db.Column(db.Text, nullable=True)
     favorited = db.relationship('Favorite', backref='company_favorite', lazy=True)
 
 
-    def __init__(self,nif,nombre,sector,direccion,email,descripcion,web,imagen):
-        self.nif = nif
+    def __init__(self,cif,nombre,sector,direccion,email,descripcion,web,imagen,pais,telefono):
         self.nombre = nombre
-        self.sector = sector
-        self.direccion = direccion
         self.email = email
-        self.descripcion = descripcion
+        self.direccion = direccion
+        self.pais = pais
+        self.telefono = telefono
+        self.cif = cif
         self.web = web
+        self.sector = sector
         self.imagen = imagen
+        self.descripcion = descripcion
 
     def __repr__(self):
         return f'<Company {self.nombre}>'
 
     def serialize(self):
         return {
-            "nif": self.nif,
             "nombre": self.nombre,
-            "sector": self.sector,
-            "direccion": self.direccion,
             "email": self.email,
-            "descripcion": self.descripcion,
+            "direccion": self.direccion,
+            "pais": self.pais,
+            "telefono": self.telefono,
+            "cif": self.cif,
             "web": self.web,
-            "imagen": self.imagen
+            "sector": self.sector,
+            "imagen": self.imagen,
+            "descripcion": self.descripcion
         }
     
     
