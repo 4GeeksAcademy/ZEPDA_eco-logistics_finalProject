@@ -2,12 +2,29 @@ import React, { useContext } from "react";
 import { Context } from "../store/appContext";
 import "../../styles/companies.css";
 import { CompanyCarousel } from "../component/companyCarousel";
+import { useParams } from "react-router-dom";
 
 export const Companies = () => {
     const { store } = useContext(Context);
+    const { paramId } = useParams();
+
+    const getSectorByParam = () => {
+        switch(paramId){
+            case 'packaging':
+                return 'Packaging';
+            case 'transporte':
+                return 'Transporte';
+            case 'gestion-de-residuos':
+                return 'Gestión de Residuos';
+            default:
+                console.log('El parametro recibido no es correcto.')
+                return undefined;
+        }
+    }
 
     const getSectorKeys = () => {
         if (store.companies && Object.keys(store.companies).length > 0) {
+            console.log(Object.keys(store.companies));
             return Object.keys(store.companies);
         }
         return [];
@@ -21,11 +38,20 @@ export const Companies = () => {
             {
                 store.companies && Object.keys(store.companies).length > 0 ? 
                 (
-                    getSectorKeys().map((sector, index) => ( 
-                        <div key={index} className="p-3">
-                            <CompanyCarousel sector={sector} />
+                    (getSectorByParam() !== undefined) ?
+                    (
+                        <div key={Date.now()} className="p-3">
+                            <CompanyCarousel sector={getSectorByParam()} />
                         </div>
-                    ))
+                    )
+                    :
+                    (
+                        getSectorKeys().map((sector, index) => ( 
+                            <div key={index} className="p-3">
+                                <CompanyCarousel sector={sector} />
+                            </div>
+                        ))
+                    )
                 ) 
                 : 
                 (

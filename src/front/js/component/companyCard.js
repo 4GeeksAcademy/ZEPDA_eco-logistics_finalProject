@@ -30,7 +30,7 @@ export const CompanyCard = ({company}) => {
             <div className="col-4 p-3"> 
                 <div className="card rounded-2 shadow"> 
                     <div className="card-header border-0 bg-white rounded-5 rounded-bottom"> 
-                        <img className="img-fluid object-fit-contain rounded mx-auto d-block" src={company.logo} alt={'logo: ' + company.logo} style={{height:'10vh'}} /> 
+                        <img className="img-fluid object-fit-contain rounded mx-auto d-block" src={'../'+company.logo} alt={'logo: ' + company.logo} style={{height:'10vh'}} /> 
                     </div> 
                     <div className="card-body bg-light pt-0 rounded-5 rounded-top rounded-top-0"> 
                         <div className="d-flex justify-content-between">
