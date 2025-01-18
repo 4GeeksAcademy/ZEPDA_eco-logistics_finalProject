@@ -41,14 +41,14 @@ export const Companies = () => {
                     (getSectorByParam() !== undefined) ?
                     (
                         <div key={Date.now()} className="p-3">
-                            <CompanyCarousel sector={getSectorByParam()} />
+                            <CompanyCarousel sector={getSectorByParam()} isGrid={true} />
                         </div>
                     )
                     :
                     (
                         getSectorKeys().map((sector, index) => ( 
                             <div key={index} className="p-3">
-                                <CompanyCarousel sector={sector} />
+                                <CompanyCarousel sector={sector} isGrid={false} />
                             </div>
                         ))
                     )
