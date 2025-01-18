@@ -5,6 +5,7 @@ import "../../styles/home.css";
 import { NewsSection } from "../component/NewsSection";
 import { Link } from "react-router-dom";
 import { importAllImages } from "../../utils/importAllImages";
+import { CloudinaryAPI } from "../component/cloudinary-api";
 
 const logos = importAllImages(require.context("../../img/logos", false, /\.(png|jpe?g|svg|webp)$/));
 
@@ -14,7 +15,7 @@ export const Home = () => {
 	return (
 
 		<>
-
+			<CloudinaryAPI />
 			<JumbotronCarousel />
 			<div className="container mt-4 d-flex justify-content-center">
 
