@@ -5,8 +5,6 @@ import "../../styles/home.css";
 import { NewsSection } from "../component/NewsSection";
 import { Link } from "react-router-dom";
 import { importAllImages } from "../../utils/importAllImages";
-import { ImageUploader } from "../component/imageUploader";
-import { ImageViewer } from "../component/imageViewer";
 
 const logos = importAllImages(require.context("../../img/logos", false, /\.(png|jpe?g|svg|webp)$/));
 
@@ -16,8 +14,6 @@ export const Home = () => {
 	return (
 
 		<>
-			<ImageUploader />
-			<ImageViewer publicId="jtgnztybku5dw8seplrm" />
 			<JumbotronCarousel />
 			<div className="container mt-4 d-flex justify-content-center">
 

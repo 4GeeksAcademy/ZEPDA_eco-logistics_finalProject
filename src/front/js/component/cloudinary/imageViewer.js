@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Context } from "../store/appContext";
+import { Context } from "../../store/appContext";
 
 export const ImageViewer = ({ publicId }) => {
     const { actions } = useContext(Context);

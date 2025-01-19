@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Context } from "../store/appContext";
+import { Context } from "../../store/appContext";
 
 export const ImageUploader = () => {
     const { actions } = useContext(Context);
@@ -34,14 +34,14 @@ export const ImageUploader = () => {
                 </form>
             </div>
             <div className='col-3'>
-                <div className="imgcontainer rounded-circle border border-2 shadow-sm" style={{ height: '100px', width: '100px' }}> 
-                    {imageUrl ? (                    
-                        <img className="imgservicios" src={imageUrl} alt="Imagen" />   
+                <div className="imgcontainer rounded-circle border border-2 shadow-sm" style={{ height: '100px', width: '100px' }}>
+                    {imageUrl ? (
+                        <img className="imgservicios" src={imageUrl} alt="Imagen" />
                     ) : (
-                        <img className="imgservicios" src="rigo-baby.jpg" alt="Imagen" />   
+                        <img className="imgservicios" src="rigo-baby.jpg" alt="Imagen" />
                     )}
-                </div> 
-            </div>            
+                </div>
+            </div>
         </div>
     );
 };

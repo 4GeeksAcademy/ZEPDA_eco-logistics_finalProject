@@ -12,7 +12,7 @@ from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 import re
 import bcrypt
-from api.cloudinary_helpers import upload_image, get_image_url
+from api.cloudinary_helpers import upload_image, delete_image
 
 api = Blueprint('api', __name__)
 
@@ -41,11 +41,30 @@ def upload_file():
 
     return jsonify(response)
 
+@api.route('/images', methods=['GET'])
+def get_all_images():
+    images = Image.query.all()
+    image_list = [{'public_id': image.public_id, 'url': image.url} for image in images]
+    return jsonify(image_list)
+
 @api.route('/image/<public_id>', methods=['GET'])
 def get_image(public_id):
     image = Image.query.filter_by(public_id=public_id).first()
     if image:
         return jsonify({'url': image.url})
+    else:
+        return jsonify({'error': 'Imagen no encontrada'}), 404
+    
+@api.route('/delete/<public_id>', methods=['DELETE'])
+def delete_image_endpoint(public_id):
+    image = Image.query.filter_by(public_id=public_id).first()
+    if image:
+        # Borrar de Cloudinary
+        cloudinary_response = delete_image(public_id)
+        # Borrar de la base de datos
+        db.session.delete(image)
+        db.session.commit()
+        return jsonify({'message': 'Imagen borrada exitosamente', 'cloudinary_response': cloudinary_response})
     else:
         return jsonify({'error': 'Imagen no encontrada'}), 404
 # ------------------

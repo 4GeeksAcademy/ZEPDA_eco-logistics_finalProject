@@ -50,6 +50,21 @@ const getState = ({ getStore, getActions, setStore }) => {
           throw error;
         }
       },
+      getAllImages: async () => {
+        try {
+          const response = await fetch('${process.env.BACKEND_URL}api/images', { method: 'GET' });
+      
+          if (response.ok) {
+            const data = await response.json();
+            return data; // Devuelve la lista de imágenes
+          } else {
+            throw new Error('Error obteniendo las imágenes');
+          }
+        } catch (error) {
+          console.error('Error obteniendo las imágenes:', error);
+          throw error;
+        }
+      },
       getImageUrl: async (publicId) => {
         try {
           const response = await fetch(`${process.env.BACKEND_URL}api/image/${publicId}`, {
@@ -67,6 +82,47 @@ const getState = ({ getStore, getActions, setStore }) => {
           throw error;
         }
       },
+      deleteImage: async (publicId) => {
+        try {
+          const response = await fetch(`${process.env.BACKEND_URL}api/delete/${publicId}`, {
+            method: 'DELETE',
+          });
+      
+          if (response.ok) {
+            const data = await response.json();
+            return data; // Devuelve la respuesta de la imagen eliminada
+          } else {
+            throw new Error('Error eliminando la imagen');
+          }
+        } catch (error) {
+          console.error('Error eliminando la imagen:', error);
+          throw error;
+        }
+      },
+      deleteAllImages: async () => {
+        try {
+          // Primero obtenemos todas las imágenes
+          const response = await fetch(`${process.env.BACKEND_URL}api/images`, { method: 'GET' });
+      
+          if (response.ok) {
+            const actions = await getActions();
+            const images = await response.json();
+      
+            // Iteramos sobre las imágenes y las eliminamos
+            for (const image of images) {
+              await actions.deleteImage(image.public_id);
+              console.log('imagen eliminada');
+            }
+      
+            return { message: 'Todas las imágenes han sido eliminadas' };
+          } else {
+            throw new Error('Error obteniendo las imágenes');
+          }
+        } catch (error) {
+          console.error('Error eliminando las imágenes:', error);
+          throw error;
+        }
+      },         
       // ------------------
       loadDummyCompanies: async () => {
         try {

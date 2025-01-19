@@ -3,7 +3,7 @@ import { Modal, Button, Form } from "react-bootstrap";
 import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom";
 import { DeletePopUp } from "./deletePopUp";
-import { ImageUploader } from "../component/imageUploader";
+import { ImageUploader } from "./cloudinary/imageUploader";
 
 export const EditUser = ({ show, openModal, closeModal }) => {
     const navigate = useNavigate();
@@ -28,8 +28,8 @@ export const EditUser = ({ show, openModal, closeModal }) => {
 
     const handleSave = () => {
         // Lógica para guardar los cambios del usuario
-        actions.updateUser(userData.id, userData); 
-        
+        actions.updateUser(userData.id, userData);
+
         // Cerramos el modal después de guardar los cambios
         closeModal();
     };
@@ -40,23 +40,23 @@ export const EditUser = ({ show, openModal, closeModal }) => {
     };
 
     // Ventanita emergente de confirmación => FEEDBACK 
-    const handleDeleteClick = () => { 
-        setShowPopup(true); 
+    const handleDeleteClick = () => {
+        setShowPopup(true);
         closeModal();
-    } 
-    const handleDeleteCancel = () => { 
-        setShowPopup(false); 
+    }
+    const handleDeleteCancel = () => {
+        setShowPopup(false);
         openModal();
     }
 
     const handleDeleteConfirmation = () => {
         // Lógica para guardar los cambios del usuario
         console.log('User deleted: ', userData);
-        const check = actions.deleteUser(userData.id); 
+        const check = actions.deleteUser(userData.id);
 
         if (check) {
             // Cerramos el modal después de guardar los cambios
-            setShowPopup(false); 
+            setShowPopup(false);
             navigate("/"); // Redirigir a la página principal o de login
         }
     };
@@ -125,11 +125,11 @@ export const EditUser = ({ show, openModal, closeModal }) => {
             </Modal>
 
             <DeletePopUp
-                show={showPopup} 
-                userId={userData.id} 
-                onDelete={handleDeleteConfirmation} 
-                onCancel={handleDeleteCancel} 
-            />  
+                show={showPopup}
+                userId={userData.id}
+                onDelete={handleDeleteConfirmation}
+                onCancel={handleDeleteCancel}
+            />
         </>
     );
 };
