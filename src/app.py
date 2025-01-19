@@ -1,6 +1,7 @@
 """
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
+from datetime import timedelta
 import os
 from flask import Flask, request, jsonify, url_for, send_from_directory
 from flask_migrate import Migrate
@@ -18,7 +19,8 @@ load_dotenv()
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
-app.config["JWT_SECRET_KEY"] = "Diego-Vega"
+app.config["JWT_SECRET_KEY"] = os.environ.get("JWT_SECRET_KEY","CAMELCASE")
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta (hours=1)
 app.config.update(
     MAIL_SERVER='smtp.gmail.com',
     MAIL_PORT=587,
@@ -31,7 +33,7 @@ mail = Mail(app)
 
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
 static_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../public/')
-app.config
+
 jwt = JWTManager(app)
 
 # database condiguration

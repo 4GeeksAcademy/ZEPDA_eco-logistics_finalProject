@@ -84,6 +84,47 @@ def register_user():
     db.session.commit()
     return {'message': f'User {user.email} was created'}
 
+@api.route("/users/<int:id>", methods=["PUT"])
+def update_user(id):
+    user = User.query.get(id)
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+
+    data = request.get_json()
+    nombre = data.get("nombre")
+    email = data.get("email")
+    contraseña = data.get("contraseña")
+    direccion = data.get("direccion")
+    descripcion = data.get("descripcion")
+    esta_activo = data.get("esta_activo")
+
+    if nombre:
+        user.nombre = nombre
+    if email:
+        user.email = email
+    if contraseña:
+        user.contraseña = contraseña
+    if direccion:
+        user.direccion = direccion
+    if descripcion:
+        user.descripcion = descripcion
+    if esta_activo is not None:
+        user.esta_activo = esta_activo
+
+    db.session.commit()
+    return jsonify(user.serialize())
+
+@api.route("/users/<int:id>", methods=["DELETE"])
+@jwt_required()
+def delete_user(id):
+    user = User.query.get(id)
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+
+    db.session.delete(user)
+    db.session.commit()
+    return jsonify({"message": "User deleted successfully"}), 200
+
 @api.route('/token', methods=['POST'])
 def create_token():
     body = request.get_json()

@@ -1,5 +1,5 @@
 
-h1{
+h1, h2, h3, h4{
   color: #426B1F;
 }
 .nav-item:hover{
@@ -97,19 +97,7 @@ footer{
   box-shadow: #0000003f 0px 0px 20px;
 }
 
-.logo-item {
-  flex: 1 1 10%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 10px;
-  
-}
 
-.logo-image {
-  max-width: 150px;
-  height: auto;
-}
 
 
 
@@ -158,10 +146,10 @@ footer{
   
 }
 
-.contacto-img {
+.imagen-registro-empresa {
   width: 100%; 
   height: 400px;
-  object-fit: cover;
+  object-fit: contain;
    
   
 }
@@ -254,4 +242,53 @@ footer{
   color:white;
   padding-right: 20px;
   padding-left: 20px;
+}
+
+
+
+/* logos home */
+
+.carousel-logos-container {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+.carousel-logos-inner {
+  display: flex;
+  
+  width: 280%; /* Doble del ancho para permitir el desplazamiento infinito */
+  animation: scroll 20s linear infinite;
+}
+
+.carousel-logos-track {
+  display: flex;
+  flex-wrap: wrap;
+  width: 50%; /* Ajustar el ancho para que las imágenes se distribuyan en 2 filas */
+}
+
+.logo-item {
+  flex: 1 0 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  
+  
+}
+
+.logo-image {
+  max-width: 150px;
+  height: auto;
+  transition: filter 0.3s;
+  
+}
+
+@keyframes scroll {
+  0% {
+      transform: translateX(0);
+  }
+  100% {
+      transform: translateX(-50%);
+  }
 }

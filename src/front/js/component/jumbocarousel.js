@@ -1,10 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { importAllImages } from "../../utils/importAllImages";
 
 // Cargar todas las imágenes
 const images = importAllImages(require.context("../../img/zepda-web-img", false, /\.(png|jpe?g|svg|webp)$/));
 
 export const JumbotronCarousel = () => {
+  useEffect(() => {
+    const carousel = document.querySelector('#carouselExampleFade');
+    if (carousel) {
+      const bootstrapCarousel = new window.bootstrap.Carousel(carousel, {
+        interval: 5000,
+        ride: 'carousel'
+      });
+      return () => {
+        bootstrapCarousel.dispose();
+      };
+    }
+  }, []);
   return (
     <div className="container jumbotron-carousel">
       <div
