@@ -11,6 +11,14 @@ class Image(db.Model):
 
     def __repr__(self):
         return f'<Image {self.public_id}>'
+    
+    def serialize(self):
+       return{
+              "id": self.id,
+              "public_id": self.public_id,
+              "url": self.url,
+              "created_at": self.created_at
+       }
 
 
 

@@ -27,6 +27,47 @@ const getState = ({ getStore, getActions, setStore }) => {
           setLoading(false);
         }
       },
+      // --- CLOUDINARY ---
+      uploadImage: async (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+      
+        try {
+          const response = await fetch(`${process.env.BACKEND_URL}api/upload`, {
+            method: 'POST',
+            body: formData,
+          });
+      
+          if (response.ok) {
+            const data = await response.json();
+            console.log(data);
+            return data; // Devuelve los datos de la imagen subida
+          } else {
+            throw new Error('Error subiendo la imagen');
+          }
+        } catch (error) {
+          console.error('Error subiendo la imagen:', error);
+          throw error;
+        }
+      },
+      getImageUrl: async (publicId) => {
+        try {
+          const response = await fetch(`${process.env.BACKEND_URL}api/image/${publicId}`, {
+            method: 'GET',
+          });
+      
+          if (response.ok) {
+            const data = await response.json();
+            return data.url; // Devuelve la URL de la imagen
+          } else {
+            throw new Error('Error obteniendo la imagen');
+          }
+        } catch (error) {
+          console.error('Error obteniendo la imagen:', error);
+          throw error;
+        }
+      },
+      // ------------------
       loadDummyCompanies: async () => {
         try {
           // Reestructuramos los datos para almacenarlos como un objeto
