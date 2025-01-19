@@ -3,6 +3,17 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 
+class Image(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    public_id = db.Column(db.String(50), nullable=False)
+    url = db.Column(db.String(200), nullable=False)
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+
+    def __repr__(self):
+        return f'<Image {self.public_id}>'
+
+
+
 
 #***********************************FAVORITES***********************************************
 

@@ -2,8 +2,8 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 import app
-from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Company
+from flask import Flask, Blueprint, request, jsonify, url_for
+from api.models import db, User, Company, Image
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 import requests
@@ -12,6 +12,12 @@ from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 import re
 import bcrypt
+from api.cloudinary_helpers import upload_image, get_image_url
+
+api = Blueprint('api', __name__)
+
+# Allow CORS requests to this API
+CORS(api)
 
 def check(email):
     regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
@@ -20,11 +26,29 @@ def check(email):
     if(re.fullmatch(regex, email)):
         return True
     else:
-        return False
-api = Blueprint('api', __name__)
+        return False    
+    
+# --- CLOUDINARY ---
+@api.route('/upload', methods=['POST'])
+def upload_file():
+    file = request.files['file']
+    response = upload_image(file)
+    
+    # Almacenar los datos en la base de datos
+    new_image = Image(public_id=response['public_id'], url=response['secure_url'])
+    db.session.add(new_image)
+    db.session.commit()
 
-# Allow CORS requests to this API
-CORS(api)
+    return jsonify(response)
+
+@api.route('/image/<public_id>', methods=['GET'])
+def get_image(public_id):
+    image = Image.query.filter_by(public_id=public_id).first()
+    if image:
+        return jsonify({'url': image.url})
+    else:
+        return jsonify({'error': 'Imagen no encontrada'}), 404
+# ------------------
 
 
 @api.route('/news', methods=['GET'])
