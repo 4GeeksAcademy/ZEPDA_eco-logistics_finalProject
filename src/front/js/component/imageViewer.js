@@ -21,7 +21,9 @@ export const ImageViewer = ({ publicId }) => {
     return (
         <div>
         {imageUrl ? (
-            <img src={imageUrl} alt="Imagen" />
+            <div className="imgcontainer border border-2" style={{height:'25vh', width: '25vw'}}> 
+                <img className="imgservicios" src={imageUrl} alt="Imagen" />
+            </div> 
         ) : (
             <p>Cargando imagen...</p>
         )}

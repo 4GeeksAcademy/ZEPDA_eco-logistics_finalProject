@@ -3,7 +3,7 @@ import { Modal, Button, Form } from "react-bootstrap";
 import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom";
 import { DeletePopUp } from "./deletePopUp";
-import { UploadImage } from "./uploadImage";
+import { ImageUploader } from "../component/imageUploader";
 
 export const EditUser = ({ show, openModal, closeModal }) => {
     const navigate = useNavigate();
@@ -69,7 +69,7 @@ export const EditUser = ({ show, openModal, closeModal }) => {
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
-                        <UploadImage />
+                        <ImageUploader />
                         <Form.Group className="mb-3" controlId="formNombre">
                             <Form.Label>Nombre</Form.Label>
                             <Form.Control

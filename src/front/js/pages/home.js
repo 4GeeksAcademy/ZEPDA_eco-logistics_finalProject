@@ -5,7 +5,6 @@ import "../../styles/home.css";
 import { NewsSection } from "../component/NewsSection";
 import { Link } from "react-router-dom";
 import { importAllImages } from "../../utils/importAllImages";
-import { CloudinaryAPI } from "../component/cloudinary-api";
 import { ImageUploader } from "../component/imageUploader";
 import { ImageViewer } from "../component/imageViewer";
 
