@@ -62,7 +62,6 @@ export const RegistroEmpresa = () => {
                     web: "",
                     sector: "",
                     descripcion: "",
-                    imagen: ""
                 });
             } else {
                 console.error("Failed to add company");
