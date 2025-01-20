@@ -39,7 +39,7 @@ const Layout = () => {
                     <Route element={<InfoEmpresa />} path="/info-empresa" />
                     <Route element={<DashboardUser />} path="/dashboard-user" />
                     <Route element={<RegistroEmpresa />} path="/registro-empresa" />
-                    <Route path="/reset-password/:token" element={<ResetPassword />} />
+                    <Route path="/reset-password/:decodeToken" element={<ResetPassword />} />
                     <Route element={<h1>Not found!</h1>} />
                 </Routes>
                 <Footer />

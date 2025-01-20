@@ -214,20 +214,21 @@ const getState = ({ getStore, getActions, setStore }) => {
               confirm_password: confirmPassword,
             }),
           });
-        
-          const responseData = await response.json();
-
           // Si no es una respuesta exitosa, mostrar el error
           if (!response.ok) {
-            console.error("Error en la solicitud:", responseData);  
-            alert(responseData.error || "Hubo un error al restablecer la contraseña.");
+            const errorData = await response.json();
+            console.error("Error en la solicitud:", errorData);  
+            alert(errorData.message || "Hubo un error al restablecer la contraseña.");
             return;
           }
           // Si la respuesta es exitosa, mostrara el mensaje adecuado
+          const data = await response.json();
+          console.log("Contraseña restablecida con éxito:", data);
           alert("Contraseña restablecida con éxito.");
+          return data;
         } catch (error) {
           // Si ocurre un error en la solicitud, mostrara un mensaje de error detallado
-          console.error("Error enviando el restablecimiento de contraseña:", error);
+          console.error("Error en la solicitud:", error);
           alert("Hubo un problema al restablecer la contraseña. " + error.message);
         }
       },
