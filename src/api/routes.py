@@ -3,6 +3,7 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 """
 import app
 from flask import Flask, request, jsonify, url_for, Blueprint
+from flask_cors import CORS
 from api.models import db, User, Company
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
@@ -13,6 +14,7 @@ from flask_jwt_extended import jwt_required
 import re
 import bcrypt
 import cloudinary.uploader
+import json
 
 def check(email):
     regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
@@ -147,56 +149,57 @@ def check_email():
 
 
 
-@api.route('api/register-company', methods=['POST'])
-def register_company():
-    try:
-        # Datos del formulario
-        nombre = request.form.get('nombre')
-        email = request.form.get('email')
-        direccion = request.form.get('direccion')
-        pais = request.form.get('pais')
-        telefono = request.form.get('telefono')
-        cif = request.form.get('cif')
-        web = request.form.get('web')
-        sector = request.form.get('sector')
-        descripcion = request.form.get('descripcion')
 
-        # Manejo del archivo (logotipo)
-        logo = request.files.get('logo')
-        logo_url = None
 
-        if logo:
-            # Subir el archivo a Cloudinary
-            upload_result = cloudinary.uploader.upload(logo, folder="logos_empresas")
-            logo_url = upload_result.get("secure_url")  # URL segura de la imagen subida
+@api.route('/companies/add', methods=['POST'])
+def add_company():
+    data = request.get_json()
+    print("data", data)
+    new_company = Company(
+        cif=data['cif'],
+        nombre=data['nombre'],
+        sector=data['sector'],
+        direccion=data['direccion'],
+        email=data['email'],
+        descripcion=data['descripcion'],
+        web=data['web'],
+        imagen=data['imagen'],
+        pais=data['pais'],
+        telefono=data['telefono']
+    )
+    
+    db.session.add(new_company)
+    db.session.commit()
+    return jsonify(new_company.serialize()), 201
 
-        # Validación mínima
-        if not all([nombre, email, direccion, pais, telefono, web]):
-            return jsonify({"error": "Todos los campos obligatorios deben completarse"}), 400
 
-        # Crear la instancia de la empresa
+@api.route('/initial-companies', methods=['GET'])
+def get_initial_companies():
+    with open("src/front/utils/initial_companies.json") as f:
+        companies = json.load(f)
+    for company in companies:
         new_company = Company(
-            nombre=nombre,
-            email=email,
-            direccion=direccion,
-            pais=pais,
-            telefono=telefono,
-            cif=cif,
-            web=web,
-            sector=sector,
-            imagen=logo_url,
-            descripcion=descripcion
+            cif=company['cif'],
+            nombre=company['nombre'],
+            sector=company['sector'],
+            direccion=company['direccion'],
+            email=company['email'],
+            descripcion=company['descripcion'],
+            web=company['web'],
+            imagen=company['imagen'],
+            pais=company['pais'],
+            telefono=company['telefono']
         )
-
-        # Guardar en la base de datos
         db.session.add(new_company)
         db.session.commit()
 
-        return jsonify({"message": "Empresa registrada exitosamente"}), 201
+    return jsonify({"message": "Initial companies added"}), 201
+    
 
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({"error": str(e)}), 500
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
+
+
 
 
 # @api.route('/registerCompany', methods=['POST'])
@@ -313,5 +316,4 @@ def register_company():
 #     db.session.commit()
 #     return jsonify({"message": f"Company {company_id} deleted"}), 200
 
-# if __name__ == '__main__':
-#     app.run(host='0.0.0.0', port=5000)
+
