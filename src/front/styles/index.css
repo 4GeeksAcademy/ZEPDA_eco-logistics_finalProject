@@ -292,3 +292,41 @@ footer{
       transform: translateX(-50%);
   }
 }
+
+/*Css de noticias*/
+.news-section .card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.news-section .card:hover {
+  transform: translateY(-10px); 
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
+}
+
+.news-section .card-body {
+  transition: background-color 0.3s ease;
+}
+
+.news-section .card-body:hover {
+  background-color: #f8f9fa; 
+}
+
+/* Estilo para los botones de navegación */
+.news-section .btn-nav {
+  background-color: green;
+  color: white; 
+  border-radius: 50%; 
+  padding: 10px;
+  border: none;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.news-section .btn-nav:hover {
+  background-color: #28a745; 
+  transform: scale(1.1); 
+}
+
+.news-section .btn-nav:disabled {
+  background-color: #dcdcdc; 
+  cursor: not-allowed;
+}
