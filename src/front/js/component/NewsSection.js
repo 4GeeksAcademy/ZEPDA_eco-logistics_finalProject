@@ -20,7 +20,7 @@ export const NewsSection = () => {
     // Limpiar el intervalo al desmontarse el componente
     return () => clearInterval(interval);
   }, [currentIndex]);
-  
+
   // Función para avanzar al siguiente conjunto de 4 noticias
   const nextSlide = () => {
     if (currentIndex + 4 < store.news.length) {
@@ -38,6 +38,9 @@ export const NewsSection = () => {
       setCurrentIndex(store.news.length - 4); // Si estamos al principio, vamos al final
     }
   };
+
+  // Imagen por defecto si no se carga la original
+  const defaultImage = "https://via.placeholder.com/200"; 
 
   return (
     <div className="container mt-5 news-section position-relative">
@@ -60,13 +63,14 @@ export const NewsSection = () => {
                   >
                     <div className="overflow-hidden">
                       <img
-                        src={article.urlToImage}
+                        src={article.urlToImage || defaultImage} // Usamos la imagen por defecto si no hay imagen
                         className="card-img-top img-fluid"
                         alt={`news-${index}`}
                         style={{
                           objectFit: "cover", // Asegura que la imagen no se deforme
                           height: "200px", // Fija la altura de la imagen
                         }}
+                        onError={(e) => { e.target.src = defaultImage; }} // Si la imagen falla, se carga la imagen por defecto
                       />
                     </div>
                     <div className="card-body d-flex flex-column">
@@ -90,10 +94,9 @@ export const NewsSection = () => {
       {/* Controles para el slider dentro del contenedor */}
       <div className="position-absolute top-50 start-0 translate-middle-y">
         <button
-          className="btn btn-link text-white"
+          className="btn btn-nav"
           onClick={prevSlide}
           disabled={currentIndex === 0}
-          style={{ backgroundColor: 'transparent', border: 'none', padding: '10px' }}
         >
           <FaArrowLeft size={30} />
         </button>
@@ -101,10 +104,9 @@ export const NewsSection = () => {
 
       <div className="position-absolute top-50 end-0 translate-middle-y">
         <button
-          className="btn btn-link text-white"
+          className="btn btn-nav"
           onClick={nextSlide}
           disabled={currentIndex + 4 >= store.news.length}
-          style={{ backgroundColor: 'transparent', border: 'none', padding: '10px' }}
         >
           <FaArrowRight size={30} />
         </button>
