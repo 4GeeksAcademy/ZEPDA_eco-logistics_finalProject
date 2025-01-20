@@ -2,9 +2,8 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 import app
-from flask import Flask, request, jsonify, url_for, Blueprint
-from flask_cors import CORS
-from api.models import db, User, Company
+from flask import Flask, Blueprint, request, jsonify, url_for
+from api.models import db, User, Company, Image
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 import requests
@@ -13,8 +12,14 @@ from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 import re
 import bcrypt
-import cloudinary.uploader
 import json
+from api.cloudinary_helpers import upload_image, delete_image
+from api.image_helpers import assign_image_to_user, assign_image_to_company
+
+api = Blueprint('api', __name__)
+
+# Allow CORS requests to this API
+CORS(api)
 
 def check(email):
     regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
@@ -23,11 +28,78 @@ def check(email):
     if(re.fullmatch(regex, email)):
         return True
     else:
-        return False
-api = Blueprint('api', __name__)
+        return False    
+    
+# --- CLOUDINARY ---
+@api.route('/upload', methods=['POST'])
+def upload_file():
+    print(f'request: {request}')
+    file = request.files['file']
+    user_id = request.form.get('user_id')  # Obtener el ID del usuario del formulario
+    company_id = request.form.get('company_id')  # Obtener el ID de la empresa del formulario
 
-# Allow CORS requests to this API
-CORS(api)
+    # Verificar que los datos están llegando correctamente
+    print(f'file: {file}')
+    print(f'user_id: {user_id}')
+    print(f'company_id: {company_id}')
+
+    if file and file.filename:
+        print(f'Nombre del archivo: {file.filename}') 
+        content_length = file.content_length or len(file.stream.read()) 
+        print(f'Tamaño del archivo: {content_length} bytes') 
+        file.stream.seek(0) # Volver al inicio del archivo después de leer el contenido
+        # Subir el archivo a Cloudinary
+        response = upload_image(file)
+        
+        # Verificar que se subió correctamente
+        print(f'upload response: {response}')
+
+        if user_id:
+            user = User.query.get(user_id)
+            if not user:
+                return jsonify({'error': 'Usuario no encontrado'}), 404
+            assign_image_to_user(user, response)
+        elif company_id:
+            company = Company.query.get(company_id)
+            if not company:
+                return jsonify({'error': 'Compañía no encontrada'}), 404
+            assign_image_to_company(company, response)
+        else:
+            return jsonify({'error': 'No se proporcionó un ID válido'}), 400
+
+        return jsonify(response)
+    else:
+        return jsonify({'error': 'Archivo vacío o no seleccionado'}), 400
+    
+
+
+@api.route('/images', methods=['GET'])
+def get_all_images():
+    images = Image.query.all()
+    image_list = [{'public_id': image.public_id, 'url': image.url} for image in images]
+    return jsonify(image_list)
+
+@api.route('/image/<public_id>', methods=['GET'])
+def get_image(public_id):
+    image = Image.query.filter_by(public_id=public_id).first()
+    if image:
+        return jsonify({'url': image.url})
+    else:
+        return jsonify({'error': 'Imagen no encontrada'}), 404
+    
+@api.route('/delete/<public_id>', methods=['DELETE'])
+def delete_image_endpoint(public_id):
+    image = Image.query.filter_by(public_id=public_id).first()
+    if image:
+        # Borrar de Cloudinary
+        cloudinary_response = delete_image(public_id)
+        # Borrar de la base de datos
+        db.session.delete(image)
+        db.session.commit()
+        return jsonify({'message': 'Imagen borrada exitosamente', 'cloudinary_response': cloudinary_response})
+    else:
+        return jsonify({'error': 'Imagen no encontrada'}), 404
+# ------------------
 
 
 @api.route('/news', methods=['GET'])
@@ -186,7 +258,6 @@ def get_initial_companies():
             email=company['email'],
             descripcion=company['descripcion'],
             web=company['web'],
-            imagen=company['imagen'],
             pais=company['pais'],
             telefono=company['telefono']
         )

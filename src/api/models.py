@@ -3,6 +3,28 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 
+class Image(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    public_id = db.Column(db.String(50), nullable=False)
+    url = db.Column(db.String(200), nullable=False)
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=True)
+
+    def __repr__(self):
+        return f'<Image {self.public_id}>'
+    
+    def serialize(self):
+       return{
+              "id": self.id,
+              "public_id": self.public_id,
+              "url": self.url,
+              "created_at": self.created_at
+       }
+
+
+
 
 #***********************************FAVORITES***********************************************
 
@@ -36,6 +58,8 @@ class User(db.Model):
     esta_activo = db.Column(db.Boolean(), unique=False, nullable=False)
     favorite_company = db.relationship('Favorite', backref='users_favorite', lazy=True)
 
+    image = db.relationship('Image', backref='user', uselist=False) # Relación uno a uno con Image
+
     def __init__(self, nombre, email, contraseña):
         self.nombre = nombre
         self.email = email
@@ -52,7 +76,8 @@ class User(db.Model):
             "email": self.email,
             "direccion": self.direccion,
             "descripcion": self.descripcion,
-            "esta_activo": True
+            "esta_activo": True,
+            "image": self.image.serialize() if self.image else None # Serializa la imagen si existe
             # do not serialize the password, its a security breach
         }
 
@@ -66,22 +91,22 @@ class Company(db.Model):
     cif = db.Column(db.String(20), unique=True, nullable=True)
     web = db.Column(db.String(120), unique=True, nullable=False)
     sector = db.Column(db.Text, nullable=True)
-    imagen = db.Column(db.String(255), nullable=True)
     descripcion = db.Column(db.Text, nullable=True)
     favorited = db.relationship('Favorite', backref='company_favorite', lazy=True)
+    image = db.relationship('Image', backref='company', uselist=False) # Relación uno a uno con Image
 
 
-    def __init__(self,cif,nombre,sector,direccion,email,descripcion,web,imagen,pais,telefono):
+    def __init__(self,cif,nombre,sector,direccion,email,descripcion,web,telefono,pais):
         self.nombre = nombre
         self.email = email
         self.direccion = direccion
         self.pais = pais
         self.telefono = telefono
         self.cif = cif
-        self.web = web
         self.sector = sector
-        self.imagen = imagen
         self.descripcion = descripcion
+        self.web = web
+       
 
     def __repr__(self):
         return f'<Company {self.nombre}>'
@@ -96,8 +121,8 @@ class Company(db.Model):
             "cif": self.cif,
             "web": self.web,
             "sector": self.sector,
-            "imagen": self.imagen,
-            "descripcion": self.descripcion
+            "descripcion": self.descripcion,
+            "image": self.image.serialize() if self.image else None # Serializa la imagen si existe
         }
     
     
