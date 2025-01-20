@@ -13,6 +13,7 @@ from flask_jwt_extended import jwt_required
 import re
 import bcrypt
 from api.cloudinary_helpers import upload_image, delete_image
+from api.image_helpers import assign_image_to_user, assign_image_to_company
 
 api = Blueprint('api', __name__)
 
@@ -31,15 +32,45 @@ def check(email):
 # --- CLOUDINARY ---
 @api.route('/upload', methods=['POST'])
 def upload_file():
+    print(f'request: {request}')
     file = request.files['file']
-    response = upload_image(file)
-    
-    # Almacenar los datos en la base de datos
-    new_image = Image(public_id=response['public_id'], url=response['secure_url'])
-    db.session.add(new_image)
-    db.session.commit()
+    user_id = request.form.get('user_id')  # Obtener el ID del usuario del formulario
+    company_id = request.form.get('company_id')  # Obtener el ID de la empresa del formulario
 
-    return jsonify(response)
+    # Verificar que los datos están llegando correctamente
+    print(f'file: {file}')
+    print(f'user_id: {user_id}')
+    print(f'company_id: {company_id}')
+
+    if file and file.filename:
+        print(f'Nombre del archivo: {file.filename}') 
+        content_length = file.content_length or len(file.stream.read()) 
+        print(f'Tamaño del archivo: {content_length} bytes') 
+        file.stream.seek(0) # Volver al inicio del archivo después de leer el contenido
+        # Subir el archivo a Cloudinary
+        response = upload_image(file)
+        
+        # Verificar que se subió correctamente
+        print(f'upload response: {response}')
+
+        if user_id:
+            user = User.query.get(user_id)
+            if not user:
+                return jsonify({'error': 'Usuario no encontrado'}), 404
+            assign_image_to_user(user, response)
+        elif company_id:
+            company = Company.query.get(company_id)
+            if not company:
+                return jsonify({'error': 'Compañía no encontrada'}), 404
+            assign_image_to_company(company, response)
+        else:
+            return jsonify({'error': 'No se proporcionó un ID válido'}), 400
+
+        return jsonify(response)
+    else:
+        return jsonify({'error': 'Archivo vacío o no seleccionado'}), 400
+    
+
 
 @api.route('/images', methods=['GET'])
 def get_all_images():

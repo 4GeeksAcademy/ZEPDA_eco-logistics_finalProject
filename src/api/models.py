@@ -9,6 +9,9 @@ class Image(db.Model):
     url = db.Column(db.String(200), nullable=False)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=True)
+
     def __repr__(self):
         return f'<Image {self.public_id}>'
     
@@ -55,6 +58,8 @@ class User(db.Model):
     esta_activo = db.Column(db.Boolean(), unique=False, nullable=False)
     favorite_company = db.relationship('Favorite', backref='users_favorite', lazy=True)
 
+    image = db.relationship('Image', backref='user', uselist=False) # Relación uno a uno con Image
+
     def __init__(self, nombre, email, contraseña):
         self.nombre = nombre
         self.email = email
@@ -71,7 +76,8 @@ class User(db.Model):
             "email": self.email,
             "direccion": self.direccion,
             "descripcion": self.descripcion,
-            "esta_activo": True
+            "esta_activo": True,
+            "image": self.image.serialize() if self.image else None # Serializa la imagen si existe
             # do not serialize the password, its a security breach
         }
 
@@ -84,11 +90,12 @@ class Company(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     descripcion = db.Column(db.Text, nullable=True)
     web = db.Column(db.String(120), unique=True, nullable=False)
-    imagen = db.Column(db.String(255), nullable=True)
+
+    image = db.relationship('Image', backref='company', uselist=False) # Relación uno a uno con Image
     favorited = db.relationship('Favorite', backref='company_favorite', lazy=True)
 
 
-    def __init__(self,nif,nombre,sector,direccion,email,descripcion,web,imagen):
+    def __init__(self,nif,nombre,sector,direccion,email,descripcion,web):
         self.nif = nif
         self.nombre = nombre
         self.sector = sector
@@ -96,7 +103,6 @@ class Company(db.Model):
         self.email = email
         self.descripcion = descripcion
         self.web = web
-        self.imagen = imagen
 
     def __repr__(self):
         return f'<Company {self.nombre}>'
@@ -110,7 +116,7 @@ class Company(db.Model):
             "email": self.email,
             "descripcion": self.descripcion,
             "web": self.web,
-            "imagen": self.imagen
+            "image": self.image.serialize() if self.image else None # Serializa la imagen si existe
         }
     
     

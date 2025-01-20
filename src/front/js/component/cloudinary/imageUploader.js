@@ -1,13 +1,16 @@
 import React, { useState, useContext } from 'react';
 import { Context } from "../../store/appContext";
 
-export const ImageUploader = () => {
+export const ImageUploader = ({type, id}) => {
     const { actions } = useContext(Context);
     const [file, setFile] = useState(null);
     const [imageUrl, setImageUrl] = useState('');
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
+        if (selectedFile) { 
+            console.log(`Tamaño del archivo: ${selectedFile.size} bytes`); 
+        }
         setFile(selectedFile);
     };
 
@@ -16,7 +19,7 @@ export const ImageUploader = () => {
 
         if (file) {
             try {
-                const response = await actions.uploadImage(file);
+                const response = await actions.uploadImage(file, type, id);
                 setImageUrl(response.secure_url); // Muestra la URL de la imagen subida
                 alert('¡Imagen subida exitosamente!');
             } catch (error) {

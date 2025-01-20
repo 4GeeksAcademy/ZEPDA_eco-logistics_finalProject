@@ -68,8 +68,8 @@ export const EditUser = ({ show, openModal, closeModal }) => {
                     <Modal.Title>Actualizar perfil de usuario</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                    <ImageUploader type="user" id={userData.id} />
                     <Form>
-                        <ImageUploader />
                         <Form.Group className="mb-3" controlId="formNombre">
                             <Form.Label>Nombre</Form.Label>
                             <Form.Control

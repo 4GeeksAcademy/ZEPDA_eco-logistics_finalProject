@@ -28,9 +28,25 @@ const getState = ({ getStore, getActions, setStore }) => {
         }
       },
       // --- CLOUDINARY ---
-      uploadImage: async (file) => {
+      uploadImage: async (file, type = undefined, id = null) => {
+        const store = getStore();
         const formData = new FormData();
         formData.append('file', file);
+      
+        // Añadir los IDs al formulario si están presentes
+        if (type !== undefined) {
+          switch(type) {
+            case 'user':
+              formData.append('user_id', id);
+              break;
+            case 'company':
+              formData.append('company_id', id);
+              break;
+            default:
+              break;
+          }
+        }
+        console.log(...formData);
       
         try {
           const response = await fetch(`${process.env.BACKEND_URL}api/upload`, {
@@ -40,7 +56,6 @@ const getState = ({ getStore, getActions, setStore }) => {
       
           if (response.ok) {
             const data = await response.json();
-            console.log(data);
             return data; // Devuelve los datos de la imagen subida
           } else {
             throw new Error('Error subiendo la imagen');
@@ -49,10 +64,10 @@ const getState = ({ getStore, getActions, setStore }) => {
           console.error('Error subiendo la imagen:', error);
           throw error;
         }
-      },
+      },      
       getAllImages: async () => {
         try {
-          const response = await fetch('${process.env.BACKEND_URL}api/images', { method: 'GET' });
+          const response = await fetch(`${process.env.BACKEND_URL}api/images`, { method: 'GET' });
       
           if (response.ok) {
             const data = await response.json();
@@ -153,7 +168,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         }
       },
       updateUser: async (id, newValues) => {
-        // console.log(newValues);
+        console.log(newValues);
         try {
           const resp = await fetch(`${process.env.BACKEND_URL}api/users/${id}`, {
             method: "PUT",
