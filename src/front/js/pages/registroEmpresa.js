@@ -15,6 +15,8 @@ export const RegistroEmpresa = () => {
         imagen: ""
     });
 
+    const [successMessage, setSuccessMessage] = useState(""); // Estado para el mensaje de éxito
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -48,6 +50,7 @@ export const RegistroEmpresa = () => {
             if (response.ok) {
                 const data = await response.json();
                 console.log("Company added:", data);
+                setSuccessMessage("Empresa registrada con éxito. ¡Gracias por formar parte de nuestro equipo!"); // Establece el mensaje de éxito
                 // Reset form
                 setFormData({
                     nombre: "",
@@ -81,10 +84,16 @@ export const RegistroEmpresa = () => {
                         <p className="mt-2 col-12">
                             Formar parte de nuestra plataforma te permitirá ofrecer tus servicios a empresas que buscan soluciones sostenibles para sus actividades.
                         </p>
-                        <p className="col-12">   
+                        <p className="col-12">
                             Rellena el siguiente formulario y envíanos tus datos para que podamos añadirte a nuestra base de datos de empresas colaboradoras.
                         </p>
                     </div>
+
+                    {successMessage && ( // Muestra el mensaje de éxito si existe
+                        <div className="alert alert-success text-center" role="alert">
+                            {successMessage}
+                        </div>
+                    )}
 
                     <form className="container mt-4 col-12 col-md-8 card shadow" onSubmit={handleSubmit}>
                         <h4 className="mt-2 text-center">FORMULARIO DE REGISTRO</h4>
