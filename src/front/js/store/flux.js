@@ -207,7 +207,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              "Authorization": `Bearer ${token}`,  // Usar el token decodificado
+              "Authorization": `Bearer ${token}`,  
             },
             body: JSON.stringify({
               password: password,
@@ -219,14 +219,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 
           // Si no es una respuesta exitosa, mostrar el error
           if (!response.ok) {
-            console.error("Error en la solicitud:", responseData);  // Loguear los detalles de la respuesta
+            console.error("Error en la solicitud:", responseData);  
             alert(responseData.error || "Hubo un error al restablecer la contraseña.");
             return;
           }
-          // Si la respuesta es exitosa, mostrar el mensaje adecuado
+          // Si la respuesta es exitosa, mostrara el mensaje adecuado
           alert("Contraseña restablecida con éxito.");
         } catch (error) {
-          // Si ocurre un error en la solicitud, mostrar un mensaje de error detallado
+          // Si ocurre un error en la solicitud, mostrara un mensaje de error detallado
           console.error("Error enviando el restablecimiento de contraseña:", error);
           alert("Hubo un problema al restablecer la contraseña. " + error.message);
         }
