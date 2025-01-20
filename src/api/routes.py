@@ -235,7 +235,6 @@ def add_company():
         email=data['email'],
         descripcion=data['descripcion'],
         web=data['web'],
-        imagen=data['imagen'],
         pais=data['pais'],
         telefono=data['telefono']
     )

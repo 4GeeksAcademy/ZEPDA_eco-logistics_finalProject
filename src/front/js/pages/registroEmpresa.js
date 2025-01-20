@@ -62,6 +62,7 @@ export const RegistroEmpresa = () => {
                     web: "",
                     sector: "",
                     descripcion: "",
+                    
                 });
             } else {
                 console.error("Failed to add company");
@@ -114,7 +115,6 @@ export const RegistroEmpresa = () => {
                         <textarea className="form-control mt-3" name="descripcion" value={formData.descripcion} onChange={handleChange} rows="5" placeholder="Describe detalladamente las funciones de tu empresa" required></textarea>
                         <button type="submit" className="btn btn-success m-3">Enviar</button>
                     </form>
-                    
                 </div>
             </div>
         </>
