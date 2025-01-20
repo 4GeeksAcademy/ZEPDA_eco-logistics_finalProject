@@ -15,6 +15,7 @@ import { Servicios } from "./pages/servicios";
 import { DashboardUser } from "./pages/dashboardUser";
 import { InfoEmpresa } from "./pages/infoEmpresa";
 import { RegistroEmpresa } from "./pages/registroEmpresa";
+import { ResetPassword } from "./pages/resetPassword";
 
 //create your first component
 const Layout = () => {
@@ -38,6 +39,7 @@ const Layout = () => {
                     <Route element={<InfoEmpresa />} path="/info-empresa" />
                     <Route element={<DashboardUser />} path="/dashboard-user" />
                     <Route element={<RegistroEmpresa />} path="/registro-empresa" />
+                    <Route path="/reset-password/:token" element={<ResetPassword />} />
                     <Route element={<h1>Not found!</h1>} />
                 </Routes>
                 <Footer />

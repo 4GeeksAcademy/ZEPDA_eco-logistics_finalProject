@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, ProgressBar } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { FiEye, FiEyeOff } from "react-icons/fi";  // Iconos para ver/ocultar contraseña
+import { ForgotPasswordModal } from "./ForgotPasswordModal";
+import { FiEye, FiEyeOff } from "react-icons/fi";  
 
 export const LoginRegisterModal = ({ showModal, handleCloseModal, actions }) => {
   const [isLogin, setIsLogin] = useState(true);
@@ -23,11 +24,13 @@ export const LoginRegisterModal = ({ showModal, handleCloseModal, actions }) => 
   const [isFormValid, setIsFormValid] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showRegistrationModal, setShowRegistrationModal] = useState(false);
+  const [loginAttemts,setLoginAttempts] = useState(0);
+  const [showForgotPassword,setShowForgotPassword] = useState(false);
   const navigate = useNavigate();
 
   // Validaciones
   const validEmail = (email) => /^[a-zA-Z0-9._%+-]+@[a-zAZ0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
-  const Validpassword = (password) => /[A-Z]/.test(password) && /[a-z]/.test(password) && /\d/.test(password);
+  const Validpassword = (password) => /[A-Z]/.test(password) && /[a-z]/.test(password) && /\d/.test(password) && password.length >=8;
   const strengthPassword = (password) => {
     let strength = 0;
     if (password.length > 6) strength += 1;
@@ -44,7 +47,7 @@ export const LoginRegisterModal = ({ showModal, handleCloseModal, actions }) => 
     } else {
       setRegisterFields({ ...registerFields, contraseña: value });
     }
-    setPasswordStrength(strengthPassword(value)); // Actualizamos la fuerza de la contraseña
+    setPasswordStrength(strengthPassword(value)); 
   };
 
   const handlePasswordVisibility = () => {
@@ -57,6 +60,7 @@ export const LoginRegisterModal = ({ showModal, handleCloseModal, actions }) => 
       setErrorMessage("");
       setSuccessMessage("");
       setIsLogin(true);
+      setLoginAttempts(0);
     }
   }, [showModal]);
 
@@ -68,6 +72,13 @@ export const LoginRegisterModal = ({ showModal, handleCloseModal, actions }) => 
     }
     if (!validEmail(loginFields.email)) {
       setErrorMessage("El correo electrónico no tiene un formato válido.");
+      return;
+    }
+
+    const emailExists = await actions.checkEmailExists(loginFields.email);
+    if (!emailExists) {
+      setErrorMessage("El correo no tiene cuenta.");
+      setTimeout(() => setErrorMessage(""), 2000);
       return;
     }
 
@@ -86,6 +97,7 @@ export const LoginRegisterModal = ({ showModal, handleCloseModal, actions }) => 
         navigate("/dashboard-user");
       },);
     } else {
+      setLoginAttempts((prev) => prev + 1);
       setErrorMessage("Usuario o contraseña incorrectos.");
     }
   };
@@ -107,12 +119,12 @@ export const LoginRegisterModal = ({ showModal, handleCloseModal, actions }) => 
       return;
     }
     if (!Validpassword(registerFields.contraseña)) {
-      setErrorMessage("La contraseña debe contener al menos una mayúscula, una minúscula y un número.");
+      setErrorMessage("La contraseña debe tener 8 caracteres y contener al menos una mayúscula, una minúscula y un número.");
       return;
     }
 
     const strength = strengthPassword(registerFields.contraseña);
-    if (strength < 3) {
+    if (strength < 4) {
       setErrorMessage("La contraseña no es lo suficientemente fuerte.");
       return;
     }
@@ -158,10 +170,6 @@ export const LoginRegisterModal = ({ showModal, handleCloseModal, actions }) => 
       },);
     }
   };
-  const handleAccept = () => {
-    setShowRegistrationModal(false);  // Cerrar el modal
-    navigate("/dashboard-user");       // Redirigir al dashboard
-  };
 
   useEffect(() => {
     // Hacer que el formulario sea válido según el tipo (Login o Registro)
@@ -197,6 +205,20 @@ export const LoginRegisterModal = ({ showModal, handleCloseModal, actions }) => 
     // Reseteamos la barra de progreso cuando cambiamos entre Login y Registro
     setPasswordStrength(0); // Restablecemos la fuerza de la contraseña cada vez que cambiamos entre formularios
   }, [isLogin]);
+
+  useEffect(() => {
+    if (errorMessage) {
+      const timer = setTimeout(() => setErrorMessage(""), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [errorMessage]);
+
+  useEffect(() => {
+    if (successMessage) {
+      const timer = setTimeout(() => setSuccessMessage(""), 3000);
+      return () => clearTimeout(timer); 
+    }
+  }, [successMessage]);
 
   return (
     <>
@@ -240,6 +262,13 @@ export const LoginRegisterModal = ({ showModal, handleCloseModal, actions }) => 
               <Button variant="secondary" type="submit" disabled={!isFormValid}>
                 Iniciar sesión
               </Button>
+              {loginAttemts >=3 && (
+                <div className="mt-3">
+                  <button variant="link" onClick={() => setShowForgotPassword(true)}>
+                    ¿Olvidaste tu contraseña?
+                  </button>
+                  </div>
+              )}
             </form>
           ) : (
             <form onSubmit={handleRegisterSubmit}>
@@ -311,19 +340,11 @@ export const LoginRegisterModal = ({ showModal, handleCloseModal, actions }) => 
           </Button>
         </Modal.Footer>
       </Modal>
-      <Modal show={showRegistrationModal} onHide={() => setShowRegistrationModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Usuario registrado</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>¡Tu cuenta ha sido creada correctamente! Ahora puedes iniciar sesión.</p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleAccept}>
-            Aceptar
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <ForgotPasswordModal
+        show={showForgotPassword}
+        onHide={() => setShowForgotPassword(false)}
+        onPasswordReset={actions.requestPasswordReset} 
+      />
     </>
   );
 };

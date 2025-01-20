@@ -36,8 +36,8 @@ const getState = ({ getStore, getActions, setStore }) => {
             return acc;
           }, {});
 
-            // console.log(companies); // empresas de ejemplo desde json local
-            setStore({ companies });
+          // console.log(companies); // empresas de ejemplo desde json local
+          setStore({ companies });
         } catch (error) {
           console.log(error);
         }
@@ -131,7 +131,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           return false;
         }
       },
-//*********************************** **************************************************************** */
+      //*********************************** **************************************************************** */
       getIsLogin: () => {
         return getStore();
       },
@@ -157,7 +157,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             body: JSON.stringify({ email, contraseña }),
           });
           const data = await resp.json();
-          if(data.token){
+          if (data.token) {
             console.log(data);
             setStore({ token: data.token });
             localStorage.setItem("token", data.token);
@@ -165,13 +165,84 @@ const getState = ({ getStore, getActions, setStore }) => {
             console.log(user);
             // don't forget to return something, that is how the async resolves
             return data.authorize;
-          }else{
+          } else {
             return false;
           }
         } catch (error) {
           console.log("Error loading message from backend", error);
         }
       },
+
+      requestPasswordReset: async (email) => {
+        try {
+          const resp = await fetch(process.env.BACKEND_URL + "api/request-reset-password", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email }),
+          });
+
+          const data = await resp.json();
+          if (resp.ok) {
+            alert("Te hemos enviado un correo para restablecer tu contraseña.");
+          } else {
+            alert(data.error || "Hubo un error al enviar el correo. Intenta de nuevo.");
+          }
+        } catch (error) {
+          console.error("Error enviando el correo de recuperación:", error);
+          alert("Hubo un problema con el envío del correo. Intenta de nuevo");
+        }
+      },
+      resetPassword: async (password, confirmPassword) => {
+        try {
+          // Obtener el token desde localStorage o el store
+          const tokenString = localStorage.getItem("token");
+          if (!tokenString) {
+            console.error("No se ha encontrado un token válido.");
+            alert("No se ha encontrado un token válido.");
+            return;
+          }
+      
+          // Verificar si las contraseñas coinciden
+          if (password !== confirmPassword) {
+            console.error("Las contraseñas no coinciden.");
+            alert("Las contraseñas no coinciden.");
+            return;
+          }
+      
+          // Realizar la solicitud para restablecer la contraseña
+          const response = await fetch(process.env.BACKEND_URL + "api/reset-password", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${tokenString}`,
+            },
+            body: JSON.stringify({
+              password: password,
+              confirm_password: confirmPassword,
+            }),
+          });
+      
+          const responseData = await response.json();
+          if (!response.ok) {
+            console.log("Error:", responseData);
+            alert(responseData.error || "Hubo un error al restablecer la contraseña.");
+            return;
+          }
+      
+          // Si todo está bien, manejar la respuesta exitosa
+          alert("Contraseña restablecida con éxito.");
+        } catch (error) {
+          console.log("Error enviando el restablecimiento de contraseña:", error);
+          alert("Hubo un problema al restablecer la contraseña.");
+        }
+      },      
+      
+
+
+
+
       getUserProfile: async () => {
         const store = getStore();
         try {
@@ -189,7 +260,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             const data = await resp.json();
             // console.log(data);
             setStore({ profile: data });
-            localStorage.setItem("profile", JSON.stringify(data)); 
+            localStorage.setItem("profile", JSON.stringify(data));
             return true;
           }
           console.log("expired");
@@ -199,30 +270,15 @@ const getState = ({ getStore, getActions, setStore }) => {
           return false;
         }
       },
-      createUser: async (user) => {
-        try {
-          const resp = await fetch(process.env.BACKEND_URL + "api/register", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(user),
-          });
-          const data = await resp.json();
-          return true;
-        } catch (err) {
-          console.log("Error sending customer to back backend", err);
-        }
-      },
       addFavoriteCompany: (company) => {
         const store = getStore();
         const updatedFavorites = [...store.favoriteCompanies, company];
         setStore({ favoriteCompanies: updatedFavorites });
       },
       removeFavoriteCompany: (company) => {
-          const store = getStore();
-          const updatedFavorites = store.favoriteCompanies.filter(fav => fav.id !== company.id);
-          setStore({ favoriteCompanies: updatedFavorites });
+        const store = getStore();
+        const updatedFavorites = store.favoriteCompanies.filter(fav => fav.id !== company.id);
+        setStore({ favoriteCompanies: updatedFavorites });
       },
       createCompany: async (user1) => {
         try {

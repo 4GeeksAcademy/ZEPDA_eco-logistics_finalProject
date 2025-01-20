@@ -33,16 +33,17 @@ export const Contacto = () => {
 
         // EmailJS send function
         const templateParams = {
-            from_email: email,
+            from_name: email,
+            to_name: "InfoZepda",
             message: message,
         };
 
         emailjs
             .send(
-                "service_h9ur4xn", // Reemplaza con tu ID de servicio
-                "template_pm7flil", // Reemplaza con tu ID de plantilla
+                "service_4r1kabj", // Reemplaza con tu ID de servicio
+                "template_k0mu5cx", // Reemplaza con tu ID de plantilla
                 templateParams,
-                "YixCcCZjxuEJaxPej" // Reemplaza con tu ID de usuario
+                "_OMCMIkpXe9CfyxUO" // Reemplaza con tu ID de usuario
             )
             .then(
                 (response) => {

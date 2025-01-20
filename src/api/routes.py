@@ -7,16 +7,16 @@ from api.models import db, User, Company
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 import requests
-from flask_jwt_extended import create_access_token
-from flask_jwt_extended import get_jwt_identity
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 from flask_mail import Message
+from datetime import timedelta
+import base64
 import re
 import bcrypt
 def check(email):
+    if not email:
+        return False
     regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
-    # pass the regular expression
-    # and the string into the fullmatch() method
     if(re.fullmatch(regex, email)):
         return True
     else:
@@ -26,7 +26,6 @@ api = Blueprint('api', __name__)
 
 # Allow CORS requests to this API
 CORS(api)
-
 
 @api.route('/test-email', methods=['GET'])
 def test_email():
@@ -49,6 +48,75 @@ def test_email():
     except Exception as e:
         return jsonify({"error": "No se puede enviar el correo: " + str(e)}), 500
 
+@api.route('/request-reset-password', methods=["POST"])
+def request_reset_password():
+    from app import mail
+    email = request.json.get("email")
+
+    if not check(email):
+        return jsonify({"error": "Formato de correo electrónico inválido"}), 400
+
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        return jsonify({"error": "Correo electrónico no registrado"}), 404
+
+    token = create_access_token(identity=email, expires_delta=timedelta(minutes=5))
+    token_byte = token.encode('utf-8')
+    token = base64.b64encode(token_byte)
+    reset_link = f"https://silver-space-pancake-4j9rvrxg7jrfjvw9-3000.app.github.dev/reset-password/{token}"
+
+ 
+    try:
+        sender_email = current_app.config['MAIL_USERNAME']    
+        msg = Message(
+            'Restablecimiento de Contraseña',
+            sender=sender_email,
+            recipients=[email]
+        )
+        msg.html = f'<p>Haz clic para restablecer la contraseña: <a href="{reset_link}">Restablecer contraseña</a></p>'
+        mail.send(msg)
+
+        return jsonify({"message": "Correo enviado exitosamente"})
+    except Exception as e:
+        return jsonify({"error": "No se puede enviar el correo: " + str(e)}), 500
+
+
+@api.route('/reset-password', methods=["POST"])
+@jwt_required()  # Este decorador asegura que el token JWT sea válido
+def reset_password():
+    # Obtener el email del usuario desde el token JWT
+    email = get_jwt_identity()
+    
+    # Obtener los datos enviados en el cuerpo de la solicitud
+    user_data = request.get_json()
+
+    # Asegurarse de que las contraseñas coinciden
+    if 'password' not in user_data or 'confirm_password' not in user_data:
+        return jsonify({"error": "Faltan campos de contraseña"}), 400
+
+    password = user_data['password']
+    confirm_password = user_data['confirm_password']
+
+    if password != confirm_password:
+        return jsonify({"error": "Las contraseñas no coinciden"}), 400
+
+    # Encontrar al usuario por su email
+    user = User.query.filter_by(email=email).first()
+
+    if not user:
+        return jsonify({"error": "Usuario no encontrado"}), 404
+
+    # Establecer la nueva contraseña (asegúrate de usar bcrypt para encriptar la contraseña)
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+    user.password = hashed_password  # Actualizar la contraseña en la base de datos
+
+    # Guardar los cambios en la base de datos
+    try:
+        db.session.commit()
+        return jsonify({"message": "Contraseña restablecida con éxito"}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": "Hubo un error al actualizar la contraseña: " + str(e)}),
 
 @api.route('/news', methods=['GET'])
 def get_news():
