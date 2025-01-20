@@ -29,7 +29,6 @@ const getState = ({ getStore, getActions, setStore }) => {
       },
       // --- CLOUDINARY ---
       uploadImage: async (file, type = undefined, id = null) => {
-        const store = getStore();
         const formData = new FormData();
         formData.append('file', file);
       
@@ -46,7 +45,6 @@ const getState = ({ getStore, getActions, setStore }) => {
               break;
           }
         }
-        console.log(...formData);
       
         try {
           const response = await fetch(`${process.env.BACKEND_URL}api/upload`, {
