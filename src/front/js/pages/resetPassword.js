@@ -1,42 +1,58 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";  // Cambié la importación aquí
+import { Context } from "../store/appContext";
+import { jwtDecode } from 'jwt-decode';
 
 export const ResetPassword = () => {
+  const { Token } = useParams();  
+  const { store, actions } = useContext(Context);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
   const navigate = useNavigate();
-  const { token } = useParams();  // Obtenemos el token desde los parámetros de la URL
+
+  // Verificar si el token ha expirado
+  const isTokenExpired = (token) => {
+    try {
+      const decodedToken = jwtDecode(token);
+      const currentTime = Date.now() / 1000; 
+      return decodedToken.exp < currentTime; 
+    } catch (error) {
+      return true;  
+    }
+  };
+
+  // Verificar si el token es inválido
+  const isTokenInvalid = (token) => {
+    try {
+      jwtDecode(token);  
+      return false;  
+    } catch (error) {
+      return true;  
+    }
+  };
 
   useEffect(() => {
-    if (!token) {
+    if (!Token) {
       setErrorMessage("Token no proporcionado.");
       return;
     }
 
-    try {
-      // Primero decodificamos el token de Base64 (lo asumo en forma de cadena como "b'String'")
-      const decodedToken = atob(token);  // Decodificamos el Base64
+    const tokenToUse = Token || store.token;
 
-      // Ahora decodificamos el JWT con jwt-decode
-      const payload = jwtDecode(decodedToken);  // Decodifica el JWT
-
-      // Verificamos si el token tiene el campo 'exp' y si ha expirado
-      const currentTime = Date.now() / 1000; // Obtener el tiempo actual en segundos
-      if (payload.exp < currentTime) {
-        setErrorMessage("El token ha expirado.");
-        return;  // Si el token expiró, ya no necesitamos continuar
-      }
-
-      // Si el token no ha expirado, entonces continuamos el flujo normal
-      setErrorMessage("");  // Limpiamos cualquier mensaje de error
-
-    } catch (error) {
-      // Si el token no se puede decodificar o tiene problemas de formato
-      setErrorMessage("Token inválido. Por favor, intentalo de nuevo.");
+    if (isTokenExpired(tokenToUse)) {
+      setErrorMessage("El token ha expirado.");
+      return;
     }
-  }, [token]);
+
+    if (isTokenInvalid(tokenToUse)) {
+      setErrorMessage("El token es inválido.");
+      return;
+    }
+
+    console.log("Token recibido:", tokenToUse); 
+  }, [Token, store.token]);
 
   const handleResetPassword = async () => {
     if (password !== confirmPassword) {
@@ -44,15 +60,25 @@ export const ResetPassword = () => {
       return;
     }
 
-    try {
-      // Aquí llamarías a tu acción de restablecer la contraseña
-      // await actions.resetPassword(password, confirmPassword, token);
+    const tokenToUse = Token || store.token;
 
-      // Si todo está bien, redirigir al login (o manejar navegación)
+    if (isTokenExpired(tokenToUse)) {
+      setErrorMessage("El token ha expirado.");
+      return;
+    }
+
+    if (isTokenInvalid(tokenToUse)) {
+      setErrorMessage("El token es inválido.");
+      return;
+    }
+
+    try {
+      await actions.resetPassword(password, confirmPassword, tokenToUse);
       alert("Contraseña restablecida con éxito.");
-      navigate("/login");  // Redirige al login después de un reset exitoso
+      navigate("/");  
     } catch (error) {
-      setErrorMessage("Hubo un problema al restablecer la contraseña. Inténtalo de nuevo.");
+      setErrorMessage(error.message || "Hubo un problema al restablecer la contraseña.");
+      console.error("Error al restablecer la contraseña:", error);
     }
   };
 

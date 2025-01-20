@@ -20,7 +20,7 @@ load_dotenv()
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 app.config["JWT_SECRET_KEY"] = os.environ.get("JWT_SECRET_KEY","CAMELCASE")
-app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta (hours=1)
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta (hours=5)
 app.config.update(
     MAIL_SERVER='smtp.gmail.com',
     MAIL_PORT=587,

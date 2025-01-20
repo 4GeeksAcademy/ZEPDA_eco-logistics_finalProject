@@ -59,13 +59,11 @@ def request_reset_password():
     user = User.query.filter_by(email=email).first()
     if not user:
         return jsonify({"error": "Correo electrónico no registrado"}), 404
-
     token = create_access_token(identity=email, expires_delta=timedelta(minutes=5))
     token_byte = token.encode('utf-8')
     token = base64.b64encode(token_byte)
     reset_link = f"https://silver-space-pancake-4j9rvrxg7jrfjvw9-3000.app.github.dev/reset-password/{token}"
 
- 
     try:
         sender_email = current_app.config['MAIL_USERNAME']    
         msg = Message(
@@ -82,41 +80,14 @@ def request_reset_password():
 
 
 @api.route('/reset-password', methods=["POST"])
-@jwt_required()  # Este decorador asegura que el token JWT sea válido
+@jwt_required()  
 def reset_password():
-    # Obtener el email del usuario desde el token JWT
-    email = get_jwt_identity()
-    
-    # Obtener los datos enviados en el cuerpo de la solicitud
     user_data = request.get_json()
-
-    # Asegurarse de que las contraseñas coinciden
-    if 'password' not in user_data or 'confirm_password' not in user_data:
-        return jsonify({"error": "Faltan campos de contraseña"}), 400
-
-    password = user_data['password']
-    confirm_password = user_data['confirm_password']
-
-    if password != confirm_password:
-        return jsonify({"error": "Las contraseñas no coinciden"}), 400
-
-    # Encontrar al usuario por su email
-    user = User.query.filter_by(email=email).first()
-
-    if not user:
-        return jsonify({"error": "Usuario no encontrado"}), 404
-
-    # Establecer la nueva contraseña (asegúrate de usar bcrypt para encriptar la contraseña)
-    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-    user.password = hashed_password  # Actualizar la contraseña en la base de datos
-
-    # Guardar los cambios en la base de datos
-    try:
-        db.session.commit()
-        return jsonify({"message": "Contraseña restablecida con éxito"}), 200
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({"error": "Hubo un error al actualizar la contraseña: " + str(e)}),
+    email = get_jwt_identity()
+    print(email)
+    print(user_data)
+    #if user_data['password'] == user_data['confirm_password']:
+    return "ok", 200
 
 @api.route('/news', methods=['GET'])
 def get_news():

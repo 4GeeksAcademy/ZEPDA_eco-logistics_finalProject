@@ -194,51 +194,44 @@ const getState = ({ getStore, getActions, setStore }) => {
           alert("Hubo un problema con el envío del correo. Intenta de nuevo");
         }
       },
-      resetPassword: async (password, confirmPassword) => {
+      resetPassword: async (password, confirmPassword, token) => {
         try {
-          // Obtener el token desde localStorage o el store
-          const tokenString = localStorage.getItem("token");
-          if (!tokenString) {
-            console.error("No se ha encontrado un token válido.");
-            alert("No se ha encontrado un token válido.");
-            return;
-          }
-      
-          // Verificar si las contraseñas coinciden
+          // Verificar si las contraseñas coinciden antes de hacer la solicitud
           if (password !== confirmPassword) {
             console.error("Las contraseñas no coinciden.");
             alert("Las contraseñas no coinciden.");
             return;
           }
-      
           // Realizar la solicitud para restablecer la contraseña
           const response = await fetch(process.env.BACKEND_URL + "api/reset-password", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              "Authorization": `Bearer ${tokenString}`,
+              "Authorization": `Bearer ${token}`,  // Usar el token decodificado
             },
             body: JSON.stringify({
               password: password,
               confirm_password: confirmPassword,
             }),
           });
-      
+        
           const responseData = await response.json();
+
+          // Si no es una respuesta exitosa, mostrar el error
           if (!response.ok) {
-            console.log("Error:", responseData);
+            console.error("Error en la solicitud:", responseData);  // Loguear los detalles de la respuesta
             alert(responseData.error || "Hubo un error al restablecer la contraseña.");
             return;
           }
-      
-          // Si todo está bien, manejar la respuesta exitosa
+          // Si la respuesta es exitosa, mostrar el mensaje adecuado
           alert("Contraseña restablecida con éxito.");
         } catch (error) {
-          console.log("Error enviando el restablecimiento de contraseña:", error);
-          alert("Hubo un problema al restablecer la contraseña.");
+          // Si ocurre un error en la solicitud, mostrar un mensaje de error detallado
+          console.error("Error enviando el restablecimiento de contraseña:", error);
+          alert("Hubo un problema al restablecer la contraseña. " + error.message);
         }
-      },      
-      
+      },
+
 
 
 
