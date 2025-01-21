@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-const mockDesc = "Le encanta la programación, especialmente en Python y JavaScript. En su tiempo libre, disfruta de la jardinería y la cocina gourmet. Es un apasionado de la música clásica y toca el violín desde niño. Le gusta leer sobre ciencia ficción y es miembro activo de un club de lectura local. Los fines de semana, suele hacer senderismo por la Sierra de Guadarrama y le gusta capturar fotografías de la naturaleza.";
+const mockDesc = "Sin descripción actualizada...";
 import { getStringDate } from "../../utils/formattedDate";
 import { EditUser } from "./editUser";
 import userPic from "../../img/rigo-baby.jpg"
@@ -11,6 +11,7 @@ export const UserPanel = ({ user }) => {
     const [imageUrl, setImageUrl] = useState('');
 
     useEffect(() => {
+        // Detecta el cambio en actions.updateUser()
         if (user.image !== null && user.image !== undefined) {
             const fetchImage = async () => {
                 try {
@@ -45,8 +46,8 @@ export const UserPanel = ({ user }) => {
                             </div>
                             <div className='col-8 my-auto'>
                                 <h5 className="card-title text-success fw-semibold m-0 py-2 text-start">{user.nombre || "Juan Martinez"}</h5> 
-                                <p className="card-text mb-2 fw-normal text-start">{user.email || "juan.martinez@example.com"}</p> 
-                                <p className="card-text mb-2 fw-normal text-start">{user.direccion || "Calle de la Primavera, 45, 4º B 28013 Madrid, España"}</p> 
+                                <p className="card-text mb-2 fw-normal text-start">{user.email || "usuario@example.com"}</p> 
+                                <p className="card-text mb-2 fw-normal text-start">{user.direccion || "Sin dirección asignada..."}</p> 
                             </div>
                         </div>
                     </div> 
@@ -62,7 +63,7 @@ export const UserPanel = ({ user }) => {
                 </div>
             </div>
 
-            <EditUser show={showModal} openModal={handleOpenModal} closeModal={handleCloseModal} />
+            <EditUser show={showModal} openModal={handleOpenModal} closeModal={handleCloseModal} userImageUrl={imageUrl} />
         </>
     );
 };

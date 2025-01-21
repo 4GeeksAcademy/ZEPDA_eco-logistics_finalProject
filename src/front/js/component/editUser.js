@@ -5,11 +5,11 @@ import { useNavigate } from "react-router-dom";
 import { DeletePopUp } from "./deletePopUp";
 import { ImageUploader } from "./cloudinary/imageUploader";
 
-export const EditUser = ({ show, openModal, closeModal }) => {
+export const EditUser = ({ show, openModal, closeModal, userImageUrl }) => {
+    const { store, actions } = useContext(Context);
     const navigate = useNavigate();
     const [showPopup, setShowPopup] = useState(false);
 
-    const { store, actions } = useContext(Context);
     const [userData, setUserData] = useState({
         id: store.profile.id,
         nombre: store.profile.nombre,
@@ -68,7 +68,7 @@ export const EditUser = ({ show, openModal, closeModal }) => {
                     <Modal.Title>Actualizar perfil de usuario</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <ImageUploader type="user" id={userData.id} />
+                    <ImageUploader type="user" id={userData.id} url={userImageUrl} />
                     <Form>
                         <Form.Group className="mb-3" controlId="formNombre">
                             <Form.Label>Nombre</Form.Label>
