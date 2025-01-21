@@ -214,7 +214,7 @@ footer{
 }
 
 .btn-danger:hover{
-  background-color:red;
+  background-color:#833030;
   color:white;
 
 }
@@ -292,3 +292,4 @@ footer{
       transform: translateX(-50%);
   }
 }
+

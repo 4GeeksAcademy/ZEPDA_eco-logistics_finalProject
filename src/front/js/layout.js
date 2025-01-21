@@ -16,7 +16,6 @@ import { DashboardUser } from "./pages/dashboardUser";
 import { InfoEmpresa } from "./pages/infoEmpresa";
 import { RegistroEmpresa } from "./pages/registroEmpresa";
 import { ResetPassword } from "./pages/resetPassword";
-
 //create your first component
 const Layout = () => {
     //the basename is used when your project is published in a subdirectory and not in the root of the domain

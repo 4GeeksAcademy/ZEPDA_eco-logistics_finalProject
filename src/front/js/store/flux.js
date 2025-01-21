@@ -1,5 +1,6 @@
 import mockData from "../../utils/mockData_Companies.json"
 
+
 const getState = ({ getStore, getActions, setStore }) => {
 
   return {
@@ -185,13 +186,15 @@ const getState = ({ getStore, getActions, setStore }) => {
 
           const data = await resp.json();
           if (resp.ok) {
-            alert("Te hemos enviado un correo para restablecer tu contraseña.");
+            console.log("Te hemos enviado un correo para restablecer tu contraseña.");
+            return { success: true };
           } else {
-            alert(data.error || "Hubo un error al enviar el correo. Intenta de nuevo.");
+            console.log(data.error || "Hubo un error al enviar el correo. Intenta de nuevo.");
+            return { success: false, message: data.error || "Hubo un error al enviar el correo. Intenta de nuevo." }; 
           }
         } catch (error) {
           console.error("Error enviando el correo de recuperación:", error);
-          alert("Hubo un problema con el envío del correo. Intenta de nuevo");
+          return { success: false, message: "Hubo un problema con el envío del correo. Intenta de nuevo" };
         }
       },
       resetPassword: async (password, confirmPassword, token) => {
@@ -199,7 +202,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           // Verificar si las contraseñas coinciden antes de hacer la solicitud
           if (password !== confirmPassword) {
             console.error("Las contraseñas no coinciden.");
-            alert("Las contraseñas no coinciden.");
+            console.log("Las contraseñas no coinciden.");
             return;
           }
           // Realizar la solicitud para restablecer la contraseña
@@ -218,18 +221,17 @@ const getState = ({ getStore, getActions, setStore }) => {
           if (!response.ok) {
             const errorData = await response.json();
             console.error("Error en la solicitud:", errorData);  
-            alert(errorData.message || "Hubo un error al restablecer la contraseña.");
+            console.log(errorData.message || "Hubo un error al restablecer la contraseña.");
             return;
           }
           // Si la respuesta es exitosa, mostrara el mensaje adecuado
           const data = await response.json();
           console.log("Contraseña restablecida con éxito:", data);
-          alert("Contraseña restablecida con éxito.");
-          return data;
+          return { success: true, message: "Contraseña restablecida con éxito." }; 
+        
         } catch (error) {
-          // Si ocurre un error en la solicitud, mostrara un mensaje de error detallado
           console.error("Error en la solicitud:", error);
-          alert("Hubo un problema al restablecer la contraseña. " + error.message);
+          console.log("Hubo un problema al restablecer la contraseña. " + error.message);
         }
       },
 

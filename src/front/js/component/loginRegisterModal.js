@@ -144,6 +144,7 @@ export const LoginRegisterModal = ({ showModal, handleCloseModal, actions }) => 
       setSuccessMessage("Usuario registrado correctamente!");
 
       // Esperar unos segundos antes de redirigir
+      setTimeout(async () => {
       handleCloseModal();
       setRegisterFields({
         nombre: "",
@@ -155,7 +156,6 @@ export const LoginRegisterModal = ({ showModal, handleCloseModal, actions }) => 
       setPasswordStrength(0);
       setShowRegistrationModal(true);
 
-      setTimeout(async () => {
         const loginResponse = await actions.loginUser({
           email: registerFields.email,
           contraseña: registerFields.contraseña
@@ -167,7 +167,9 @@ export const LoginRegisterModal = ({ showModal, handleCloseModal, actions }) => 
         } else {
           setErrorMessage("Hubo un error al iniciar sesión después del registro.");
         }
-      },);
+      },2000);
+    }else{
+      setErrorMessage("Hubo un error al registrar al usuario.");
     }
   };
 
@@ -259,16 +261,20 @@ export const LoginRegisterModal = ({ showModal, handleCloseModal, actions }) => 
                   </span>
                 </div>
               </div>
-              <Button variant="secondary" type="submit" disabled={!isFormValid}>
-                Iniciar sesión
-              </Button>
-              {loginAttemts >=3 && (
-                <div className="mt-3">
-                  <button variant="link" onClick={() => setShowForgotPassword(true)}>
-                    ¿Olvidaste tu contraseña?
-                  </button>
-                  </div>
-              )}
+              <div className="d-flex justify-content-between align-items-center mt-3">
+  <Button variant="secondary" type="submit" disabled={!isFormValid}>
+    Iniciar sesión
+  </Button>
+  {loginAttemts >= 3 && (
+    <span
+      style={{ cursor: 'pointer', textDecoration: 'underline' }}
+      onClick={() => setShowForgotPassword(true)}
+    >
+      ¿Olvidaste tu contraseña?
+    </span>
+  )}
+</div>
+
             </form>
           ) : (
             <form onSubmit={handleRegisterSubmit}>

@@ -4,7 +4,8 @@ import { Modal, Button } from "react-bootstrap";
 export const ForgotPasswordModal = ({ show, onHide, onPasswordReset }) => {
   const [email, setEmail] = useState("");
   const [resetMessage, setResetMessage] = useState(""); // Mensaje de éxito o error
-  const [isLoading, setIsLoading] = useState(false); // Estado de carga
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleForgotPasswordSubmit = async (e) => {
     e.preventDefault();
@@ -15,12 +16,25 @@ export const ForgotPasswordModal = ({ show, onHide, onPasswordReset }) => {
     }
 
     setIsLoading(true);
-    const result = await onPasswordReset(email);
-    setIsLoading(false);
+    setResetMessage(""); // Limpiar el mensaje anterior
+    setErrorMessage(""); // Limpiar el mensaje de error anterior
 
-    setResetMessage(result.message);
-    if (result.success) {
-      setEmail(""); // Limpiar el campo de correo
+    try {
+      const result = await onPasswordReset(email);
+      setIsLoading(false);
+
+      if (result.success) {
+        setResetMessage("Te hemos enviado un correo para restablecer la contraseña.");
+        setEmail(""); // Limpiar el campo de email
+        setTimeout(() => {
+          onHide(); // Cerrar la modal después de 2 segundos
+        }, 2000);
+      } else {
+        setErrorMessage(result.message || "No se ha podido enviar el correo. Intenta nuevamente.");
+      }
+    } catch (error) {
+      setIsLoading(false);
+      setErrorMessage("Hubo un problema al intentar enviar el correo. Intenta nuevamente.");
     }
   };
 
@@ -48,6 +62,8 @@ export const ForgotPasswordModal = ({ show, onHide, onPasswordReset }) => {
             {isLoading ? "Enviando..." : "Enviar correo de recuperación"}
           </Button>
         </form>
+
+        {/* Mostrar el mensaje de éxito */}
         {resetMessage && (
           <div
             className={`alert ${resetMessage.includes("error") ? "alert-danger" : "alert-success"} mt-3`}
@@ -55,14 +71,15 @@ export const ForgotPasswordModal = ({ show, onHide, onPasswordReset }) => {
             {resetMessage}
           </div>
         )}
+
+        {/* Mostrar mensaje de error si existe */}
+        {errorMessage && (
+          <div className="alert alert-danger mt-3">
+            {errorMessage}
+          </div>
+        )}
       </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={onHide}>
-          Cerrar
-        </Button>
-      </Modal.Footer>
     </Modal>
   );
 };
-
 

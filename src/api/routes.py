@@ -59,7 +59,7 @@ def request_reset_password():
     user = User.query.filter_by(email=email).first()
     if not user:
         return jsonify({"error": "Correo electrónico no registrado"}), 404
-    token = create_access_token(identity=email, expires_delta=timedelta(minutes=20))
+    token = create_access_token(identity=email, expires_delta=timedelta(minutes=5))
     token_byte = token.encode('utf-8')
     token = base64.b64encode(token_byte)
     reset_link = f"https://silver-space-pancake-4j9rvrxg7jrfjvw9-3000.app.github.dev/reset-password/{token}"
@@ -89,11 +89,10 @@ def reset_password():
         if 'password' not in user_data or 'confirm_password' not in user_data:
             return jsonify({"msg": "Faltan campos de contraseña"}), 400
         
-        # Verificar que las contraseñas coinciden
         if user_data['password'] != user_data['confirm_password']:
             return jsonify({"msg": "Las contraseñas no coinciden"}), 400
 
-        # Obtener la nueva contraseña (y realizar un hash)
+       
         password = user_data['password']
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt(14)).decode('utf-8')
 
@@ -102,7 +101,6 @@ def reset_password():
         if not user:
             return jsonify({"msg": "Usuario no encontrado"}), 404
 
-        # Actualizar la contraseña en la base de datos
         user.contraseña = hashed_password
         db.session.commit()
 
