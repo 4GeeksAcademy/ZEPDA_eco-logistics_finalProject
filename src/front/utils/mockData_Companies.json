@@ -68,7 +68,7 @@
             {
                 "nombre": "Stock Logistic",
                 "pais": "United Kingdom",
-                "sector": "Transporte",
+                "sector": "Transportes",
                 "email": "support@stocklogistic.co.uk",
                 "telefono": "+44 161 234 5678",
                 "web": "https://www.stocklogistic.co.uk",
@@ -80,7 +80,7 @@
             {
                 "nombre": "MOLDTRANS",
                 "pais": "Holland",
-                "sector": "Transporte",
+                "sector": "Transportes",
                 "email": "info@moldtrans.nl",
                 "telefono": "+31 20 123 4567",
                 "web": "https://www.moldtrans.nl",
@@ -92,7 +92,7 @@
             {
                 "nombre": "Expotrans",
                 "pais": "España",
-                "sector": "Transporte",
+                "sector": "Transportes",
                 "email": "contact@expotrans.es",
                 "telefono": "+34 93 234 5678",
                 "web": "https://www.expotrans.es",
