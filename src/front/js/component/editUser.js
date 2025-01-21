@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { DeletePopUp } from "./deletePopUp";
 import { ImageUploader } from "./cloudinary/imageUploader";
 
-export const EditUser = ({ show, openModal, closeModal, userImageUrl }) => {
+export const EditUser = ({ show, openModal, closeModal, backUpImage }) => {
     const { store, actions } = useContext(Context);
     const navigate = useNavigate();
     const [showPopup, setShowPopup] = useState(false);
@@ -29,6 +29,7 @@ export const EditUser = ({ show, openModal, closeModal, userImageUrl }) => {
     const handleSave = () => {
         // Lógica para guardar los cambios del usuario
         actions.updateUser(userData.id, userData);
+        // actions.updateImage(); // Actualiza la imagen
 
         // Cerramos el modal después de guardar los cambios
         closeModal();
@@ -63,7 +64,7 @@ export const EditUser = ({ show, openModal, closeModal, userImageUrl }) => {
 
     // Confirmación en el guardado de la imagen
     const handleUploadImageConfirmation = () => {
-        
+
     }
 
     return (
@@ -73,7 +74,7 @@ export const EditUser = ({ show, openModal, closeModal, userImageUrl }) => {
                     <Modal.Title>Actualizar perfil de usuario</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <ImageUploader type="user" id={userData.id} url={userImageUrl} />
+                    <ImageUploader type="user" id={userData.id} image={backUpImage} />
                     <Form>
                         <Form.Group className="mb-3" controlId="formNombre">
                             <Form.Label>Nombre</Form.Label>

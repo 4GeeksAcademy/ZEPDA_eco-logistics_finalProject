@@ -65,7 +65,7 @@ export const UserPanel = ({ user }) => {
                 </div>
             </div>
 
-            <EditUser show={showModal} openModal={handleOpenModal} closeModal={handleCloseModal} userImageUrl={imageUrl} />
+            <EditUser show={showModal} openModal={handleOpenModal} closeModal={handleCloseModal} backUpImage={user.image} />
         </>
     );
 };

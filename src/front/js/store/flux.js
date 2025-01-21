@@ -297,7 +297,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           );
           if (resp.status == 200) {
             const data = await resp.json();
-            // console.log(data);
+            console.log(data);
             setStore({ profile: data });
             localStorage.setItem("profile", JSON.stringify(data)); 
             return true;

@@ -2,14 +2,17 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { Context } from "../../store/appContext";
 
-export const ImageUploader = ({type, id, url = ''}) => {
+export const ImageUploader = ({type, id, image = null}) => {
     const { actions } = useContext(Context);
     const [file, setFile] = useState(null);
     const [imageUrl, setImageUrl] = useState('');
+    const [imageID, setImageID] = useState('');
 
     useEffect(() => {
-        if (url !== '') {
-            setImageUrl(url);
+        console.log(image);
+        if (image !== null) {
+            setImageUrl(image.url);
+            setImageID(image.public_id);
         }
     }, [])
 
@@ -25,19 +28,32 @@ export const ImageUploader = ({type, id, url = ''}) => {
         e.preventDefault();
 
         if (file) {
+            console.log('subiendo imagen');
             try {
                 const response = await actions.uploadImage(file, type, id);
-                setImageUrl(response.secure_url); // Muestra la URL de la imagen subida
-                alert('¡Imagen subida exitosamente!');
+                setImageUrl(response.secure_url); 
+                setImageID(response.public_id);
                 setFile(null);
+                // alert('¡Imagen subida exitosamente!');
             } catch (error) {
                 alert('Error subiendo la imagen.');
             }
         }
     };
 
-    const handleTrashImage = () => {
-        console.log('borrando imagen');
+    const handleTrashImage = async (e) => {
+        if (imageID) {
+            console.log('borrando imagen');
+            try {
+                const response = await actions.deleteImage(imageID);
+                setImageUrl(''); 
+                setImageID('');
+                setFile(null);
+                // alert('¡Imagen eliminada exitosamente!');
+            } catch (error) {
+                alert('Error eliminando la imagen.');
+            }
+        }
     };
 
     return (
@@ -57,7 +73,7 @@ export const ImageUploader = ({type, id, url = ''}) => {
                                     </Tooltip>
                                 }
                             >
-                                <Button variant="danger" disabled={!imageUrl} className='px-3 py-1 ms-2' onClick={handleTrashImage}><i class="fa-solid fa-trash fs-6 p-0"></i></Button>
+                                <Button variant="danger" disabled={!imageUrl} className='px-3 py-1 ms-2' onClick={handleTrashImage}><i className="fa-solid fa-trash fs-6 p-0"></i></Button>
                             </OverlayTrigger>
                         }
                     </div>
