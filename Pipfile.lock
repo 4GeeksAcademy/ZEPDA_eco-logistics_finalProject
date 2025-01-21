@@ -2,7 +2,9 @@
     "_meta": {
         "hash": {
             "sha256": "c1e0bc9bae75f17121d5a5e40eb1d08eb325cdbb0175e6345134d0d8e60c1c8a"
+
         },
+
         "pipfile-spec": 6,
         "requires": {
             "python_version": "3.10"
@@ -15,9 +17,9 @@
             }
         ]
     },
-<<<<<<< HEAD
+
     "default": {},
-=======
+
     "default": {
         "alembic": {
             "hashes": [
@@ -691,6 +693,6 @@
             "version": "==3.1.2"
         }
     },
->>>>>>> 4ab7961c20728bab96fbbaa1f001fe54c3aed286
+
     "develop": {}
 }

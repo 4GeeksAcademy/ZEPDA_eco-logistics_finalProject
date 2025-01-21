@@ -2,14 +2,16 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 import app
-from flask import Flask, Blueprint, request, jsonify, url_for
+
+from flask import Flask, request, jsonify, url_for, Blueprint, current_app
 from api.models import db, User, Company, Image
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 import requests
-from flask_jwt_extended import create_access_token
-from flask_jwt_extended import get_jwt_identity
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
+from flask_mail import Message
+from datetime import timedelta
+import base64
 import re
 import bcrypt
 import json
@@ -21,10 +23,11 @@ api = Blueprint('api', __name__)
 # Allow CORS requests to this API
 CORS(api)
 
+
 def check(email):
+    if not email:
+        return False
     regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
-    # pass the regular expression
-    # and the string into the fullmatch() method
     if(re.fullmatch(regex, email)):
         return True
     else:
@@ -136,6 +139,90 @@ def delete_image_endpoint(public_id):
     else:
         return jsonify({'error': 'Imagen no encontrada'}), 404
 # ------------------
+
+
+@api.route('/test-email', methods=['GET'])
+def test_email():
+    from app import mail
+    try: 
+        sender_email = current_app.config['MAIL_USERNAME']  
+        msg = Message(
+            'Correo de prueba con enlace',  
+            sender=sender_email,
+            recipients=['empresasarn@gmail.com']  
+        )
+        frontend_url ="https://silver-space-pancake-4j9rvrxg7jrfjvw9-3000.app.github.dev/contacto"
+        msg.html = f'''
+            <p>Este es un correo de prueba enviado desde la aplicación Flask.</p>
+            <p>Puedes hacer clic en el siguiente enlace para más detalles:</p>
+            <p><a href="{frontend_url}">Haz clic aquí</a></p>
+        '''
+        mail.send(msg)
+        return jsonify({"message": "Correo enviado exitosamente"})
+    except Exception as e:
+        return jsonify({"error": "No se puede enviar el correo: " + str(e)}), 500
+
+@api.route('/request-reset-password', methods=["POST"])
+def request_reset_password():
+    from app import mail
+    email = request.json.get("email")
+
+    if not check(email):
+        return jsonify({"error": "Formato de correo electrónico inválido"}), 400
+
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        return jsonify({"error": "Correo electrónico no registrado"}), 404
+    token = create_access_token(identity=email, expires_delta=timedelta(minutes=5))
+    token_byte = token.encode('utf-8')
+    token = base64.b64encode(token_byte)
+    reset_link = f"https://silver-space-pancake-4j9rvrxg7jrfjvw9-3000.app.github.dev/reset-password/{token}"
+
+    try:
+        sender_email = current_app.config['MAIL_USERNAME']    
+        msg = Message(
+            'Restablecimiento de Contraseña',
+            sender=sender_email,
+            recipients=[email]
+        )
+        msg.html = f'<p>Haz clic para restablecer la contraseña: <a href="{reset_link}">Restablecer contraseña</a></p>'
+        mail.send(msg)
+
+        return jsonify({"message": "Correo enviado exitosamente"})
+    except Exception as e:
+        return jsonify({"error": "No se puede enviar el correo: " + str(e)}), 500
+
+@api.route('/reset-password', methods=["POST"])
+@jwt_required()  # Asegura que el usuario esté autenticado
+def reset_password():
+    try:
+        # Obtener los datos enviados por el cliente
+        user_data = request.get_json()
+        email = get_jwt_identity()  # El email del usuario que hizo la solicitud (extraído del JWT)
+        
+        if 'password' not in user_data or 'confirm_password' not in user_data:
+            return jsonify({"msg": "Faltan campos de contraseña"}), 400
+        
+        if user_data['password'] != user_data['confirm_password']:
+            return jsonify({"msg": "Las contraseñas no coinciden"}), 400
+
+       
+        password = user_data['password']
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt(14)).decode('utf-8')
+
+        # Buscar el usuario en la base de datos
+        user = User.query.filter_by(email=email).first()
+        if not user:
+            return jsonify({"msg": "Usuario no encontrado"}), 404
+
+        user.contraseña = hashed_password
+        db.session.commit()
+
+        return jsonify({"msg": "Contraseña actualizada con éxito"}), 200
+
+    except Exception as e:
+        print(f"Error al procesar la solicitud: {e}")
+        return jsonify({"msg": "Hubo un error al restablecer la contraseña"}), 500
 
 
 @api.route('/news', methods=['GET'])

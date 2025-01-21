@@ -88,7 +88,8 @@ export const RegistroEmpresa = () => {
                         </p>
                         <p className="col-12">
                             Rellena el siguiente formulario y envíanos tus datos para que podamos añadirte a nuestra base de datos de empresas colaboradoras.
-                        </p>
+                            </p>   
+
                     </div>
 
                     {successMessage && ( // Muestra el mensaje de éxito si existe
