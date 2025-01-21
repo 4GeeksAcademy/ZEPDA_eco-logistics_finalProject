@@ -203,6 +203,32 @@ const getState = ({ getStore, getActions, setStore }) => {
           console.log(error);
         }
       },
+      registrarCompany: async (formData) => {
+        try {
+                    const response = await fetch(process.env.BACKEND_URL + "api/companies/add", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(formData)
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log("Company added:", data);
+                        const currentCompanies = getStore().companies;
+                        setStore({
+                          companies: [...currentCompanies, data],
+                        });
+                        setSuccessMessage("Empresa registrada con éxito. ¡Gracias por formar parte de nuestro equipo!"); // Establece el mensaje de éxito
+                        
+                        window.scrollTo(0, 0);
+                    } else {
+                        console.error("Failed to add company");
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                }
+      },
       // ------------------  
       saveUserData: (user, token) => {
         localStorage.setItem("profile", JSON.stringify(user));
