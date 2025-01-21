@@ -329,7 +329,7 @@ def remove_favorite():
     company_id = data.get('company_id')
     user_id = data.get('user_id')
     
-    favorite = Favorite(company_id=company_id, user_id=user_id)
+    favorite = Favorite.query.filter_by(company_id=company_id, user_id=user_id).first()
     if not favorite:
         return jsonify({"message": "Favorite not found"}), 404
 

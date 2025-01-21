@@ -17,12 +17,12 @@ export const CompanyCard = ({company}) => {
 
     const handleAddFavorite = (company, id) => {
         if (!isFavorite) {
-            actions.addFavoriteCompany(company);
+            // actions.addFavoriteCompany(company);
             actions.addFavorite(id, store.profile.id);
             
             console.log('Added to favorites');
         } else {
-            actions.removeFavoriteCompany(company);
+            // actions.removeFavoriteCompany(company);
             actions.removeFavorite(id, store.profile.id);
             console.log('Removed from favorites');
         }

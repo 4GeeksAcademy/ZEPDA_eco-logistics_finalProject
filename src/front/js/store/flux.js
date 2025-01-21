@@ -348,16 +348,16 @@ const getState = ({ getStore, getActions, setStore }) => {
           console.log("Error sending customer to back backend", err);
         }
       },
-      addFavoriteCompany: (company) => {
-        const store = getStore();
-        const updatedFavorites = [...store.favoriteCompanies, company];
-        setStore({ favoriteCompanies: updatedFavorites });
-      },
-      removeFavoriteCompany: (company) => {
-          const store = getStore();
-          const updatedFavorites = store.favoriteCompanies.filter(fav => fav.id !== company.id);
-          setStore({ favoriteCompanies: updatedFavorites });
-      },
+      // addFavoriteCompany: (company) => {
+      //   const store = getStore();
+      //   const updatedFavorites = [...store.favoriteCompanies, company];
+      //   setStore({ favoriteCompanies: updatedFavorites });
+      // },
+      // removeFavoriteCompany: (company) => {
+      //     const store = getStore();
+      //     const updatedFavorites = store.favoriteCompanies.filter(fav => fav.id !== company.id);
+      //     setStore({ favoriteCompanies: updatedFavorites });
+      // },
       createCompany: async (user1) => {
         try {
           const resp = await fetch(process.env.BACKEND_URL + "api/registerCompany", {
@@ -390,12 +390,14 @@ const getState = ({ getStore, getActions, setStore }) => {
   
       },
 
-      removeFavorite: async (company, user, id) => {
+      removeFavorite: async (company, user) => {
+        const store = getStore();
         try {
-            const resp = await fetch(process.env.BACKEND_URL + `api/favorites/${id}`, {
+            const resp = await fetch(process.env.BACKEND_URL + `api/favorites`, {
                 method: "DELETE",
                 headers: {
-                    "Content-Type": "application/json",
+                  "Content-Type": "application/json",
+                  Authorization: "Bearer " + store.token,
                 },
                 body: JSON.stringify({ company_id: company, user_id: user }),
             });
