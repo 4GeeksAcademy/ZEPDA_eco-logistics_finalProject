@@ -28,10 +28,11 @@ const getState = ({ getStore, getActions, setStore }) => {
         }
       },
       // --- CLOUDINARY ---
-      uploadImage: async (file) => {
+      uploadImage: async (file,type) => {
         const store = getStore();
         const formData = new FormData();
         formData.append('file', file);
+        formData.append('type', type);
       
         try {
           const response = await fetch(`${process.env.BACKEND_URL}api/upload`, {

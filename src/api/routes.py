@@ -35,7 +35,9 @@ def check(email):
 def upload_file():
     # Verificar que los datos están llegando correctamente
     file = request.files['file']
+    type = request.form.get('type')
     print(f'file: {file}')
+    print(f'type: {type}')
 
     if file and file.filename:
         print(f'Nombre del archivo: {file.filename}')
@@ -44,13 +46,13 @@ def upload_file():
         file.stream.seek(0)  # Volver al inicio del archivo después de leer el contenido
 
         # Subir el archivo a Cloudinary
-        response = upload_image(file)
+        response = upload_image(file,type)
         
         # Crear el modelo Image y añadirlo a la base de datos
         new_image = create_image(response)
 
         # Verificar que se subió correctamente
-        print(f'upload response: {response}')
+        # print(f'upload response: {response}')
         return jsonify(new_image.serialize()), 201
     else:
         return jsonify({'error': 'Archivo vacío o no seleccionado'}), 400
