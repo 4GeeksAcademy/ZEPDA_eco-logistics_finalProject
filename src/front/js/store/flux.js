@@ -28,39 +28,65 @@ const getState = ({ getStore, getActions, setStore }) => {
         }
       },
       // --- CLOUDINARY ---
-      uploadImage: async (file, type = undefined, id = null) => {
+      uploadImage: async (file) => {
+        const store = getStore();
         const formData = new FormData();
         formData.append('file', file);
       
-        // Añadir los IDs al formulario si están presentes
-        if (type !== undefined) {
-          switch(type) {
-            case 'user':
-              formData.append('user_id', id);
-              break;
-            case 'company':
-              formData.append('company_id', id);
-              break;
-            default:
-              break;
-          }
-        }
-      
         try {
           const response = await fetch(`${process.env.BACKEND_URL}api/upload`, {
-            method: 'POST',
+            method: "POST",
             body: formData,
+            headers: {
+              Authorization: "Bearer " + store.token,
+            },
           });
       
           if (response.ok) {
             const data = await response.json();
-            return data; // Devuelve los datos de la imagen subida
+            // console.log("Imagen subida exitosamente:", data);
+            return data;
           } else {
-            throw new Error('Error subiendo la imagen');
+            const errorData = await response.json();
+            console.error("Error subiendo la imagen:", errorData.message);
+            return null;
           }
-        } catch (error) {
-          console.error('Error subiendo la imagen:', error);
-          throw error;
+        } catch (err) {
+          console.error("Error subiendo la imagen en el backend", err);
+          return null;
+        }
+      },
+      associateImage: async (type, id, imageId) => {
+        const store = getStore();
+        const formData = new FormData();
+        formData.append('type', type);
+        formData.append('id', id);
+      
+        if (imageId !== null) {
+          formData.append('image_id', imageId);
+        }
+      
+        try {
+          const response = await fetch(`${process.env.BACKEND_URL}api/associate_image`, {
+            method: "PUT",
+            body: formData,
+            headers: {
+              Authorization: "Bearer " + store.token,
+            },
+          });
+      
+          if (response.ok) {
+            const data = await response.json();
+            // console.log("Imagen actualizada exitosamente:", data);
+            return data;
+          } else {
+            const errorData = await response.json();
+            console.error("Error actualizando la imagen:", errorData.message);
+            return null;
+          }
+        } catch (err) {
+          console.error("Error actualizando la imagen en el backend", err);
+          return null;
         }
       },      
       getAllImages: async () => {
@@ -95,9 +121,9 @@ const getState = ({ getStore, getActions, setStore }) => {
           throw error;
         }
       },
-      deleteImage: async (publicId) => {
+      deleteImage: async (public_id) => {
         try {
-          const response = await fetch(`${process.env.BACKEND_URL}api/delete/${publicId}`, {
+          const response = await fetch(`${process.env.BACKEND_URL}api/delete/${public_id}`, {
             method: 'DELETE',
           });
       
@@ -120,6 +146,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           if (response.ok) {
             const actions = await getActions();
             const images = await response.json();
+            console.log(images);
       
             // Iteramos sobre las imágenes y las eliminamos
             for (const image of images) {
@@ -166,7 +193,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         }
       },
       updateUser: async (id, newValues) => {
-        console.log(newValues);
+        // console.log('newValues user', newValues);
         try {
           const resp = await fetch(`${process.env.BACKEND_URL}api/users/${id}`, {
             method: "PUT",
@@ -297,7 +324,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           );
           if (resp.status == 200) {
             const data = await resp.json();
-            // console.log(data);
+            console.log(data);
             setStore({ profile: data });
             localStorage.setItem("profile", JSON.stringify(data)); 
             return true;

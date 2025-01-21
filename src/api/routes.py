@@ -14,7 +14,7 @@ import re
 import bcrypt
 import json
 from api.cloudinary_helpers import upload_image, delete_image
-from api.image_helpers import assign_image_to_user, assign_image_to_company
+from api.image_helpers import assign_image_to_user, assign_image_to_company, create_image
 
 api = Blueprint('api', __name__)
 
@@ -33,46 +33,74 @@ def check(email):
 # --- CLOUDINARY ---
 @api.route('/upload', methods=['POST'])
 def upload_file():
-    print(f'request: {request}')
-    file = request.files['file']
-    user_id = request.form.get('user_id')  # Obtener el ID del usuario del formulario
-    company_id = request.form.get('company_id')  # Obtener el ID de la empresa del formulario
-
     # Verificar que los datos están llegando correctamente
+    file = request.files['file']
     print(f'file: {file}')
-    print(f'user_id: {user_id}')
-    print(f'company_id: {company_id}')
 
     if file and file.filename:
-        print(f'Nombre del archivo: {file.filename}') 
-        content_length = file.content_length or len(file.stream.read()) 
-        print(f'Tamaño del archivo: {content_length} bytes') 
-        file.stream.seek(0) # Volver al inicio del archivo después de leer el contenido
+        print(f'Nombre del archivo: {file.filename}')
+        content_length = file.content_length or len(file.stream.read())
+        print(f'Tamaño del archivo: {content_length} bytes')
+        file.stream.seek(0)  # Volver al inicio del archivo después de leer el contenido
+
         # Subir el archivo a Cloudinary
         response = upload_image(file)
         
+        # Crear el modelo Image y añadirlo a la base de datos
+        new_image = create_image(response)
+
         # Verificar que se subió correctamente
         print(f'upload response: {response}')
-
-        if user_id:
-            user = User.query.get(user_id)
-            if not user:
-                return jsonify({'error': 'Usuario no encontrado'}), 404
-            assign_image_to_user(user, response)
-        elif company_id:
-            company = Company.query.get(company_id)
-            if not company:
-                return jsonify({'error': 'Compañía no encontrada'}), 404
-            assign_image_to_company(company, response)
-        else:
-            return jsonify({'error': 'No se proporcionó un ID válido'}), 400
-
-        return jsonify(response)
+        return jsonify(new_image.serialize()), 201
     else:
         return jsonify({'error': 'Archivo vacío o no seleccionado'}), 400
     
 
+@api.route('/associate_image', methods=['PUT'])
+def associate_image():
+    type = request.form.get('type')
+    id = request.form.get('id')
+    image_id = request.form.get('image_id')  # ID de la nueva imagen (puede ser null)
 
+    print(f'type: {type}')
+    print(f'id: {id}')
+    print(f'image_id: {image_id}')
+
+    if type == 'user':
+        user = User.query.get(id)
+        if not user:
+            return jsonify({'error': 'Usuario no encontrado'}), 404
+
+        if image_id:
+            assign_image_to_user(user, image_id)
+        else:
+            if user.image:
+                delete_image(user.image.public_id)  # Borrar de Cloudinary
+                db.session.delete(user.image)  # Borrar de la base de datos
+                user.image = None
+                db.session.commit()
+
+    elif type == 'company':
+        company = Company.query.get(id)
+        if not company:
+            return jsonify({'error': 'Compañía no encontrada'}), 404
+
+        if image_id:
+            assign_image_to_company(company, image_id)
+        else:
+            if company.image:
+                delete_image(company.image.public_id)  # Borrar de Cloudinary
+                db.session.delete(company.image)  # Borrar de la base de datos
+                company.image = None
+                db.session.commit()
+
+    else:
+        return jsonify({'error': 'Tipo de modelo no válido'}), 400
+
+    return jsonify({'image_id': image_id, 'message': 'Imagen actualizada correctamente'})
+
+
+# ------------------
 @api.route('/images', methods=['GET'])
 def get_all_images():
     images = Image.query.all()
@@ -84,6 +112,14 @@ def get_image(public_id):
     image = Image.query.filter_by(public_id=public_id).first()
     if image:
         return jsonify({'url': image.url})
+    else:
+        return jsonify({'error': 'Imagen no encontrada'}), 404
+    
+@api.route('/public_id/<image_id>', methods=['GET'])
+def get_publicID(image_id):
+    image = Image.query.get(image_id)
+    if image:
+        return jsonify({'public_id': image.public_id})
     else:
         return jsonify({'error': 'Imagen no encontrada'}), 404
     
