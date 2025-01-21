@@ -1,6 +1,3 @@
-"""
-This module takes care of starting the API Server, Loading the DB and Adding the endpoints
-"""
 from datetime import timedelta
 import os
 from flask import Flask, request, jsonify, url_for, send_from_directory
@@ -15,7 +12,9 @@ from api.commands import setup_commands
 from flask_jwt_extended import JWTManager
 from flask_mail import Mail
 from dotenv import load_dotenv
+import cloudinary
 load_dotenv()
+
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
@@ -28,15 +27,13 @@ app.config.update(
     MAIL_USERNAME=os.getenv('MAIL_USERNAME'),
     MAIL_PASSWORD=os.getenv('MAIL_PASSWORD'),
 )
-
 mail = Mail(app)
 
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
 static_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../public/')
-
 jwt = JWTManager(app)
 
-# database condiguration
+# database configuration
 db_url = os.getenv("DATABASE_URL")
 if db_url is not None:
     app.config['SQLALCHEMY_DATABASE_URI'] = db_url.replace("postgres://", "postgresql://")
@@ -49,6 +46,13 @@ db.init_app(app)
 
 # Allow CORS requests to this API
 CORS(app)
+
+# Initialize Cloudinary
+cloudinary.config(
+    cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME'),
+    api_key=os.environ.get('CLOUDINARY_API_KEY'),
+    api_secret=os.environ.get('CLOUDINARY_API_SECRET')
+)
 
 # add the admin
 setup_admin(app)
@@ -79,7 +83,6 @@ def serve_any_other_file(path):
     response = send_from_directory(static_file_dir, path)
     response.cache_control.max_age = 0  # avoid cache memory
     return response
-
 
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':

@@ -28,6 +28,143 @@ const getState = ({ getStore, getActions, setStore }) => {
           setLoading(false);
         }
       },
+      // --- CLOUDINARY ---
+      uploadImage: async (file) => {
+        const store = getStore();
+        const formData = new FormData();
+        formData.append('file', file);
+      
+        try {
+          const response = await fetch(`${process.env.BACKEND_URL}api/upload`, {
+            method: "POST",
+            body: formData,
+            headers: {
+              Authorization: "Bearer " + store.token,
+            },
+          });
+      
+          if (response.ok) {
+            const data = await response.json();
+            // console.log("Imagen subida exitosamente:", data);
+            return data;
+          } else {
+            const errorData = await response.json();
+            console.error("Error subiendo la imagen:", errorData.message);
+            return null;
+          }
+        } catch (err) {
+          console.error("Error subiendo la imagen en el backend", err);
+          return null;
+        }
+      },
+      associateImage: async (type, id, imageId) => {
+        const store = getStore();
+        const formData = new FormData();
+        formData.append('type', type);
+        formData.append('id', id);
+      
+        if (imageId !== null) {
+          formData.append('image_id', imageId);
+        }
+      
+        try {
+          const response = await fetch(`${process.env.BACKEND_URL}api/associate_image`, {
+            method: "PUT",
+            body: formData,
+            headers: {
+              Authorization: "Bearer " + store.token,
+            },
+          });
+      
+          if (response.ok) {
+            const data = await response.json();
+            // console.log("Imagen actualizada exitosamente:", data);
+            return data;
+          } else {
+            const errorData = await response.json();
+            console.error("Error actualizando la imagen:", errorData.message);
+            return null;
+          }
+        } catch (err) {
+          console.error("Error actualizando la imagen en el backend", err);
+          return null;
+        }
+      },      
+      getAllImages: async () => {
+        try {
+          const response = await fetch(`${process.env.BACKEND_URL}api/images`, { method: 'GET' });
+      
+          if (response.ok) {
+            const data = await response.json();
+            return data; // Devuelve la lista de imágenes
+          } else {
+            throw new Error('Error obteniendo las imágenes');
+          }
+        } catch (error) {
+          console.error('Error obteniendo las imágenes:', error);
+          throw error;
+        }
+      },
+      getImageUrl: async (publicId) => {
+        try {
+          const response = await fetch(`${process.env.BACKEND_URL}api/image/${publicId}`, {
+            method: 'GET',
+          });
+      
+          if (response.ok) {
+            const data = await response.json();
+            return data.url; // Devuelve la URL de la imagen
+          } else {
+            throw new Error('Error obteniendo la imagen');
+          }
+        } catch (error) {
+          console.error('Error obteniendo la imagen:', error);
+          throw error;
+        }
+      },
+      deleteImage: async (public_id) => {
+        try {
+          const response = await fetch(`${process.env.BACKEND_URL}api/delete/${public_id}`, {
+            method: 'DELETE',
+          });
+      
+          if (response.ok) {
+            const data = await response.json();
+            return data; // Devuelve la respuesta de la imagen eliminada
+          } else {
+            throw new Error('Error eliminando la imagen');
+          }
+        } catch (error) {
+          console.error('Error eliminando la imagen:', error);
+          throw error;
+        }
+      },
+      deleteAllImages: async () => {
+        try {
+          // Primero obtenemos todas las imágenes
+          const response = await fetch(`${process.env.BACKEND_URL}api/images`, { method: 'GET' });
+      
+          if (response.ok) {
+            const actions = await getActions();
+            const images = await response.json();
+            console.log(images);
+      
+            // Iteramos sobre las imágenes y las eliminamos
+            for (const image of images) {
+              await actions.deleteImage(image.public_id);
+              console.log('imagen eliminada');
+            }
+      
+            return { message: 'Todas las imágenes han sido eliminadas' };
+          } else {
+            throw new Error('Error obteniendo las imágenes');
+          }
+        } catch (error) {
+          console.error('Error eliminando las imágenes:', error);
+          throw error;
+        }
+      },         
+      // ------------------
       loadDummyCompanies: async () => {
         try {
           // Reestructuramos los datos para almacenarlos como un objeto
@@ -57,7 +194,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         }
       },
       updateUser: async (id, newValues) => {
-        // console.log(newValues);
+        // console.log('newValues user', newValues);
         try {
           const resp = await fetch(`${process.env.BACKEND_URL}api/users/${id}`, {
             method: "PUT",
@@ -254,7 +391,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           );
           if (resp.status == 200) {
             const data = await resp.json();
-            // console.log(data);
+            console.log(data);
             setStore({ profile: data });
             localStorage.setItem("profile", JSON.stringify(data));
             return true;

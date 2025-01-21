@@ -3,6 +3,28 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 
+class Image(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    public_id = db.Column(db.String(50), nullable=False)
+    url = db.Column(db.String(200), nullable=False)
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=True)
+
+    def __repr__(self):
+        return f'<Image {self.public_id}>'
+    
+    def serialize(self):
+       return{
+              "id": self.id,
+              "public_id": self.public_id,
+              "url": self.url,
+              "created_at": self.created_at
+       }
+
+
+
 
 #***********************************FAVORITES***********************************************
 
@@ -36,6 +58,8 @@ class User(db.Model):
     esta_activo = db.Column(db.Boolean(), unique=False, nullable=False)
     favorite_company = db.relationship('Favorite', backref='users_favorite', lazy=True)
 
+    image = db.relationship('Image', backref='user', uselist=False) # Relación uno a uno con Image
+
     def __init__(self, nombre, email, contraseña):
         self.nombre = nombre
         self.email = email
@@ -52,46 +76,53 @@ class User(db.Model):
             "email": self.email,
             "direccion": self.direccion,
             "descripcion": self.descripcion,
-            "esta_activo": True
+            "esta_activo": True,
+            "image": self.image.serialize() if self.image else None # Serializa la imagen si existe
             # do not serialize the password, its a security breach
         }
 
 class Company(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    nif = db.Column(db.String(20), unique=True, nullable=True)
     nombre = db.Column(db.String(120), nullable=False)
-    sector = db.Column(db.Text, nullable=True)
-    direccion = db.Column(db.String(255), nullable=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    descripcion = db.Column(db.Text, nullable=True)
+    direccion = db.Column(db.String(255), nullable=False)
+    telefono = db.Column(db.String(20), nullable=False)
+    pais = db.Column(db.String(20), nullable=False)
+    cif = db.Column(db.String(20), unique=True, nullable=True)
     web = db.Column(db.String(120), unique=True, nullable=False)
-    imagen = db.Column(db.String(255), nullable=True)
+    sector = db.Column(db.Text, nullable=True)
+    descripcion = db.Column(db.Text, nullable=True)
     favorited = db.relationship('Favorite', backref='company_favorite', lazy=True)
+    image = db.relationship('Image', backref='company', uselist=False) # Relación uno a uno con Image
 
 
-    def __init__(self,nif,nombre,sector,direccion,email,descripcion,web,imagen):
-        self.nif = nif
+    def __init__(self,cif,nombre,sector,direccion,email,descripcion,web,telefono,pais):
         self.nombre = nombre
-        self.sector = sector
-        self.direccion = direccion
         self.email = email
+        self.direccion = direccion
+        self.pais = pais
+        self.telefono = telefono
+        self.cif = cif
+        self.sector = sector
         self.descripcion = descripcion
         self.web = web
-        self.imagen = imagen
+       
 
     def __repr__(self):
         return f'<Company {self.nombre}>'
 
     def serialize(self):
         return {
-            "nif": self.nif,
             "nombre": self.nombre,
-            "sector": self.sector,
-            "direccion": self.direccion,
             "email": self.email,
-            "descripcion": self.descripcion,
+            "direccion": self.direccion,
+            "pais": self.pais,
+            "telefono": self.telefono,
+            "cif": self.cif,
             "web": self.web,
-            "imagen": self.imagen
+            "sector": self.sector,
+            "descripcion": self.descripcion,
+            "image": self.image.serialize() if self.image else None # Serializa la imagen si existe
         }
     
     

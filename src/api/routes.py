@@ -2,8 +2,9 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 import app
+
 from flask import Flask, request, jsonify, url_for, Blueprint, current_app
-from api.models import db, User, Company
+from api.models import db, User, Company, Image
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 import requests
@@ -13,6 +14,16 @@ from datetime import timedelta
 import base64
 import re
 import bcrypt
+import json
+from api.cloudinary_helpers import upload_image, delete_image
+from api.image_helpers import assign_image_to_user, assign_image_to_company, create_image
+
+api = Blueprint('api', __name__)
+
+# Allow CORS requests to this API
+CORS(api)
+
+
 def check(email):
     if not email:
         return False
@@ -20,12 +31,115 @@ def check(email):
     if(re.fullmatch(regex, email)):
         return True
     else:
-        return False
-api = Blueprint('api', __name__)
+        return False    
+    
+# --- CLOUDINARY ---
+@api.route('/upload', methods=['POST'])
+def upload_file():
+    # Verificar que los datos están llegando correctamente
+    file = request.files['file']
+    print(f'file: {file}')
+
+    if file and file.filename:
+        print(f'Nombre del archivo: {file.filename}')
+        content_length = file.content_length or len(file.stream.read())
+        print(f'Tamaño del archivo: {content_length} bytes')
+        file.stream.seek(0)  # Volver al inicio del archivo después de leer el contenido
+
+        # Subir el archivo a Cloudinary
+        response = upload_image(file)
+        
+        # Crear el modelo Image y añadirlo a la base de datos
+        new_image = create_image(response)
+
+        # Verificar que se subió correctamente
+        print(f'upload response: {response}')
+        return jsonify(new_image.serialize()), 201
+    else:
+        return jsonify({'error': 'Archivo vacío o no seleccionado'}), 400
+    
+
+@api.route('/associate_image', methods=['PUT'])
+def associate_image():
+    type = request.form.get('type')
+    id = request.form.get('id')
+    image_id = request.form.get('image_id')  # ID de la nueva imagen (puede ser null)
+
+    print(f'type: {type}')
+    print(f'id: {id}')
+    print(f'image_id: {image_id}')
+
+    if type == 'user':
+        user = User.query.get(id)
+        if not user:
+            return jsonify({'error': 'Usuario no encontrado'}), 404
+
+        if image_id:
+            assign_image_to_user(user, image_id)
+        else:
+            if user.image:
+                delete_image(user.image.public_id)  # Borrar de Cloudinary
+                db.session.delete(user.image)  # Borrar de la base de datos
+                user.image = None
+                db.session.commit()
+
+    elif type == 'company':
+        company = Company.query.get(id)
+        if not company:
+            return jsonify({'error': 'Compañía no encontrada'}), 404
+
+        if image_id:
+            assign_image_to_company(company, image_id)
+        else:
+            if company.image:
+                delete_image(company.image.public_id)  # Borrar de Cloudinary
+                db.session.delete(company.image)  # Borrar de la base de datos
+                company.image = None
+                db.session.commit()
+
+    else:
+        return jsonify({'error': 'Tipo de modelo no válido'}), 400
+
+    return jsonify({'image_id': image_id, 'message': 'Imagen actualizada correctamente'})
 
 
-# Allow CORS requests to this API
-CORS(api)
+# ------------------
+@api.route('/images', methods=['GET'])
+def get_all_images():
+    images = Image.query.all()
+    image_list = [{'public_id': image.public_id, 'url': image.url} for image in images]
+    return jsonify(image_list)
+
+@api.route('/image/<public_id>', methods=['GET'])
+def get_image(public_id):
+    image = Image.query.filter_by(public_id=public_id).first()
+    if image:
+        return jsonify({'url': image.url})
+    else:
+        return jsonify({'error': 'Imagen no encontrada'}), 404
+    
+@api.route('/public_id/<image_id>', methods=['GET'])
+def get_publicID(image_id):
+    image = Image.query.get(image_id)
+    if image:
+        return jsonify({'public_id': image.public_id})
+    else:
+        return jsonify({'error': 'Imagen no encontrada'}), 404
+    
+@api.route('/delete/<public_id>', methods=['DELETE'])
+def delete_image_endpoint(public_id):
+    image = Image.query.filter_by(public_id=public_id).first()
+    if image:
+        # Borrar de Cloudinary
+        cloudinary_response = delete_image(public_id)
+        # Borrar de la base de datos
+        db.session.delete(image)
+        db.session.commit()
+        return jsonify({'message': 'Imagen borrada exitosamente', 'cloudinary_response': cloudinary_response})
+    else:
+        return jsonify({'error': 'Imagen no encontrada'}), 404
+# ------------------
+
 
 @api.route('/test-email', methods=['GET'])
 def test_email():
@@ -226,121 +340,173 @@ def check_email():
         return jsonify({'exists': True})  # El correo ya está registrado
     else:
         return jsonify({'exists': False})  # El correo no está registrado
-
-
-@api.route('/registerCompany', methods=['POST'])
-def register_company():
     
-    body = request.get_json()
-    company_nif = body.get('nif', None)
-    company_nombre = body.get('nombre', None)
-    company_sector = body.get('sector', None)
-    company_direccion = body.get('direccion', None)
-    company_email = body.get('email', None)
-    company_descripcion = body.get('descripcion', None)
-    company_web= body.get('web', None)
-    company_contraseña = body.get('contraseña', None)
-    company_certificado = body.get('certificado', None)
-    if company_nombre is None or company_email is None or company_contraseña is None:
-        return {'message': 'Missing arguments'}      
-    bpassword = bytes(company_contraseña, 'utf-8')
-    salt = bcrypt.gensalt(14)
-    hashed_password = bcrypt.hashpw(password=bpassword, salt=salt)       
-    user = Company(company_nif, company_nombre, company_sector, company_direccion, company_email, company_descripcion, company_web, hashed_password.decode('utf-8'), company_certificado)    
-    #return {'message': f'nombre: {user.nombre} email: {user.email} contraseña: {contraseña}'}
-    db.session.add(user)
-    db.session.commit()
-    return {'message': f'User {user.email} was created'}
-
-@api.route('/profile/companies', methods=['GET'])
-def get_companies():
-    """Obtiene todas las compañías"""
-    companies = Company.query.all()
-    companies_serialized = [company.serialize() for company in companies]
-    return jsonify(companies_serialized), 200
 
 
-@api.route('/profile/companies/<int:company_id>', methods=['GET'])
-def get_company(company_id):
-    """Obtiene una compañía por ID"""
-    company = Company.query.get(company_id)
-    if company is None:
-        return jsonify({"message": "Company not found"}), 404
-    return jsonify(company.serialize()), 200
 
 
-@api.route('/profile/companies', methods=['POST'])
-def create_company():
-    """Crea una nueva compañía"""
-    body = request.get_json()
-    
-    nif = body.get('nif', None)
-    nombre = body.get('nombre', None)
-    sector = body.get('sector', None)
-    direccion = body.get('direccion', None)
-    email = body.get('email', None)
-    descripcion = body.get('descripcion', None)
-    web = body.get('web', None)
-    contraseña = body.get('contraseña', None)
-    certificado = body.get('certificado', None)
-    
-    if not all([nif, nombre, sector, direccion, email, descripcion, web]):
-        return jsonify({"message": "Missing required fields"}), 400
 
-    # Verificar si ya existe una compañía con el mismo NIF o email
-    if Company.query.filter((Company.nif == nif) | (Company.email == email)).first():
-        return jsonify({"message": "Company with this NIF or email already exists"}), 400
-
-    company = Company(
-        nif=nif,
-        nombre=nombre,
-        sector=sector,
-        direccion=direccion,
-        email=email,
-        descripcion=descripcion,
-        web=web,
-        contraseña=contraseña,
-        certificado=certificado
+@api.route('/companies/add', methods=['POST'])
+def add_company():
+    data = request.get_json()
+    print("data", data)
+    new_company = Company(
+        cif=data['cif'],
+        nombre=data['nombre'],
+        sector=data['sector'],
+        direccion=data['direccion'],
+        email=data['email'],
+        descripcion=data['descripcion'],
+        web=data['web'],
+        pais=data['pais'],
+        telefono=data['telefono']
     )
     
-    db.session.add(company)
+    db.session.add(new_company)
     db.session.commit()
-    return jsonify(company.serialize()), 201
+    return jsonify(new_company.serialize()), 201
 
 
-@api.route('/profile/companies/<int:company_id>', methods=['PUT'])
-def update_company(company_id):
-    """Actualiza los datos de una compañía existente"""
-    body = request.get_json()
-    company = Company.query.get(company_id)
+@api.route('/initial-companies', methods=['GET'])
+def get_initial_companies():
+    with open("src/front/utils/initial_companies.json") as f:
+        companies = json.load(f)
+    for company in companies:
+        new_company = Company(
+            cif=company['cif'],
+            nombre=company['nombre'],
+            sector=company['sector'],
+            direccion=company['direccion'],
+            email=company['email'],
+            descripcion=company['descripcion'],
+            web=company['web'],
+            pais=company['pais'],
+            telefono=company['telefono']
+        )
+        db.session.add(new_company)
+        db.session.commit()
+
+    return jsonify({"message": "Initial companies added"}), 201
     
-    if company is None:
-        return jsonify({"message": "Company not found"}), 404
-
-    company.nif = body.get('nif', company.nif)
-    company.nombre = body.get('nombre', company.nombre)
-    company.sector = body.get('sector', company.sector)
-    company.direccion = body.get('direccion', company.direccion)
-    company.email = body.get('email', company.email)
-    company.descripcion = body.get('descripcion', company.descripcion)
-    company.web = body.get('web', company.web)
-    company.contraseña = body.get('contraseña', company.contraseña)
-    company.certificado = body.get('certificado', company.certificado)
-
-    db.session.commit()
-    return jsonify(company.serialize()), 200
-
-
-@api.route('/profile/companies/<int:company_id>', methods=['DELETE'])
-def delete_company(company_id):
-    """Elimina una compañía por ID"""
-    company = Company.query.get(company_id)
-    if company is None:
-        return jsonify({"message": "Company not found"}), 404
-
-    db.session.delete(company)
-    db.session.commit()
-    return jsonify({"message": f"Company {company_id} deleted"}), 200
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
+
+
+
+
+# @api.route('/registerCompany', methods=['POST'])
+# def register_company():
+    
+#     body = request.get_json()
+#     company_nif = body.get('nif', None)
+#     company_nombre = body.get('nombre', None)
+#     company_sector = body.get('sector', None)
+#     company_direccion = body.get('direccion', None)
+#     company_email = body.get('email', None)
+#     company_descripcion = body.get('descripcion', None)
+#     company_web= body.get('web', None)
+#     company_contraseña = body.get('contraseña', None)
+#     company_certificado = body.get('certificado', None)
+#     if company_nombre is None or company_email is None or company_contraseña is None:
+#         return {'message': 'Missing arguments'}      
+#     bpassword = bytes(company_contraseña, 'utf-8')
+#     salt = bcrypt.gensalt(14)
+#     hashed_password = bcrypt.hashpw(password=bpassword, salt=salt)       
+#     user = Company(company_nif, company_nombre, company_sector, company_direccion, company_email, company_descripcion, company_web, hashed_password.decode('utf-8'), company_certificado)    
+#     #return {'message': f'nombre: {user.nombre} email: {user.email} contraseña: {contraseña}'}
+#     db.session.add(user)
+#     db.session.commit()
+#     return {'message': f'User {user.email} was created'}
+
+# @api.route('/profile/companies', methods=['GET'])
+# def get_companies():
+#     """Obtiene todas las compañías"""
+#     companies = Company.query.all()
+#     companies_serialized = [company.serialize() for company in companies]
+#     return jsonify(companies_serialized), 200
+
+
+# @api.route('/profile/companies/<int:company_id>', methods=['GET'])
+# def get_company(company_id):
+#     """Obtiene una compañía por ID"""
+#     company = Company.query.get(company_id)
+#     if company is None:
+#         return jsonify({"message": "Company not found"}), 404
+#     return jsonify(company.serialize()), 200
+
+
+# @api.route('/profile/companies', methods=['POST'])
+# def create_company():
+#     """Crea una nueva compañía"""
+#     body = request.get_json()
+    
+#     nif = body.get('nif', None)
+#     nombre = body.get('nombre', None)
+#     sector = body.get('sector', None)
+#     direccion = body.get('direccion', None)
+#     email = body.get('email', None)
+#     descripcion = body.get('descripcion', None)
+#     web = body.get('web', None)
+#     contraseña = body.get('contraseña', None)
+#     certificado = body.get('certificado', None)
+    
+#     if not all([nif, nombre, sector, direccion, email, descripcion, web]):
+#         return jsonify({"message": "Missing required fields"}), 400
+
+#     # Verificar si ya existe una compañía con el mismo NIF o email
+#     if Company.query.filter((Company.nif == nif) | (Company.email == email)).first():
+#         return jsonify({"message": "Company with this NIF or email already exists"}), 400
+
+#     company = Company(
+#         nif=nif,
+#         nombre=nombre,
+#         sector=sector,
+#         direccion=direccion,
+#         email=email,
+#         descripcion=descripcion,
+#         web=web,
+#         contraseña=contraseña,
+#         certificado=certificado
+#     )
+    
+#     db.session.add(company)
+#     db.session.commit()
+#     return jsonify(company.serialize()), 201
+
+
+# @api.route('/profile/companies/<int:company_id>', methods=['PUT'])
+# def update_company(company_id):
+#     """Actualiza los datos de una compañía existente"""
+#     body = request.get_json()
+#     company = Company.query.get(company_id)
+    
+#     if company is None:
+#         return jsonify({"message": "Company not found"}), 404
+
+#     company.nif = body.get('nif', company.nif)
+#     company.nombre = body.get('nombre', company.nombre)
+#     company.sector = body.get('sector', company.sector)
+#     company.direccion = body.get('direccion', company.direccion)
+#     company.email = body.get('email', company.email)
+#     company.descripcion = body.get('descripcion', company.descripcion)
+#     company.web = body.get('web', company.web)
+#     company.contraseña = body.get('contraseña', company.contraseña)
+#     company.certificado = body.get('certificado', company.certificado)
+
+#     db.session.commit()
+#     return jsonify(company.serialize()), 200
+
+
+# @api.route('/profile/companies/<int:company_id>', methods=['DELETE'])
+# def delete_company(company_id):
+#     """Elimina una compañía por ID"""
+#     company = Company.query.get(company_id)
+#     if company is None:
+#         return jsonify({"message": "Company not found"}), 404
+
+#     db.session.delete(company)
+#     db.session.commit()
+#     return jsonify({"message": f"Company {company_id} deleted"}), 200
+
+

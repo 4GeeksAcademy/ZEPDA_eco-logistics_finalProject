@@ -14,7 +14,6 @@ export const Home = () => {
 	return (
 
 		<>
-
 			<JumbotronCarousel />
 			<div className="container mt-4 d-flex justify-content-center">
 

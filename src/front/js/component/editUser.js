@@ -1,14 +1,22 @@
-import React, { useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom";
 import { DeletePopUp } from "./deletePopUp";
+import { ImageUploader } from "./cloudinary/imageUploader";
 
-export const EditUser = ({ show, openModal, closeModal }) => {
+export const EditUser = ({ show, openModal, closeModal, backUpImage }) => {
+    const { store, actions } = useContext(Context);
     const navigate = useNavigate();
     const [showPopup, setShowPopup] = useState(false);
-
-    const { store, actions } = useContext(Context);
+    const [updateImage, setUpdateImage] = useState(false);
+    // Datos de la imagen
+    const [imageData, setImageData] = useState({ 
+        imageID: '', 
+        publicID: '', 
+        imageURL: ''
+    });
+    // Datos del usuario
     const [userData, setUserData] = useState({
         id: store.profile.id,
         nombre: store.profile.nombre,
@@ -16,6 +24,25 @@ export const EditUser = ({ show, openModal, closeModal }) => {
         direccion: store.profile.direccion || undefined,
         descripcion: store.profile.descripcion || undefined
     });
+
+    useEffect(() => {
+        if(show){
+            // console.log(backUpImage, show);
+            if (backUpImage !== null) {
+                setImageData({ 
+                    imageID: backUpImage.id, 
+                    publicID: backUpImage.public_id, 
+                    imageURL: backUpImage.url
+                });
+            } else {
+                setImageData({ 
+                    imageID: '', 
+                    publicID: '', 
+                    imageURL: ''
+                });
+            }
+        }
+    }, [show])
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -25,40 +52,64 @@ export const EditUser = ({ show, openModal, closeModal }) => {
         });
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
         // Lógica para guardar los cambios del usuario
-        actions.updateUser(userData.id, userData); 
-        
+        await handleUploadImage(true);
+        actions.updateUser(userData.id, userData);
+
         // Cerramos el modal después de guardar los cambios
         closeModal();
     };
 
-    const handleCancel = () => {
+    const handleCancel = async () => {
         // Cerramos el modal sin guardar cambios
+        await handleUploadImage(false);
         closeModal();
     };
 
     // Ventanita emergente de confirmación => FEEDBACK 
-    const handleDeleteClick = () => { 
-        setShowPopup(true); 
+    const handleDeleteClick = () => {
+        setShowPopup(true);
         closeModal();
-    } 
-    const handleDeleteCancel = () => { 
-        setShowPopup(false); 
+    }
+    const handleDeleteCancel = () => {
+        setShowPopup(false);
         openModal();
     }
 
     const handleDeleteConfirmation = () => {
         // Lógica para guardar los cambios del usuario
         console.log('User deleted: ', userData);
-        const check = actions.deleteUser(userData.id); 
+
+        const check = actions.deleteUser(userData.id); // borra al usuario
 
         if (check) {
             // Cerramos el modal después de guardar los cambios
-            setShowPopup(false); 
+            setShowPopup(false);
             navigate("/"); // Redirigir a la página principal o de login
         }
     };
+
+    // Consecuencia final de la actualización de imagen
+    const handleUploadImage = async (saveImage) => {
+        // Si ha modificado la image: sube una nueva o borra la actual
+        console.log('Revisando imagen...', updateImage);
+        if (updateImage) {
+            console.log('¡Actualizando imagen!', saveImage);
+            // Si presiona en 'Guardar y salir'
+            if (saveImage) {
+                console.log('asociando imagen al usuario', imageData.imageID || null);
+                await actions.associateImage('user', userData.id, imageData.imageID);
+            }
+            // Si presiona en 'Cancelar'
+            else {
+                if (imageData.publicID) {
+                    console.log('borrando imagen descartada', imageData.publicID);
+                    await actions.deleteImage(imageData.publicID);
+                } 
+            }
+        }
+    }
 
     return (
         <>
@@ -67,6 +118,7 @@ export const EditUser = ({ show, openModal, closeModal }) => {
                     <Modal.Title>Actualizar perfil de usuario</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                    <ImageUploader type="user" id={userData.id} handleUpdate={setUpdateImage} setImage={setImageData} image={imageData} />
                     <Form>
                         <Form.Group className="mb-3" controlId="formNombre">
                             <Form.Label>Nombre</Form.Label>
@@ -123,11 +175,11 @@ export const EditUser = ({ show, openModal, closeModal }) => {
             </Modal>
 
             <DeletePopUp
-                show={showPopup} 
-                userId={userData.id} 
-                onDelete={handleDeleteConfirmation} 
-                onCancel={handleDeleteCancel} 
-            />  
+                show={showPopup}
+                userId={userData.id}
+                onDelete={handleDeleteConfirmation}
+                onCancel={handleDeleteCancel}
+            />
         </>
     );
 };
