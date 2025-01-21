@@ -24,6 +24,7 @@ export const RegistroEmpresa = () => {
             [name]: value
         });
     };
+   
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
@@ -64,6 +65,7 @@ export const RegistroEmpresa = () => {
                     descripcion: "",
                     
                 });
+                window.scrollTo(0, 0);
             } else {
                 console.error("Failed to add company");
             }
