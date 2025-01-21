@@ -3,26 +3,15 @@ const mockDesc = "Sin descripción actualizada...";
 import { getStringDate } from "../../utils/formattedDate";
 import { EditUser } from "./editUser";
 import userPic from "../../img/rigo-baby.jpg"
-import { Context } from "../store/appContext";
 
 export const UserPanel = ({ user }) => {
-    const { actions } = useContext(Context);
     const [showModal, setShowModal] = useState(false);
     const [imageUrl, setImageUrl] = useState('');
 
     useEffect(() => {
         // Detecta el cambio en actions.updateUser()
         if (user.image !== null && user.image !== undefined) {
-            const fetchImage = async () => {
-                try {
-                    const url = await actions.getImageUrl(user.image.public_id);
-                    setImageUrl(url); // Muestra la URL de la imagen
-                } catch (error) {
-                    alert('Error obteniendo la imagen.');
-                }
-            };
-        
-            fetchImage();
+            setImageUrl(user.image.url); 
         } else {
             setImageUrl('');
         }

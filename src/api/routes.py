@@ -49,7 +49,7 @@ def upload_file():
         # Crear el modelo Image y añadirlo a la base de datos
         new_image = create_image(response)
 
-    # Verificar que se subió correctamente
+        # Verificar que se subió correctamente
         print(f'upload response: {response}')
         return jsonify(new_image.serialize()), 201
     else:
@@ -97,7 +97,7 @@ def associate_image():
     else:
         return jsonify({'error': 'Tipo de modelo no válido'}), 400
 
-    return jsonify({'public_id': image_id, 'message': 'Imagen asociada correctamente'})
+    return jsonify({'image_id': image_id, 'message': 'Imagen actualizada correctamente'})
 
 
 # ------------------
@@ -112,6 +112,14 @@ def get_image(public_id):
     image = Image.query.filter_by(public_id=public_id).first()
     if image:
         return jsonify({'url': image.url})
+    else:
+        return jsonify({'error': 'Imagen no encontrada'}), 404
+    
+@api.route('/public_id/<image_id>', methods=['GET'])
+def get_publicID(image_id):
+    image = Image.query.get(image_id)
+    if image:
+        return jsonify({'public_id': image.public_id})
     else:
         return jsonify({'error': 'Imagen no encontrada'}), 404
     

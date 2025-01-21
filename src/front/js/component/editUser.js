@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom";
@@ -9,7 +9,14 @@ export const EditUser = ({ show, openModal, closeModal, backUpImage }) => {
     const { store, actions } = useContext(Context);
     const navigate = useNavigate();
     const [showPopup, setShowPopup] = useState(false);
-
+    const [updateImage, setUpdateImage] = useState(false);
+    // Datos de la imagen
+    const [imageData, setImageData] = useState({ 
+        imageID: '', 
+        publicID: '', 
+        imageURL: ''
+    });
+    // Datos del usuario
     const [userData, setUserData] = useState({
         id: store.profile.id,
         nombre: store.profile.nombre,
@@ -17,6 +24,25 @@ export const EditUser = ({ show, openModal, closeModal, backUpImage }) => {
         direccion: store.profile.direccion || undefined,
         descripcion: store.profile.descripcion || undefined
     });
+
+    useEffect(() => {
+        if(show){
+            // console.log(backUpImage, show);
+            if (backUpImage !== null) {
+                setImageData({ 
+                    imageID: backUpImage.id, 
+                    publicID: backUpImage.public_id, 
+                    imageURL: backUpImage.url
+                });
+            } else {
+                setImageData({ 
+                    imageID: '', 
+                    publicID: '', 
+                    imageURL: ''
+                });
+            }
+        }
+    }, [show])
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -26,17 +52,18 @@ export const EditUser = ({ show, openModal, closeModal, backUpImage }) => {
         });
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
         // Lógica para guardar los cambios del usuario
+        await handleUploadImage(true);
         actions.updateUser(userData.id, userData);
-        // actions.updateImage(); // Actualiza la imagen
 
         // Cerramos el modal después de guardar los cambios
         closeModal();
     };
 
-    const handleCancel = () => {
+    const handleCancel = async () => {
         // Cerramos el modal sin guardar cambios
+        await handleUploadImage(false);
         closeModal();
     };
 
@@ -53,7 +80,8 @@ export const EditUser = ({ show, openModal, closeModal, backUpImage }) => {
     const handleDeleteConfirmation = () => {
         // Lógica para guardar los cambios del usuario
         console.log('User deleted: ', userData);
-        const check = actions.deleteUser(userData.id);
+
+        const check = actions.deleteUser(userData.id); // borra al usuario
 
         if (check) {
             // Cerramos el modal después de guardar los cambios
@@ -62,9 +90,25 @@ export const EditUser = ({ show, openModal, closeModal, backUpImage }) => {
         }
     };
 
-    // Confirmación en el guardado de la imagen
-    const handleUploadImageConfirmation = () => {
-
+    // Consecuencia final de la actualización de imagen
+    const handleUploadImage = async (saveImage) => {
+        // Si ha modificado la image: sube una nueva o borra la actual
+        console.log('Revisando imagen...', updateImage);
+        if (updateImage) {
+            console.log('¡Actualizando imagen!', saveImage);
+            // Si presiona en 'Guardar y salir'
+            if (saveImage) {
+                console.log('asociando imagen al usuario', imageData.imageID || null);
+                await actions.associateImage('user', userData.id, imageData.imageID);
+            }
+            // Si presiona en 'Cancelar'
+            else {
+                if (imageData.publicID) {
+                    console.log('borrando imagen descartada', imageData.publicID);
+                    await actions.deleteImage(imageData.publicID);
+                } 
+            }
+        }
     }
 
     return (
@@ -74,7 +118,7 @@ export const EditUser = ({ show, openModal, closeModal, backUpImage }) => {
                     <Modal.Title>Actualizar perfil de usuario</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <ImageUploader type="user" id={userData.id} image={backUpImage} />
+                    <ImageUploader type="user" id={userData.id} handleUpdate={setUpdateImage} setImage={setImageData} image={imageData} />
                     <Form>
                         <Form.Group className="mb-3" controlId="formNombre">
                             <Form.Label>Nombre</Form.Label>

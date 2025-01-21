@@ -44,7 +44,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       
           if (response.ok) {
             const data = await response.json();
-            console.log("Imagen subida exitosamente:", data);
+            // console.log("Imagen subida exitosamente:", data);
             return data;
           } else {
             const errorData = await response.json();
@@ -77,7 +77,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       
           if (response.ok) {
             const data = await response.json();
-            console.log("Imagen actualizada exitosamente:", data);
+            // console.log("Imagen actualizada exitosamente:", data);
             return data;
           } else {
             const errorData = await response.json();
@@ -121,9 +121,9 @@ const getState = ({ getStore, getActions, setStore }) => {
           throw error;
         }
       },
-      deleteImage: async (publicId) => {
+      deleteImage: async (public_id) => {
         try {
-          const response = await fetch(`${process.env.BACKEND_URL}api/delete/${publicId}`, {
+          const response = await fetch(`${process.env.BACKEND_URL}api/delete/${public_id}`, {
             method: 'DELETE',
           });
       
@@ -146,6 +146,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           if (response.ok) {
             const actions = await getActions();
             const images = await response.json();
+            console.log(images);
       
             // Iteramos sobre las imágenes y las eliminamos
             for (const image of images) {
@@ -192,7 +193,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         }
       },
       updateUser: async (id, newValues) => {
-        console.log(newValues);
+        // console.log('newValues user', newValues);
         try {
           const resp = await fetch(`${process.env.BACKEND_URL}api/users/${id}`, {
             method: "PUT",
