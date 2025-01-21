@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Button } from "react-bootstrap";
+import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { Context } from "../../store/appContext";
 
 export const ImageUploader = ({type, id, url = ''}) => {
@@ -36,14 +36,31 @@ export const ImageUploader = ({type, id, url = ''}) => {
         }
     };
 
+    const handleTrashImage = () => {
+        console.log('borrando imagen');
+    };
+
     return (
         <div className='row'>
             <div className='col-9'>
                 <form onSubmit={handleUpload}>
                     <input className="form-control form-control-sm mb-3" id="formFileSm" type="file" onChange={handleFileChange} />
-                    {file &&
-                        <Button type="submit" className="form-control form-control-sm float-end mb-3" style={{ width: '40%' }} disabled={!file}>Subir Imagen</Button>
-                    }
+                    <div className="float-end mb-3">
+                        {file &&
+                            <Button type="submit" variant="success" disabled={!file} className='px-3 py-1 m-0 fs-6'>Subir Imagen</Button>
+                        }
+                        {imageUrl &&
+                            <OverlayTrigger 
+                                overlay={
+                                    <Tooltip id="button-tooltip">
+                                        Eliminar imagen de usuario
+                                    </Tooltip>
+                                }
+                            >
+                                <Button variant="danger" disabled={!imageUrl} className='px-3 py-1 ms-2' onClick={handleTrashImage}><i class="fa-solid fa-trash fs-6 p-0"></i></Button>
+                            </OverlayTrigger>
+                        }
+                    </div>
                 </form>
             </div>
             <div className='col-3'>

@@ -61,6 +61,11 @@ export const EditUser = ({ show, openModal, closeModal, userImageUrl }) => {
         }
     };
 
+    // Confirmación en el guardado de la imagen
+    const handleUploadImageConfirmation = () => {
+        
+    }
+
     return (
         <>
             <Modal show={show} onHide={handleCancel}>

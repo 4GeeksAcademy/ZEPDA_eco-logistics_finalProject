@@ -23,6 +23,8 @@ export const UserPanel = ({ user }) => {
             };
         
             fetchImage();
+        } else {
+            setImageUrl('');
         }
     }, [user.image])
 
