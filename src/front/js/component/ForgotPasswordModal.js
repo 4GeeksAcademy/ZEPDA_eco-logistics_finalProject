@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button } from "react-bootstrap";
 
 export const ForgotPasswordModal = ({ show, onHide, onPasswordReset }) => {
@@ -6,6 +6,15 @@ export const ForgotPasswordModal = ({ show, onHide, onPasswordReset }) => {
   const [resetMessage, setResetMessage] = useState(""); // Mensaje de éxito o error
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  // Resetear mensajes cuando el modal se muestra
+  useEffect(() => {
+    if (show) {
+      setResetMessage("");
+      setErrorMessage("");
+      setEmail(""); // Limpiar el campo de email
+    }
+  }, [show]);
 
   const handleForgotPasswordSubmit = async (e) => {
     e.preventDefault();
@@ -82,4 +91,3 @@ export const ForgotPasswordModal = ({ show, onHide, onPasswordReset }) => {
     </Modal>
   );
 };
-
