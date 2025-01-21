@@ -3,9 +3,8 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 """
 import os
 import app
-
-from flask import Flask, request, jsonify, url_for, Blueprint, current_app
-from api.models import db, User, Company, Image
+from flask import Flask, Blueprint, request, jsonify, url_for, current_app
+from api.models import db, User, Company, Image, Favorite
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 import requests
@@ -394,7 +393,8 @@ def get_initial_companies():
             web=company['web'],
             direccion=company['direccion'],
             descripcion=company['descripcion'],
-            cif=company['cif']
+            cif=company['cif'],
+            imagen_url=company['imagen_url']
         )
         db.session.add(new_company)
         db.session.commit()
@@ -459,6 +459,46 @@ def initialCompanies_images():
 #                             })
     
 #     return jsonify({"message": "Images associated successfully"}), 200
+
+
+
+
+#FAVORITOS
+
+@api.route("/favorites", methods=["POST"])
+def add_favorite():
+    body = request.get_json()
+    user_id = body.get("user_id")
+    company_id = body.get("company_id")
+
+    favorite = Favorite(user_id=user_id, company_id=company_id)
+    db.session.add(favorite)
+    db.session.commit()
+
+    return jsonify(favorite.serialize()), 201
+
+
+@api.route("/favorites", methods=["GET"])
+def get_favorites():
+    favorites = Favorite.query.all()
+    favorites_serialized = [favorite.serialize() for favorite in favorites]
+    return jsonify(favorites_serialized), 200
+
+
+
+@api.route("/favorites/<int:id>", methods=["DELETE"])   
+def remove_favorite():
+    data = request.get_json()
+    company_id = data.get('company_id')
+    user_id = data.get('user_id')
+    
+    favorite = Favorite.query.filter_by(company_id=company_id, user_id=user_id).first()
+    if not favorite:
+        return jsonify({"message": "Favorite not found"}), 404
+
+    db.session.delete(favorite)
+    db.session.commit()
+    return jsonify({"message": "Favorite removed successfully"}), 200
 
 
 # @api.route('/profile/companies', methods=['POST'])
