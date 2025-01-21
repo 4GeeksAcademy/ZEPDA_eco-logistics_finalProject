@@ -93,10 +93,11 @@ class Company(db.Model):
     sector = db.Column(db.Text, nullable=True)
     descripcion = db.Column(db.Text, nullable=True)
     favorited = db.relationship('Favorite', backref='company_favorite', lazy=True)
+    imagen = db.Column(db.String(200), nullable=True)
     image = db.relationship('Image', backref='company', uselist=False) # Relación uno a uno con Image
 
 
-    def __init__(self,cif,nombre,sector,direccion,email,descripcion,web,telefono,pais):
+    def __init__(self,cif,nombre,sector,direccion,email,descripcion,web,telefono,pais,imagen):
         self.nombre = nombre
         self.email = email
         self.direccion = direccion
@@ -106,6 +107,7 @@ class Company(db.Model):
         self.sector = sector
         self.descripcion = descripcion
         self.web = web
+        self.imagen = imagen
        
 
     def __repr__(self):
@@ -113,6 +115,7 @@ class Company(db.Model):
 
     def serialize(self):
         return {
+            "id": self.id,
             "nombre": self.nombre,
             "email": self.email,
             "direccion": self.direccion,
@@ -122,6 +125,7 @@ class Company(db.Model):
             "web": self.web,
             "sector": self.sector,
             "descripcion": self.descripcion,
+            "imagen": self.imagen,
             "image": self.image.serialize() if self.image else None # Serializa la imagen si existe
         }
     

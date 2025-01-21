@@ -15,7 +15,7 @@ export const NewsSection = () => {
     // Cambiar de noticias automáticamente cada 5 segundos
     const interval = setInterval(() => {
       nextSlide(); // Llamamos a nextSlide para cambiar el índice
-    }, 5000);
+    }, 12000);
 
     // Limpiar el intervalo al desmontarse el componente
     return () => clearInterval(interval);

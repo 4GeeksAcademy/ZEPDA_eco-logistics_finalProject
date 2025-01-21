@@ -3,7 +3,7 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 """
 import app
 from flask import Flask, Blueprint, request, jsonify, url_for
-from api.models import db, User, Company, Image
+from api.models import db, User, Company, Image, Favorite
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 import requests
@@ -295,6 +295,46 @@ def get_company_byID(company_id):
     if company is None:
         return jsonify({"message": "Company not found"}), 404
     return jsonify(company.serialize()), 200
+
+
+
+
+#FAVORITOS
+
+@api.route("/favorites", methods=["POST"])
+def add_favorite():
+    body = request.get_json()
+    user_id = body.get("user_id")
+    company_id = body.get("company_id")
+
+    favorite = Favorite(user_id=user_id, company_id=company_id)
+    db.session.add(favorite)
+    db.session.commit()
+
+    return jsonify(favorite.serialize()), 201
+
+
+@api.route("/favorites", methods=["GET"])
+def get_favorites():
+    favorites = Favorite.query.all()
+    favorites_serialized = [favorite.serialize() for favorite in favorites]
+    return jsonify(favorites_serialized), 200
+
+
+
+@api.route("/favorites/<int:id>", methods=["DELETE"])   
+def remove_favorite():
+    data = request.get_json()
+    company_id = data.get('company_id')
+    user_id = data.get('user_id')
+    
+    favorite = Favorite(company_id=company_id, user_id=user_id)
+    if not favorite:
+        return jsonify({"message": "Favorite not found"}), 404
+
+    db.session.delete(favorite)
+    db.session.commit()
+    return jsonify({"message": "Favorite removed successfully"}), 200
 
 
 # @api.route('/profile/companies', methods=['POST'])

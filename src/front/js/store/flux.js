@@ -372,8 +372,63 @@ const getState = ({ getStore, getActions, setStore }) => {
         } catch (err) {
           console.log("Error sending customer to back backend", err);
         }
-      }
+      },
+      addFavorite: (company, user) => {
+        try {
+          const resp = fetch(process.env.BACKEND_URL + "api/favorites", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({company_id: company, user_id: user }),
+          });
+          const data = resp.json();
+          return true;
+        }catch(err){
+          console.log("Error sending favorite to back backend", err);
+        }
+  
+      },
+
+      removeFavorite: async (company, user, id) => {
+        try {
+            const resp = await fetch(process.env.BACKEND_URL + `api/favorites/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ company_id: company, user_id: user }),
+            });
+            if (resp.ok) {
+                const data = await resp.json();
+                return true;
+            } else {
+                console.error("Failed to remove favorite");
+                return false;
+            }
+        } catch (err) {
+            console.log("Error removing favorite from backend", err);
+            return false;
+        }
+    },
+
+      getFavorites: async (id) => {
+        try {
+          const resp = await fetch(process.env.BACKEND_URL + "api/favorites/"+id, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          const data = await resp.json();
+          return data;
+        } catch (err) {
+          console.log("Error sending customer to back backend", err);
+        }
+      },
+    
     }
+   
   };
 };
 
