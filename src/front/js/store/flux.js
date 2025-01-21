@@ -29,10 +29,11 @@ const getState = ({ getStore, getActions, setStore }) => {
         }
       },
       // --- CLOUDINARY ---
-      uploadImage: async (file) => {
+      uploadImage: async (file,type) => {
         const store = getStore();
         const formData = new FormData();
         formData.append('file', file);
+        formData.append('type', type);
       
         try {
           const response = await fetch(`${process.env.BACKEND_URL}api/upload`, {
@@ -180,6 +181,30 @@ const getState = ({ getStore, getActions, setStore }) => {
           console.log(error);
         }
       },
+      getDummyCompanies: async () => {
+        try {
+          // Fetch data from the server
+          const response = await fetch(`${process.env.BACKEND_URL}api/companies`, { method: 'GET' }); 
+          const data = await response.json();
+      
+          // Restructurar los datos para almacenarlos como un objeto separado por sectores
+          const companies = data.reduce((acc, company) => {
+            const sector = company.sector;
+            if (!acc[sector]) {
+              acc[sector] = [];
+            }
+            acc[sector].push(company);
+            return acc;
+          }, {});
+          console.log(companies);
+      
+          // Actualizar el store con los datos reestructurados
+          setStore({ companies });
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      // ------------------  
       saveUserData: (user, token) => {
         localStorage.setItem("profile", JSON.stringify(user));
         localStorage.setItem("token", token);
@@ -427,7 +452,69 @@ const getState = ({ getStore, getActions, setStore }) => {
         } catch (err) {
           console.log("Error sending customer to back backend", err);
         }
-      }
+      },
+      associateInitialCompaniesImages: async () => {
+          try {
+              // Fetch data from the server
+              const response = await fetch(process.env.BACKEND_URL + 'api/initialCompanies-images', {
+                  method: 'GET',
+                  headers: {
+                      'Content-Type': 'application/json'
+                  }
+              });
+      
+              if (response.ok) {
+                  const data = await response.json();
+                              
+                  // Procesar las imágenes en el frontend
+                  for (const sector_dict of data) {
+                      for (const sector in sector_dict) {
+                          const companyList = sector_dict[sector];
+                          for (const company of companyList) {
+                              const imagePath = `src/front/img/logos/${company.imagen}`;
+
+                              // Crear un FormData para la carga de archivos
+                              const formData = new FormData();
+                              formData.append('file', imagePath);
+                              formData.append('type', 'company');
+      
+                              // Subir la imagen al servidor
+                              const uploadResponse = await fetch(process.env.BACKEND_URL + 'api/upload', {
+                                  method: 'POST',
+                                  body: formData
+                              });
+      
+                              if (uploadResponse.ok) {
+                                  const imageData = await uploadResponse.json();
+                                  console.log(imageData);
+      
+                                  // Asociar la imagen a la empresa
+                                  await fetch(process.env.BACKEND_URL + 'api/associate_image', {
+                                      method: 'PUT',
+                                      headers: {
+                                          'Content-Type': 'application/x-www-form-urlencoded'
+                                      },
+                                      body: new URLSearchParams({
+                                          'type': 'company',
+                                          'id': company.id,
+                                          'image_id': imageData.id
+                                      })
+                                  });
+                              }
+                          }
+                      }
+                  }
+      
+                  console.log('Images associated successfully');
+                  // Puedes actualizar el store con el resultado, si es necesario
+                  // setStore({ imagesAssociated: true });
+              } else {
+                  console.error('Failed to fetch initial companies:', response.statusText);
+              }
+          } catch (error) {
+              console.error('Error associating images:', error);
+          }
+      },
     }
   };
 };

@@ -55,7 +55,7 @@ export const Companies = () => {
                 ) 
                 : 
                 (
-                    <p>No se encontraron empresas...</p>
+                    <p>Cargando empresas...</p>
                 )
             }
         </div>

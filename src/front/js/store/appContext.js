@@ -23,7 +23,9 @@ const injectContext = PassedComponent => {
 
 		useEffect(() => {
 			
-			state.actions.loadDummyCompanies();
+			state.actions.getDummyCompanies();
+			state.actions.associateInitialCompaniesImages();
+			state.actions.getDummyCompanies();
 
 		}, []);
 
