@@ -266,7 +266,8 @@ def get_initial_companies():
             web=company['web'],
             direccion=company['direccion'],
             descripcion=company['descripcion'],
-            cif=company['cif']
+            cif=company['cif'],
+            imagen_url=company['imagen_url']
         )
         db.session.add(new_company)
         db.session.commit()
