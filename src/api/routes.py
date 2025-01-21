@@ -1,6 +1,7 @@
 """
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
+import os
 import app
 from flask import Flask, Blueprint, request, jsonify, url_for
 from api.models import db, User, Company, Image
@@ -333,6 +334,42 @@ def get_company_byID(company_id):
     if company is None:
         return jsonify({"message": "Company not found"}), 404
     return jsonify(company.serialize()), 200
+
+@api.route('/initialCompanies-images', methods=['GET'])
+def initialCompanies_images():
+    # Leer el archivo JSON y devolverlo como respuesta
+    with open('src/front/utils/mockData_Companies.json', 'r', encoding='utf-8') as file:
+        data = json.load(file)
+    return jsonify(data), 200
+
+
+# @api.route('/initialCompanies-images', methods=['POST'])
+# def initialCompanies_images():
+#     # Leer el archivo JSON
+#     with open('src/front/utils/mockData_Companies.json', 'r', encoding='utf-8') as file:
+#         data = json.load(file)
+    
+#     # Recoge las rutas de las imágenes y las asocia a cada empresa
+#     for sector_dict in data:
+#         for sector, company_list in sector_dict.items():
+#             for company in company_list:
+#                 image_path = company.get('imagen')
+#                 if image_path:
+#                     # Simulación de carga de imagen
+#                     with open('src/front/img/logos/'+image_path, 'rb') as img_file:
+#                         files = {'file': img_file}
+#                         response = requests.post(os.environ.get('BACKEND_URL')+'upload', files=files, data={'type': 'company'})
+#                         print(response)
+#                         if response.status_code == 201:
+#                             image_data = response.json()
+#                             # Asociar la imagen a la empresa
+#                             requests.put(os.environ.get('BACKEND_URL')+'associate_image', data={
+#                                 'type': 'company',
+#                                 'id': company['id'],
+#                                 'image_id': image_data['id']
+#                             })
+    
+#     return jsonify({"message": "Images associated successfully"}), 200
 
 
 # @api.route('/profile/companies', methods=['POST'])
