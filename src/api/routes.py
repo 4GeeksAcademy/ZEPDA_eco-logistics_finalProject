@@ -228,15 +228,15 @@ def add_company():
     data = request.get_json()
     print("data", data)
     new_company = Company(
-        cif=data['cif'],
         nombre=data['nombre'],
-        sector=data['sector'],
-        direccion=data['direccion'],
-        email=data['email'],
-        descripcion=data['descripcion'],
-        web=data['web'],
         pais=data['pais'],
-        telefono=data['telefono']
+        sector=data['sector'],
+        email=data['email'],
+        telefono=data['telefono'],
+        web=data['web'],
+        direccion=data['direccion'],
+        descripcion=data['descripcion'],
+        cif=data['cif']
     )
     
     db.session.add(new_company)
@@ -246,19 +246,27 @@ def add_company():
 
 @api.route('/initial-companies', methods=['GET'])
 def get_initial_companies():
-    with open("src/front/utils/initial_companies.json") as f:
-        companies = json.load(f)
+    with open('src/front/utils/mockData_Companies.json', 'r', encoding='utf-8') as file:
+        data = json.load(file)
+    
+    # Desglosamos los datos en una lista única
+    companies = []
+    for sector_dict in data:
+        for sector, company_list in sector_dict.items():
+            companies.extend(company_list)
+
+    # Creamos y subimos todas las empresas al servidor
     for company in companies:
         new_company = Company(
-            cif=company['cif'],
             nombre=company['nombre'],
-            sector=company['sector'],
-            direccion=company['direccion'],
-            email=company['email'],
-            descripcion=company['descripcion'],
-            web=company['web'],
             pais=company['pais'],
-            telefono=company['telefono']
+            sector=company['sector'],
+            email=company['email'],
+            telefono=company['telefono'],
+            web=company['web'],
+            direccion=company['direccion'],
+            descripcion=company['descripcion'],
+            cif=company['cif']
         )
         db.session.add(new_company)
         db.session.commit()
