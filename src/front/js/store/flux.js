@@ -180,6 +180,30 @@ const getState = ({ getStore, getActions, setStore }) => {
           console.log(error);
         }
       },
+      getDummyCompanies: async () => {
+        try {
+          // Fetch data from the server
+          const response = await fetch(`${process.env.BACKEND_URL}api/companies`, { method: 'GET' }); 
+          const data = await response.json();
+      
+          // Restructurar los datos para almacenarlos como un objeto separado por sectores
+          const companies = data.reduce((acc, company) => {
+            const sector = company.sector;
+            if (!acc[sector]) {
+              acc[sector] = [];
+            }
+            acc[sector].push(company);
+            return acc;
+          }, {});
+          console.log(companies);
+      
+          // Actualizar el store con los datos reestructurados
+          setStore({ companies });
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      // ------------------  
       saveUserData: (user, token) => {
         localStorage.setItem("profile", JSON.stringify(user));
         localStorage.setItem("token", token);

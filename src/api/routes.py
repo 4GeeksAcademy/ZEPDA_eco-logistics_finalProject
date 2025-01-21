@@ -266,15 +266,15 @@ def add_company():
     data = request.get_json()
     print("data", data)
     new_company = Company(
-        cif=data['cif'],
         nombre=data['nombre'],
-        sector=data['sector'],
-        direccion=data['direccion'],
-        email=data['email'],
-        descripcion=data['descripcion'],
-        web=data['web'],
         pais=data['pais'],
-        telefono=data['telefono']
+        sector=data['sector'],
+        email=data['email'],
+        telefono=data['telefono'],
+        web=data['web'],
+        direccion=data['direccion'],
+        descripcion=data['descripcion'],
+        cif=data['cif']
     )
     
     db.session.add(new_company)
@@ -284,19 +284,27 @@ def add_company():
 
 @api.route('/initial-companies', methods=['GET'])
 def get_initial_companies():
-    with open("src/front/utils/initial_companies.json") as f:
-        companies = json.load(f)
+    with open('src/front/utils/mockData_Companies.json', 'r', encoding='utf-8') as file:
+        data = json.load(file)
+    
+    # Desglosamos los datos en una lista única
+    companies = []
+    for sector_dict in data:
+        for sector, company_list in sector_dict.items():
+            companies.extend(company_list)
+
+    # Creamos y subimos todas las empresas al servidor
     for company in companies:
         new_company = Company(
-            cif=company['cif'],
             nombre=company['nombre'],
-            sector=company['sector'],
-            direccion=company['direccion'],
-            email=company['email'],
-            descripcion=company['descripcion'],
-            web=company['web'],
             pais=company['pais'],
-            telefono=company['telefono']
+            sector=company['sector'],
+            email=company['email'],
+            telefono=company['telefono'],
+            web=company['web'],
+            direccion=company['direccion'],
+            descripcion=company['descripcion'],
+            cif=company['cif']
         )
         db.session.add(new_company)
         db.session.commit()
@@ -310,45 +318,21 @@ if __name__ == '__main__':
 
 
 
-# @api.route('/registerCompany', methods=['POST'])
-# def register_company():
-    
-#     body = request.get_json()
-#     company_nif = body.get('nif', None)
-#     company_nombre = body.get('nombre', None)
-#     company_sector = body.get('sector', None)
-#     company_direccion = body.get('direccion', None)
-#     company_email = body.get('email', None)
-#     company_descripcion = body.get('descripcion', None)
-#     company_web= body.get('web', None)
-#     company_contraseña = body.get('contraseña', None)
-#     company_certificado = body.get('certificado', None)
-#     if company_nombre is None or company_email is None or company_contraseña is None:
-#         return {'message': 'Missing arguments'}      
-#     bpassword = bytes(company_contraseña, 'utf-8')
-#     salt = bcrypt.gensalt(14)
-#     hashed_password = bcrypt.hashpw(password=bpassword, salt=salt)       
-#     user = Company(company_nif, company_nombre, company_sector, company_direccion, company_email, company_descripcion, company_web, hashed_password.decode('utf-8'), company_certificado)    
-#     #return {'message': f'nombre: {user.nombre} email: {user.email} contraseña: {contraseña}'}
-#     db.session.add(user)
-#     db.session.commit()
-#     return {'message': f'User {user.email} was created'}
-
-# @api.route('/profile/companies', methods=['GET'])
-# def get_companies():
-#     """Obtiene todas las compañías"""
-#     companies = Company.query.all()
-#     companies_serialized = [company.serialize() for company in companies]
-#     return jsonify(companies_serialized), 200
 
 
-# @api.route('/profile/companies/<int:company_id>', methods=['GET'])
-# def get_company(company_id):
-#     """Obtiene una compañía por ID"""
-#     company = Company.query.get(company_id)
-#     if company is None:
-#         return jsonify({"message": "Company not found"}), 404
-#     return jsonify(company.serialize()), 200
+@api.route('/companies', methods=['GET'])
+def get_companies():
+    companies = Company.query.all()
+    companies_serialized = [company.serialize() for company in companies]
+    return jsonify(companies_serialized), 200
+
+
+@api.route('/companies/<int:company_id>', methods=['GET'])
+def get_company_byID(company_id):
+    company = Company.query.get(company_id)
+    if company is None:
+        return jsonify({"message": "Company not found"}), 404
+    return jsonify(company.serialize()), 200
 
 
 # @api.route('/profile/companies', methods=['POST'])

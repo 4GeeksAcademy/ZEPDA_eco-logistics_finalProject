@@ -4,77 +4,62 @@
             {
                 "nombre": "ITENE RESEARCH CENTER",
                 "pais": "United Kingdom",
-                "ubicacion": "London, UK",
                 "sector": "Packaging",
                 "email": "contact@iteneuk.co.uk",
                 "telefono": "+44 20 1234 5678",
                 "web": "https://www.iteneuk.co.uk",
                 "direccion": "123 Packaging Ave, London, UK",
                 "descripcion": "Centro líder en investigación y desarrollo de soluciones innovadoras de embalaje.",
-                "nif": "GB123456789",
-                "contraseña": "SecurePass123!",
-                "password_check": "SecurePass123!",
-                "logo": "logo-itene-research.png"
+                "cif": "GB123456789",
+                "imagen": "logo-itene-research.png"
             },
             {
                 "nombre": "NAITEC",
                 "pais": "France",
-                "ubicacion": "Paris, France",
                 "sector": "Packaging",
                 "email": "info@naitecfrance.fr",
                 "telefono": "+33 1 2345 6789",
                 "web": "https://www.naitecfrance.fr",
                 "direccion": "45 Innovation Blvd, Paris, France",
                 "descripcion": "Empresa dedicada a ofrecer soluciones de embalaje sostenible.",
-                "nif": "FR987654321",
-                "contraseña": "NaiTecSecure!",
-                "password_check": "NaiTecSecure!",
-                "logo": "logo-naitec-automotive.png"
+                "cif": "FR987654321",
+                "imagen": "logo-naitec-automotive.png"
             },
             {
                 "nombre": "PackBenefit",
                 "pais": "España",
-                "ubicacion": "Madrid, España",
                 "sector": "Packaging",
                 "email": "hello@packbenefit.es",
                 "telefono": "+34 91 234 5678",
                 "web": "https://www.packbenefit.es",
                 "direccion": "Calle Embalaje 27, Madrid, España",
                 "descripcion": "Proveedor de soluciones de embalaje innovadoras y ecológicas.",
-                "nif": "ES654321987",
-                "contraseña": "PackBenefit123!",
-                "password_check": "PackBenefit123!",
-                "logo": "logo-packbenefit.png"
+                "cif": "ES654321987",
+                "imagen": "logo-packbenefit.png"
             },
             {
                 "nombre": "PackTech Innovations",
                 "pais": "Spain",
-                "ubicacion": "Madrid, Spain",
                 "sector": "Packaging",
                 "email": "info@packtech.es",
                 "telefono": "+34 91 234 5678",
                 "web": "https://www.packtech.es",
                 "direccion": "456 Packaging Street, Madrid, Spain",
                 "descripcion": "Empresa líder en soluciones de embalaje ecológicas y sostenibles.",
-                "nif": "ES987654321",
-                "contraseña": "EcoPack2025!",
-                "password_check": "EcoPack2025!",
-                "logo": "logo-packtech.png"
+                "cif": "ES987654321",
+                "imagen": "logo-packtech.png"
             },
             {
                 "nombre": "EcoPack Solutions",
                 "pais": "Netherlands",
-                "ubicacion": "Amsterdam, Netherlands",
                 "sector": "Packaging",
                 "email": "info@ecopack.nl",
                 "telefono": "+31 20 1234 5678",
                 "web": "https://www.ecopack.nl",
                 "direccion": "101 Packaging Boulevard, Amsterdam, Netherlands",
                 "descripcion": "Especialistas en soluciones de embalaje ecológico y reciclable.",
-                "nif": "NL789123456",
-                "contraseña": "EcoPackNL2025!",
-                "password_check": "EcoPackNL2025!",
-                "logo": "logo-ecopack.png"
+                "cif": "NL789123456",
+                "imagen": "logo-ecopack.png"
             }
         ]
     },
@@ -83,77 +68,62 @@
             {
                 "nombre": "Stock Logistic",
                 "pais": "United Kingdom",
-                "ubicacion": "Manchester, UK",
-                "sector": "Transporte",
+                "sector": "Transportes",
                 "email": "support@stocklogistic.co.uk",
                 "telefono": "+44 161 234 5678",
                 "web": "https://www.stocklogistic.co.uk",
                 "direccion": "456 Warehouse St, Manchester, UK",
                 "descripcion": "Servicios logísticos completos y eficientes.",
-                "nif": "GB234567891",
-                "contraseña": "StockLogistic!",
-                "password_check": "StockLogistic!",
-                "logo": "logo-stock-logistic.png"
+                "cif": "GB234567891",
+                "imagen": "logo-stock-logistic.png"
             },
             {
                 "nombre": "MOLDTRANS",
                 "pais": "Holland",
-                "ubicacion": "Amsterdam, Netherlands",
-                "sector": "Transporte",
+                "sector": "Transportes",
                 "email": "info@moldtrans.nl",
                 "telefono": "+31 20 123 4567",
                 "web": "https://www.moldtrans.nl",
                 "direccion": "78 Transport Ln, Amsterdam, Netherlands",
                 "descripcion": "Líder en servicios de transporte y logística.",
-                "nif": "NL123456789",
-                "contraseña": "MoldTrans2025",
-                "password_check": "MoldTrans2025",
-                "logo": "logo-moldtrans.png"
+                "cif": "NL123456789",
+                "imagen": "logo-moldtrans.png"
             },
             {
                 "nombre": "Expotrans",
                 "pais": "España",
-                "ubicacion": "Barcelona, España",
-                "sector": "Transporte",
+                "sector": "Transportes",
                 "email": "contact@expotrans.es",
                 "telefono": "+34 93 234 5678",
                 "web": "https://www.expotrans.es",
                 "direccion": "Avenida Logística 12, Barcelona, España",
                 "descripcion": "Especialistas en transporte y logística internacional.",
-                "nif": "ES987654321",
-                "contraseña": "ExpotransSecure!",
-                "password_check": "ExpotransSecure!",
-                "logo": "logo-expotrans.png"
+                "cif": "ES987654123",
+                "imagen": "logo-expotrans.png"
             },
             {
                 "nombre": "TransLogistics Solutions",
                 "pais": "Germany",
-                "ubicacion": "Berlin, Germany",
                 "sector": "Transportes",
                 "email": "contact@translogistics.de",
                 "telefono": "+49 30 1234 5678",
                 "web": "https://www.translogistics.de",
                 "direccion": "789 Transport Avenue, Berlin, Germany",
                 "descripcion": "Proveedor global de soluciones logísticas y de transporte eficientes.",
-                "nif": "DE123987654",
-                "contraseña": "LogiTrans2025!",
-                "password_check": "LogiTrans2025!",
-                "logo": "logo-translogistics.png"
+                "cif": "DE123987654",
+                "imagen": "logo-translogistics.png"
             },
             {
                 "nombre": "GlobalTransit Solutions",
                 "pais": "Belgium",
-                "ubicacion": "Brussels, Belgium",
                 "sector": "Transportes",
                 "email": "contact@globaltransit.be",
                 "telefono": "+32 2 1234 5678",
                 "web": "https://www.globaltransit.be",
                 "direccion": "55 Transit Lane, Brussels, Belgium",
                 "descripcion": "Expertos en servicios de transporte y logística a nivel mundial.",
-                "nif": "BE123456789",
-                "contraseña": "TransitGlobal2025!",
-                "password_check": "TransitGlobal2025!",
-                "logo": "logo-globaltransit.png"
+                "cif": "BE123456789",
+                "imagen": "logo-globaltransit.png"
             }
         ]
     },
@@ -162,77 +132,62 @@
             {
                 "nombre": "Ecoembes",
                 "pais": "España",
-                "ubicacion": "Valencia, España",
                 "sector": "Gestión de Residuos",
                 "email": "info@ecoembes.es",
                 "telefono": "+34 96 234 5678",
                 "web": "https://www.ecoembes.es",
                 "direccion": "Calle Reciclaje 30, Valencia, España",
                 "descripcion": "Organización sin ánimo de lucro dedicada al reciclaje de envases.",
-                "nif": "ES123456789",
-                "contraseña": "Ecoembes2025",
-                "password_check": "Ecoembes2025",
-                "logo": "logo-ecoembes.png"
+                "cif": "ES123456789",
+                "imagen": "logo-ecoembes.png"
             },
             {
                 "nombre": "Ecologistic",
                 "pais": "España",
-                "ubicacion": "Sevilla, España",
                 "sector": "Gestión de Residuos",
                 "email": "contacto@ecologistic.es",
                 "telefono": "+34 95 234 5678",
                 "web": "https://www.ecologistic.es",
                 "direccion": "Ronda Verde 15, Sevilla, España",
                 "descripcion": "Servicios de gestión integral de residuos.",
-                "nif": "ES234567891",
-                "contraseña": "EcoLogisticSecure",
-                "password_check": "EcoLogisticSecure",
-                "logo": "logo-ecologistic.png"
+                "cif": "ES234567891",
+                "imagen": "logo-ecologistic.png"
             },
             {
                 "nombre": "Acteco",
                 "pais": "España",
-                "ubicacion": "Bilbao, España",
                 "sector": "Gestión de Residuos",
                 "email": "hola@acteco.es",
                 "telefono": "+34 94 234 5678",
                 "web": "https://www.acteco.es",
                 "direccion": "Plaza Reciclaje 8, Bilbao, España",
                 "descripcion": "Líder en soluciones de reciclaje y gestión de residuos.",
-                "nif": "ES345678912",
-                "contraseña": "ActecoResiduos",
-                "password_check": "ActecoResiduos",
-                "logo": "logo-acteco.png"
+                "cif": "ES345678912",
+                "imagen": "logo-acteco.png"
             },
             {
                 "nombre": "EcoWaste Management",
                 "pais": "France",
-                "ubicacion": "Paris, France",
                 "sector": "Gestión de Residuos",
                 "email": "info@ecowaste.fr",
                 "telefono": "+33 1 2345 6789",
                 "web": "https://www.ecowaste.fr",
                 "direccion": "321 Waste Management Blvd, Paris, France",
                 "descripcion": "Líder en la gestión sostenible de residuos y reciclaje.",
-                "nif": "FR456123789",
-                "contraseña": "EcoManage2025!",
-                "password_check": "EcoManage2025!",
-                "logo": "logo-ecowaste.png"
+                "cif": "FR456123789",
+                "imagen": "logo-ecowaste.png"
             },
             {
                 "nombre": "GreenWaste Solutions",
                 "pais": "Italy",
-                "ubicacion": "Rome, Italy",
                 "sector": "Gestión de Residuos",
                 "email": "contact@greenwaste.it",
                 "telefono": "+39 06 1234 5678",
                 "web": "https://www.greenwaste.it",
                 "direccion": "15 Eco Lane, Rome, Italy",
                 "descripcion": "Empresa líder en el manejo de residuos ecológicos y reciclaje innovador.",
-                "nif": "IT456789123",
-                "contraseña": "GreenEco2025!",
-                "password_check": "GreenEco2025!",
-                "logo": "logo-greenwaste.png"
+                "cif": "IT456789123",
+                "imagen": "logo-greenwaste.png"
             }
         ]
     }
