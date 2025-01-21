@@ -13,6 +13,7 @@ from flask_jwt_extended import JWTManager
 from flask_mail import Mail
 from dotenv import load_dotenv
 import cloudinary
+
 load_dotenv()
 
 

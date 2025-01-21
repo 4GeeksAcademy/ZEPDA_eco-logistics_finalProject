@@ -15,6 +15,7 @@ import base64
 import re
 import bcrypt
 import json
+import os
 from api.cloudinary_helpers import upload_image, delete_image
 from api.image_helpers import assign_image_to_user, assign_image_to_company, create_image
 
@@ -176,7 +177,8 @@ def request_reset_password():
     token = create_access_token(identity=email, expires_delta=timedelta(minutes=5))
     token_byte = token.encode('utf-8')
     token = base64.b64encode(token_byte)
-    reset_link = f"https://silver-space-pancake-4j9rvrxg7jrfjvw9-3000.app.github.dev/reset-password/{token}"
+    front_end = os.getenv("FRONTEND_URL")
+    reset_link = f"{front_end}reset-password/{token}"
 
     try:
         sender_email = current_app.config['MAIL_USERNAME']    

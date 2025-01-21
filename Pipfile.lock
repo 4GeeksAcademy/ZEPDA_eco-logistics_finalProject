@@ -17,9 +17,6 @@
             }
         ]
     },
-
-    "default": {},
-
     "default": {
         "alembic": {
             "hashes": [
