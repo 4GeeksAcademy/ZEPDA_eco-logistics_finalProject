@@ -1,11 +1,8 @@
 import React, { useState } from "react";
-import { useContext } from "react";
-import { Context } from "../store/appContext";
-import imagen from "../../img/zepda-web-img/Driving-Green-Email-Marketing-for-Eco-Friendly-Products-scaled-1-2.webp";
 import emailjs from "emailjs-com";
 
 export const Contacto = () => {
-    const { store, actions } = useContext(Context);
+   
     const [email, setEmail] = useState("");
     const [message, setMessage] = useState("");
     const [sending, setSending] = useState(false);
@@ -15,6 +12,9 @@ export const Contacto = () => {
 
     // Expresión regular para validar el formato del correo electrónico
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const service_id = process.env.EMAILJS_SERVICE_ID
+    const template_id = process.env.EMAILJS_TEMPLATE_ID
+    const user_id = process.env.EMAILJS_USER_ID
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -33,16 +33,17 @@ export const Contacto = () => {
 
         // EmailJS send function
         const templateParams = {
-            from_email: email,
+            from_name: email,
+            to_name: "InfoZepda",
             message: message,
         };
 
         emailjs
             .send(
-                "service_h9ur4xn", // Reemplaza con tu ID de servicio
-                "template_pm7flil", // Reemplaza con tu ID de plantilla
+                service_id,
+                template_id,
                 templateParams,
-                "YixCcCZjxuEJaxPej" // Reemplaza con tu ID de usuario
+                user_id
             )
             .then(
                 (response) => {
