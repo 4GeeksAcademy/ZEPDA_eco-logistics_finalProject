@@ -329,7 +329,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         const store = getStore();
         localStorage.removeItem("token");  // Remove token from localStorage
         localStorage.removeItem("profile");  // Remove user profile from localStorage
-        setStore({ ...store, token: null, profile: null });  // Reset store state
+        setStore({ ...store, token: null, profile: null, favoriteCompanies: []});  // Reset store state
       },
       resetLocalStorage: () => {
         const store = getStore();
