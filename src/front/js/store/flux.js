@@ -574,19 +574,23 @@ const getState = ({ getStore, getActions, setStore }) => {
   
       },
 
-      removeFavorite: async (company, user) => {
+      removeFavorite: async (companyId, userId) => {
         const store = getStore();
         try {
-            const resp = await fetch(process.env.BACKEND_URL + `api/favorites`, {
-                method: "DELETE",
+            const resp = await fetch(`${process.env.BACKEND_URL}api/favorites/delete`, {
+                method: "POST",
                 headers: {
-                  "Content-Type": "application/json",
-                  Authorization: "Bearer " + store.token,
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + store.token,
                 },
-                body: JSON.stringify({ company_id: company, user_id: user }),
+                body: JSON.stringify({ company_id: companyId, user_id: userId }),
             });
             if (resp.ok) {
-                const data = await resp.json();
+                const updatedFavorites = store.favoriteCompanies.filter(
+                    (company) => company.id !== companyId
+                );
+                setStore({ favoriteCompanies: updatedFavorites }); // Actualiza el store
+                console.log(`Removed company with ID ${companyId} from favorites.`);
                 return true;
             } else {
                 console.error("Failed to remove favorite");
@@ -607,7 +611,8 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
           });
           const data = await resp.json();
-          return data;
+          setStore({ favoriteCompanies: data });
+          
         } catch (err) {
           console.log("Error sending customer to back backend", err);
         }
