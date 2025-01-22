@@ -42,9 +42,9 @@ export const UserPanel = ({ user }) => {
                             </div>
                         </div>
                     </div> 
-                    <div className="card-body bg-light pt-0 rounded-2 rounded-top rounded-top-0 pb-2"> 
+                    <div className="card-body bg-light pt-0 rounded-2 rounded-top-0 pb-1 d-flex flex-column justify-content-between"> 
                         <p className="mt-2 text-start">{user.descripcion || mockDesc}</p>
-                        <div className="d-flex justify-content-between position-absolute bottom-0 w-100 start-0 px-3 pb-1">
+                        <div className="d-flex justify-content-between">
                             <p className="card-text m-0 text-secondary text-start">Usuario desde {user.admission_day || getStringDate()}</p> 
                             <a href="#" className="text-success float-end" onClick={(e) => { e.preventDefault(); handleOpenModal(); }}>
                                 Editar usuario

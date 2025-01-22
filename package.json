@@ -76,6 +76,7 @@
 		"@cloudinary/react": "^1.13.1",
 		"@cloudinary/url-gen": "^1.21.0",
 		"bootstrap": "^5.3.3",
+		"brew": "^0.0.8",
 		"emailjs-com": "^3.2.0",
 		"jwt-decode": "^4.0.0",
 		"prop-types": "^15.6.1",

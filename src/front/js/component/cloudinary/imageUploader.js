@@ -87,7 +87,7 @@ export const ImageUploader = ({ type, id, handleUpdate, setImage, image = null }
                 <p className="text-start mb-2">Imagen de Perfil</p> 
                 <form onSubmit={handleUpload}>
                     <input className="form-control form-control-sm mb-3" ref={fileInputRef} type="file" onChange={handleFileChange} />
-                    <div className="float-end mb-3">
+                    <div className="float-end mb-2">
                         {file &&
                             <Button type="submit" variant="success" disabled={!file} className='px-3 py-1 m-0 fs-6'>Subir Imagen</Button>
                         }
@@ -105,7 +105,7 @@ export const ImageUploader = ({ type, id, handleUpdate, setImage, image = null }
                     </div>
                 </form>
             </div>
-            <div className='col-3'>
+            <div className='col-3 mb-3'>
                 <div className="imgcontainer rounded-circle border border-2 shadow-sm mt-2" style={{ height: '100px', width: '100px' }}>
                     <img className="imgservicios" src={image.imageURL || "rigo-baby.jpg"} alt="Imagen" />
                 </div>
