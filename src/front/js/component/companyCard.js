@@ -45,9 +45,7 @@ export const CompanyCard = ({company}) => {
                         <div className="fs-1 rounded-pill icon-hover clickable" onClick={() => handleAddFavorite(company,company.id)}>
                             <i className={isFavorite ? "fa-solid fa-heart text-success" : "fa-regular fa-heart"} />
                         </div>
-                    </div>
-
-                    
+                    </div> 
                     <button className="btn btn-success rounded-pill float-start" onClick={navigateToQuienesSomos}>info</button>
                 </div> 
             </div> 

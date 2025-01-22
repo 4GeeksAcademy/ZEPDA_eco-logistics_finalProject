@@ -19,14 +19,17 @@ export const InfoEmpresa = () => {
         <div className="container mt-5">
             <h1 className="text-center">Información de la Empresa</h1>
             <div className="company-details shadow p-3 mb-5 bg-white rounded mx-auto" style={{ maxWidth: '600px' }}>
-                <img src={'../' + company.logo} alt={`Logo de ${company.nombre}`} style={{ height: '150px' }} />
+                <img
+                    src={company.imagen_url ? process.env.RUTA_LOGOS + `${company.imagen_url}` + "?raw=true" : "../zepdalogo.png"}
+                    alt={company.imagen_url ? 'logo: ' + process.env.RUTA_LOGOS + `${company.imagen_url}` + "?raw=true" : "../zepdalogo.png"}
+                    style={{ height: '150px', width: 'auto', maxWidth: '100%' }}
+                />
                 <h2 className="text-center">{company.nombre}</h2>
                 <p><strong>País:</strong> {company.pais}</p>
-                <p><strong>Ubicación:</strong> {company.ubicacion}</p>
                 <p><strong>Descripción:</strong> {company.descripcion}</p>
                 <p><strong>Teléfono:</strong> {company.telefono}</p>
                 <p><strong>Web:</strong> <a href={company.web} target="_blank" rel="noopener noreferrer">{company.web}</a></p>
-                <p><strong>NIF:</strong> {company.nif}</p>
+                <p><strong>CIF:</strong> {company.cif}</p>
                 <p><strong>Dirección:</strong> {company.direccion}</p>
 
                 {!isLoggedIn ? (
