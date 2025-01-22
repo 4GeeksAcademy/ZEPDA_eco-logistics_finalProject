@@ -617,6 +617,17 @@ const getState = ({ getStore, getActions, setStore }) => {
           console.log("Error sending customer to back backend", err);
         }
       },
+
+      loadInitialCompanies: async () => {
+        try {
+          const response = await fetch(process.env.BACKEND_URL + "api/companies", { method: 'GET' });
+          const data = await response.json();
+          console.log(data);
+          setStore({ companies: data });
+        } catch (error) {
+          console.log(error);
+        }
+      }
     
     }
    

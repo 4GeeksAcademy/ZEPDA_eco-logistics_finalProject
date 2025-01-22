@@ -400,7 +400,7 @@ def get_initial_companies():
         db.session.add(new_company)
         db.session.commit()
 
-    return jsonify({"message": "Initial companies added"}), 201
+    return jsonify({companies}), 201
     
 
 if __name__ == '__main__':
