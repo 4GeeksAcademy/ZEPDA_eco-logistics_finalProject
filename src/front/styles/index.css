@@ -1,5 +1,5 @@
 
-h1{
+h1, h2, h3, h4{
   color: #426B1F;
 }
 .nav-item:hover{
@@ -92,21 +92,12 @@ footer{
   flex-wrap: wrap;
   justify-content: space-between;
   margin-top: 20px;
+  border: solid 1px #0000002c;
+  border-radius: 10px; 
+  box-shadow: #0000003f 0px 0px 20px;
 }
 
-.logo-item {
-  flex: 1 1 10%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 10px;
-  
-}
 
-.logo-image {
-  max-width: 150px;
-  height: auto;
-}
 
 
 
@@ -152,11 +143,14 @@ footer{
   align-items: center;
   height: 400px;
   overflow: hidden;
+  
 }
 
-.contacto-img {
-  width: 100%; /* Ajustar el ancho al 100% del contenedor */
-  height: auto; /* Mantener la proporción de la imagen */
+.imagen-registro-empresa {
+  width: 100%; 
+  height: 400px;
+  object-fit: contain;
+   
   
 }
 
@@ -192,6 +186,157 @@ footer{
     object-position: center;
   }
 
+  .sumate{
+    background-color: #426B1F;
+    color:white;
+    padding-right: 20px;
+    padding-left: 20px;
+    
+   
+  }
+  .empresas-colaboradoras{
+    padding-right: 20px;
+    padding-left: 20px;
+   
+  }
+ 
+  .infohome{
+    box-shadow: #0000003f 0px 0px 20px;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  .btn-danger{
+    background-color: red;
+    color:white;
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+.btn-danger:hover{
+  background-color:#833030;
+  color:white;
+
+}
+
+.btn-logout{
+  background-color: #426B1F;
+  color:white;
+  padding-right: 20px;
+  padding-left: 20px;
+}
+.btn-logout:hover{
+  background-color: red;
+  color:white;
+  padding-right: 20px;
+  padding-left: 20px;
+}
+.btn-register{
+  background-color: #426B1F;
+  color:white;
+  padding-right: 20px;
+  padding-left: 20px;
+}
+.btn-register:hover{
+  background-color: #426B1F;
+  color:white;
+  padding-right: 20px;
+  padding-left: 20px;
+}
+
+
+
+/* logos home */
+
+.carousel-logos-container {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+.carousel-logos-inner {
+  display: flex;
   
+  width: 280%; /* Doble del ancho para permitir el desplazamiento infinito */
+  animation: scroll 20s linear infinite;
+}
+
+.carousel-logos-track {
+  display: flex;
+  flex-wrap: wrap;
+  width: 50%; /* Ajustar el ancho para que las imágenes se distribuyan en 2 filas */
+}
+
+.logo-item {
+  flex: 1 0 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  
+  
+}
+
+.logo-image {
+  max-width: 150px;
+  height: auto;
+  transition: filter 0.3s;
+  
+}
+
+@keyframes scroll {
+  0% {
+      transform: translateX(0);
+  }
+  100% {
+      transform: translateX(-50%);
+  }
+}
 
 
+/*Css de noticias*/
+.news-section .card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.news-section .card:hover {
+  transform: translateY(-10px); 
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
+}
+
+.news-section .card-body {
+  transition: background-color 0.3s ease;
+}
+
+.news-section .card-body:hover {
+  background-color: #f8f9fa; 
+}
+
+/* Estilo para los botones de navegación */
+.news-section .btn-nav {
+  background-color: green;
+  color: white; 
+  border-radius: 50%; 
+  padding: 10px;
+  border: none;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.news-section .btn-nav:hover {
+  background-color: #28a745; 
+  transform: scale(1.1); 
+}
+
+.news-section .btn-nav:disabled {
+  background-color: #dcdcdc; 
+  cursor: not-allowed;
+}
+.card-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2; /* Mostrar solo 3 líneas */
+  overflow: hidden;
+  font-size: 0.875rem;
+  flex-grow: 1;
+  text-overflow: ellipsis;
+}

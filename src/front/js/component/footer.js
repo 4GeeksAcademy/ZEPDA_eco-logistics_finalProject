@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import zepdaImagotipo from "../../img/zepdaimagotipoz.png";
 import { Link } from "react-router-dom";
+import { DeleteAllImages } from "./cloudinary/deleteAllImages";
+import { ImageDeleter } from "./cloudinary/imageDeleter";
 
 export const Footer = () => (
 	<footer className="container footer d-flex mt-5 ">
@@ -12,7 +14,7 @@ export const Footer = () => (
 		</div>
 
 		<div className="text-end footerlinks mt-3">
-		<Link className="links" to="/contacto"><p>Área de socios</p></Link>
+			<Link className="links" to="/registro-empresa"><p>Área de socios</p></Link>
 			<Link className="links" to="/contacto"><p>Contacto</p></Link>
 			<Link className="links" to="/quienes-somos"><p>Quiénes somos</p></Link>
 		</div>

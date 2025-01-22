@@ -1,17 +1,16 @@
 [
-    {
-        "Packaging": [
+   
             {
                 "nombre": "ITENE RESEARCH CENTER",
                 "pais": "United Kingdom",
                 "sector": "Packaging",
-                "email": "contact@iteneuk.co.uk",
+                "email": "contacto@iteneuk.co.uk",
                 "telefono": "+44 20 1234 5678",
-                "web": "https://www.iteneuk.co.uk",
+                "web": "https://www.iteneuk.com",
                 "direccion": "123 Packaging Ave, London, UK",
                 "descripcion": "Centro líder en investigación y desarrollo de soluciones innovadoras de embalaje.",
-                "cif": "GB123456789",
-                "imagen_url": "logo-itene-research.png"
+                "cif": "GB123456188",
+                "imagen": "logo-itene-research.png"
             },
             {
                 "nombre": "NAITEC",
@@ -22,8 +21,8 @@
                 "web": "https://www.naitecfrance.fr",
                 "direccion": "45 Innovation Blvd, Paris, France",
                 "descripcion": "Empresa dedicada a ofrecer soluciones de embalaje sostenible.",
-                "cif": "FR987654321",
-                "imagen_url": "logo-naitec-automotive.png"
+                "cif": "FR987654322",
+                "imagen": "https://github.com/4GeeksAcademy/ZEPDA_eco-logistics_finalProject/blob/dev2/src/front/img/logos/logo-naitec-automotive.png?raw=true"
             },
             {
                 "nombre": "PackBenefit",
@@ -35,7 +34,7 @@
                 "direccion": "Calle Embalaje 27, Madrid, España",
                 "descripcion": "Proveedor de soluciones de embalaje innovadoras y ecológicas.",
                 "cif": "ES654321987",
-                "imagen_url": "logo-packbenefit.png"
+                "imagen": "logo-packbenefit.png"
             },
             {
                 "nombre": "PackTech Innovations",
@@ -47,7 +46,7 @@
                 "direccion": "456 Packaging Street, Madrid, Spain",
                 "descripcion": "Empresa líder en soluciones de embalaje ecológicas y sostenibles.",
                 "cif": "ES987654321",
-                "imagen_url": "logo-packtech.png"
+                "imagen": "logo-packtech.png"
             },
             {
                 "nombre": "EcoPack Solutions",
@@ -59,47 +58,47 @@
                 "direccion": "101 Packaging Boulevard, Amsterdam, Netherlands",
                 "descripcion": "Especialistas en soluciones de embalaje ecológico y reciclable.",
                 "cif": "NL789123456",
-                "imagen_url": "logo-ecopack.png"
-            }
-        ]
-    },
-    {
-        "Transporte": [
+                "imagen": "logo-ecopack.png"
+            },
+        
+    
+    
+        
             {
                 "nombre": "Stock Logistic",
                 "pais": "United Kingdom",
-                "sector": "Transportes",
+                "sector": "Transporte",
                 "email": "support@stocklogistic.co.uk",
                 "telefono": "+44 161 234 5678",
                 "web": "https://www.stocklogistic.co.uk",
                 "direccion": "456 Warehouse St, Manchester, UK",
                 "descripcion": "Servicios logísticos completos y eficientes.",
                 "cif": "GB234567891",
-                "imagen_url": "logo-stock-logistic.png"
+                "imagen": "logo-stock-logistic.png"
             },
             {
                 "nombre": "MOLDTRANS",
                 "pais": "Holland",
-                "sector": "Transportes",
+                "sector": "Transporte",
                 "email": "info@moldtrans.nl",
                 "telefono": "+31 20 123 4567",
                 "web": "https://www.moldtrans.nl",
                 "direccion": "78 Transport Ln, Amsterdam, Netherlands",
                 "descripcion": "Líder en servicios de transporte y logística.",
                 "cif": "NL123456789",
-                "imagen_url": "logo-moldtrans.png"
+                "imagen": "logo-moldtrans.png"
             },
             {
                 "nombre": "Expotrans",
                 "pais": "España",
-                "sector": "Transportes",
+                "sector": "Transporte",
                 "email": "contact@expotrans.es",
                 "telefono": "+34 93 234 5678",
                 "web": "https://www.expotrans.es",
                 "direccion": "Avenida Logística 12, Barcelona, España",
                 "descripcion": "Especialistas en transporte y logística internacional.",
-                "cif": "ES987654123",
-                "imagen_url": "logo-expotrans.png"
+                "cif": "ES987654421",
+                "imagen": "logo-expotrans.png"
             },
             {
                 "nombre": "TransLogistics Solutions",
@@ -111,7 +110,7 @@
                 "direccion": "789 Transport Avenue, Berlin, Germany",
                 "descripcion": "Proveedor global de soluciones logísticas y de transporte eficientes.",
                 "cif": "DE123987654",
-                "imagen_url": "logo-translogistics.png"
+                "imagen": "logo-translogistics.png"
             },
             {
                 "nombre": "GlobalTransit Solutions",
@@ -123,12 +122,11 @@
                 "direccion": "55 Transit Lane, Brussels, Belgium",
                 "descripcion": "Expertos en servicios de transporte y logística a nivel mundial.",
                 "cif": "BE123456789",
-                "imagen_url": "logo-globaltransit.png"
-            }
-        ]
-    },
-    {
-        "Gestión de Residuos": [
+                "imagen": "logo-globaltransit.png"
+            },
+        
+    
+   
             {
                 "nombre": "Ecoembes",
                 "pais": "España",
@@ -139,19 +137,19 @@
                 "direccion": "Calle Reciclaje 30, Valencia, España",
                 "descripcion": "Organización sin ánimo de lucro dedicada al reciclaje de envases.",
                 "cif": "ES123456789",
-                "imagen_url": "logo-ecoembes.png"
+                "imagen": "logo-ecoembes.png"
             },
             {
                 "nombre": "Ecologistic",
                 "pais": "España",
                 "sector": "Gestión de Residuos",
-                "email": "contacto@ecologistic.es",
+                "email": "contacto@ecologisticss.es",
                 "telefono": "+34 95 234 5678",
                 "web": "https://www.ecologistic.es",
                 "direccion": "Ronda Verde 15, Sevilla, España",
                 "descripcion": "Servicios de gestión integral de residuos.",
                 "cif": "ES234567891",
-                "imagen_url": "logo-ecologistic.png"
+                "imagen": "logo-ecologistic.png"
             },
             {
                 "nombre": "Acteco",
@@ -163,19 +161,19 @@
                 "direccion": "Plaza Reciclaje 8, Bilbao, España",
                 "descripcion": "Líder en soluciones de reciclaje y gestión de residuos.",
                 "cif": "ES345678912",
-                "imagen_url": "logo-acteco.png"
+                "imagen": "logo-acteco.png"
             },
             {
                 "nombre": "EcoWaste Management",
                 "pais": "France",
                 "sector": "Gestión de Residuos",
-                "email": "info@ecowaste.fr",
+                "email": "info@ecowasted.fr",
                 "telefono": "+33 1 2345 6789",
                 "web": "https://www.ecowaste.fr",
                 "direccion": "321 Waste Management Blvd, Paris, France",
                 "descripcion": "Líder en la gestión sostenible de residuos y reciclaje.",
                 "cif": "FR456123789",
-                "imagen_url": "logo-ecowaste.png"
+                "imagen": "logo-ecowaste.png"
             },
             {
                 "nombre": "GreenWaste Solutions",
@@ -187,8 +185,8 @@
                 "direccion": "15 Eco Lane, Rome, Italy",
                 "descripcion": "Empresa líder en el manejo de residuos ecológicos y reciclaje innovador.",
                 "cif": "IT456789123",
-                "imagen_url": "logo-greenwaste.png"
+                "imagen": "logo-greenwaste.png"
             }
         ]
-    }
-]
+    
+
