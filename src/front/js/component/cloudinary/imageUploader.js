@@ -84,6 +84,7 @@ export const ImageUploader = ({ type, id, handleUpdate, setImage, image = null }
     return (
         <div className='row'>
             <div className='col-9'>
+                <p className="text-start mb-2">Imagen de Perfil</p> 
                 <form onSubmit={handleUpload}>
                     <input className="form-control form-control-sm mb-3" ref={fileInputRef} type="file" onChange={handleFileChange} />
                     <div className="float-end mb-3">
@@ -105,7 +106,7 @@ export const ImageUploader = ({ type, id, handleUpdate, setImage, image = null }
                 </form>
             </div>
             <div className='col-3'>
-                <div className="imgcontainer rounded-circle border border-2 shadow-sm" style={{ height: '100px', width: '100px' }}>
+                <div className="imgcontainer rounded-circle border border-2 shadow-sm mt-2" style={{ height: '100px', width: '100px' }}>
                     <img className="imgservicios" src={image.imageURL || "rigo-baby.jpg"} alt="Imagen" />
                 </div>
             </div>

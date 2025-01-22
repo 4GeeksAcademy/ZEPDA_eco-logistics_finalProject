@@ -9,7 +9,8 @@ const getState = ({ getStore, getActions, setStore }) => {
       companies: {},
       token: localStorage.getItem("token") || "",
       profile: JSON.parse(localStorage.getItem("profile")) || {},
-      favoriteCompanies: []
+      favoriteCompanies: [],
+      contrataciones: []
     },
     actions: {
       fetchNews: async (setLoading) => {
@@ -220,14 +221,14 @@ const getState = ({ getStore, getActions, setStore }) => {
                         setStore({
                           companies: [...currentCompanies, data],
                         });
-                        setSuccessMessage("Empresa registrada con éxito. ¡Gracias por formar parte de nuestro equipo!"); // Establece el mensaje de éxito
-                        
-                        window.scrollTo(0, 0);
+                        return true;
                     } else {
                         console.error("Failed to add company");
+                        return false;
                     }
                 } catch (error) {
                     console.error("Error:", error);
+                    return false;
                 }
       },
       // ------------------  

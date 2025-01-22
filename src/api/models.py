@@ -94,7 +94,6 @@ class Company(db.Model):
     descripcion = db.Column(db.Text, nullable=True)
     imagen_url = db.Column(db.String(200), nullable=True)
     favorited = db.relationship('Favorite', backref='company_favorite', lazy=True)
-    imagen = db.Column(db.String(200), nullable=True)
     image = db.relationship('Image', backref='company', uselist=False) # Relación uno a uno con Image
 
 

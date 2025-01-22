@@ -33,7 +33,7 @@ export const CompanyCard = ({company}) => {
         <>
             <div className="card rounded-2 shadow"> 
                 <div className="card-header border-0 bg-white rounded-2 rounded-bottom"> 
-                    <img className="img-fluid object-fit-contain rounded mx-auto d-block" src={process.env.RUTA_LOGOS + `${company.imagen_url}`+ "?raw=true"} alt={'logo: ' + process.env.RUTA_LOGOS + company.imagen_url} style={{height:'10vh'}} /> 
+                    <img className="img-fluid rounded mx-auto d-block" src={company.imagen_url ? process.env.RUTA_LOGOS + `${company.imagen_url}`+ "?raw=true" : "../zepdalogo.png"} alt={'logo: ' + company.imagen_url ? process.env.RUTA_LOGOS + `${company.imagen_url}`+ "?raw=true" : "../zepdalogo.png"} style={{height:'10vh'}} /> 
                 </div> 
                 <div className="card-body bg-light pt-0 rounded-2 rounded-top rounded-top-0"> 
                     <div className="d-flex justify-content-between">

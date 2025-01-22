@@ -42,7 +42,7 @@ export const RegistroEmpresa = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        actions.registrarCompany(formData);
+        const success = actions.registrarCompany(formData);
         // Reset form
         setFormData({
             nombre: "",
@@ -55,6 +55,10 @@ export const RegistroEmpresa = () => {
             sector: "",
             descripcion: "",
         });
+        if (success) {
+            setSuccessMessage("Empresa registrada con éxito. ¡Gracias por formar parte de nuestro equipo!");
+        }
+        window.scrollTo(0, 0);
     };
 
     return (
