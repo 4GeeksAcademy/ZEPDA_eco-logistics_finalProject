@@ -14,11 +14,11 @@ export const QuienesSomos = () => {
         <>
             <div className="container mt-4">
 
-                <div className="container">
+                <div className="container text-center">
                     <img src={somos} className="contacto-img" alt="contacto" />
                 </div>
-
-                <p className="mt-5">Somos un grupo de personas ambiciosas pero comprometidas con el medio ambiente. Por eso hemos decidido crear un lugar único donde puedas encontrar todos los servicios necesarios para que tu pequeña empresa adopte buenas prácticas amigables con nuestro planeta, para así reducir el impacto ambiental a la vez q optimizamos de manera eficiente nuestras funciones empresariales. </p>
+                <h3 className="mt-5">Zepda Eco-logistics</h3>
+                <p className="mt-2">Somos un grupo de personas ambiciosas pero comprometidas con el medio ambiente. Por eso hemos decidido crear un lugar único donde puedas encontrar todos los servicios necesarios para que tu pequeña empresa adopte buenas prácticas amigables con nuestro planeta, para así reducir el impacto ambiental a la vez q optimizamos de manera eficiente nuestras funciones empresariales. </p>
                 <p>
                     Desde Zepda Eco-logistics te animamos a formar parte de nuestro equipo y unirte a nuestra causa, tanto contratando los servicios de nuestras empresas asociadas como formando parte de nuestros clientes.
                 </p>
