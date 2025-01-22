@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Button, Modal, Tooltip, OverlayTrigger } from "react-bootstrap";
 import { HiringContration } from "../component/hiringContrarion";
+
 export const InfoEmpresa = () => {
     const location = useLocation();
     const { company } = location.state; // Extrae los datos de la empresa desde el estado
