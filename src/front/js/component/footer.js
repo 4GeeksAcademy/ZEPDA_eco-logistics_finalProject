@@ -17,8 +17,6 @@ export const Footer = () => (
 			<Link className="links" to="/registro-empresa"><p>Área de socios</p></Link>
 			<Link className="links" to="/contacto"><p>Contacto</p></Link>
 			<Link className="links" to="/quienes-somos"><p>Quiénes somos</p></Link>
-			<DeleteAllImages />
-			<ImageDeleter />
 		</div>
 
 	</footer>

@@ -1,10 +1,10 @@
 """
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
+import os
 import app
-
-from flask import Flask, request, jsonify, url_for, Blueprint, current_app
-from api.models import db, User, Company, Image
+from flask import Flask, Blueprint, request, jsonify, url_for, current_app
+from api.models import db, User, Company, Image, Favorite
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 import requests
@@ -39,7 +39,9 @@ def check(email):
 def upload_file():
     # Verificar que los datos están llegando correctamente
     file = request.files['file']
+    type = request.form.get('type')
     print(f'file: {file}')
+    print(f'type: {type}')
 
     if file and file.filename:
         print(f'Nombre del archivo: {file.filename}')
@@ -48,13 +50,13 @@ def upload_file():
         file.stream.seek(0)  # Volver al inicio del archivo después de leer el contenido
 
         # Subir el archivo a Cloudinary
-        response = upload_image(file)
+        response = upload_image(file,type)
         
         # Crear el modelo Image y añadirlo a la base de datos
         new_image = create_image(response)
 
         # Verificar que se subió correctamente
-        print(f'upload response: {response}')
+        # print(f'upload response: {response}')
         return jsonify(new_image.serialize()), 201
     else:
         return jsonify({'error': 'Archivo vacío o no seleccionado'}), 400
@@ -353,15 +355,16 @@ def add_company():
     data = request.get_json()
     print("data", data)
     new_company = Company(
-        cif=data['cif'],
         nombre=data['nombre'],
-        sector=data['sector'],
-        direccion=data['direccion'],
-        email=data['email'],
-        descripcion=data['descripcion'],
-        web=data['web'],
         pais=data['pais'],
-        telefono=data['telefono']
+        sector=data['sector'],
+        email=data['email'],
+        telefono=data['telefono'],
+        web=data['web'],
+        direccion=data['direccion'],
+        descripcion=data['descripcion'],
+        cif=data['cif'],
+        imagen_url=data['imagen']
     )
     
     db.session.add(new_company)
@@ -371,19 +374,28 @@ def add_company():
 
 @api.route('/initial-companies', methods=['GET'])
 def get_initial_companies():
-    with open("src/front/utils/initial_companies.json") as f:
-        companies = json.load(f)
+    with open('src/front/utils/mockData_Companies.json', 'r', encoding='utf-8') as file:
+        data = json.load(file)
+    
+    # Desglosamos los datos en una lista única
+    companies = []
+    for sector_dict in data:
+        for sector, company_list in sector_dict.items():
+            companies.extend(company_list)
+
+    # Creamos y subimos todas las empresas al servidor
     for company in companies:
         new_company = Company(
-            cif=company['cif'],
             nombre=company['nombre'],
-            sector=company['sector'],
-            direccion=company['direccion'],
-            email=company['email'],
-            descripcion=company['descripcion'],
-            web=company['web'],
             pais=company['pais'],
-            telefono=company['telefono']
+            sector=company['sector'],
+            email=company['email'],
+            telefono=company['telefono'],
+            web=company['web'],
+            direccion=company['direccion'],
+            descripcion=company['descripcion'],
+            cif=company['cif'],
+            imagen_url=company['imagen_url']
         )
         db.session.add(new_company)
         db.session.commit()
@@ -397,45 +409,97 @@ if __name__ == '__main__':
 
 
 
-# @api.route('/registerCompany', methods=['POST'])
-# def register_company():
+
+
+@api.route('/companies', methods=['GET'])
+def get_companies():
+    companies = Company.query.all()
+    companies_serialized = [company.serialize() for company in companies]
+    return jsonify(companies_serialized), 200
+
+
+@api.route('/companies/<int:company_id>', methods=['GET'])
+def get_company_byID(company_id):
+    company = Company.query.get(company_id)
+    if company is None:
+        return jsonify({"message": "Company not found"}), 404
+    return jsonify(company.serialize()), 200
+
+@api.route('/initialCompanies-images', methods=['GET'])
+def initialCompanies_images():
+    # Leer el archivo JSON y devolverlo como respuesta
+    with open('src/front/utils/mockData_Companies.json', 'r', encoding='utf-8') as file:
+        data = json.load(file)
+    return jsonify(data), 200
+
+
+# @api.route('/initialCompanies-images', methods=['POST'])
+# def initialCompanies_images():
+#     # Leer el archivo JSON
+#     with open('src/front/utils/mockData_Companies.json', 'r', encoding='utf-8') as file:
+#         data = json.load(file)
     
-#     body = request.get_json()
-#     company_nif = body.get('nif', None)
-#     company_nombre = body.get('nombre', None)
-#     company_sector = body.get('sector', None)
-#     company_direccion = body.get('direccion', None)
-#     company_email = body.get('email', None)
-#     company_descripcion = body.get('descripcion', None)
-#     company_web= body.get('web', None)
-#     company_contraseña = body.get('contraseña', None)
-#     company_certificado = body.get('certificado', None)
-#     if company_nombre is None or company_email is None or company_contraseña is None:
-#         return {'message': 'Missing arguments'}      
-#     bpassword = bytes(company_contraseña, 'utf-8')
-#     salt = bcrypt.gensalt(14)
-#     hashed_password = bcrypt.hashpw(password=bpassword, salt=salt)       
-#     user = Company(company_nif, company_nombre, company_sector, company_direccion, company_email, company_descripcion, company_web, hashed_password.decode('utf-8'), company_certificado)    
-#     #return {'message': f'nombre: {user.nombre} email: {user.email} contraseña: {contraseña}'}
-#     db.session.add(user)
-#     db.session.commit()
-#     return {'message': f'User {user.email} was created'}
-
-# @api.route('/profile/companies', methods=['GET'])
-# def get_companies():
-#     """Obtiene todas las compañías"""
-#     companies = Company.query.all()
-#     companies_serialized = [company.serialize() for company in companies]
-#     return jsonify(companies_serialized), 200
+#     # Recoge las rutas de las imágenes y las asocia a cada empresa
+#     for sector_dict in data:
+#         for sector, company_list in sector_dict.items():
+#             for company in company_list:
+#                 image_path = company.get('imagen')
+#                 if image_path:
+#                     # Simulación de carga de imagen
+#                     with open('src/front/img/logos/'+image_path, 'rb') as img_file:
+#                         files = {'file': img_file}
+#                         response = requests.post(os.environ.get('BACKEND_URL')+'upload', files=files, data={'type': 'company'})
+#                         print(response)
+#                         if response.status_code == 201:
+#                             image_data = response.json()
+#                             # Asociar la imagen a la empresa
+#                             requests.put(os.environ.get('BACKEND_URL')+'associate_image', data={
+#                                 'type': 'company',
+#                                 'id': company['id'],
+#                                 'image_id': image_data['id']
+#                             })
+    
+#     return jsonify({"message": "Images associated successfully"}), 200
 
 
-# @api.route('/profile/companies/<int:company_id>', methods=['GET'])
-# def get_company(company_id):
-#     """Obtiene una compañía por ID"""
-#     company = Company.query.get(company_id)
-#     if company is None:
-#         return jsonify({"message": "Company not found"}), 404
-#     return jsonify(company.serialize()), 200
+
+
+#FAVORITOS
+
+@api.route("/favorites", methods=["POST"])
+def add_favorite():
+    body = request.get_json()
+    user_id = body.get("user_id")
+    company_id = body.get("company_id")
+
+    favorite = Favorite(user_id=user_id, company_id=company_id)
+    db.session.add(favorite)
+    db.session.commit()
+
+    return jsonify(favorite.serialize()), 201
+
+
+@api.route("/favorites", methods=["GET"])
+def get_favorites():
+    favorites = Favorite.query.all()
+    favorites_serialized = [favorite.serialize() for favorite in favorites]
+    return jsonify(favorites_serialized), 200
+
+
+
+@api.route("/favorites/<int:id>", methods=["DELETE"])   
+def remove_favorite():
+    data = request.get_json()
+    company_id = data.get('company_id')
+    user_id = data.get('user_id')
+    
+    favorite = Favorite.query.filter_by(company_id=company_id, user_id=user_id).first()
+    if not favorite:
+        return jsonify({"message": "Favorite not found"}), 404
+
+    db.session.delete(favorite)
+    db.session.commit()
+    return jsonify({"message": "Favorite removed successfully"}), 200
 
 
 # @api.route('/profile/companies', methods=['POST'])

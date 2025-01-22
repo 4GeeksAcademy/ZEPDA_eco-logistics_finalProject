@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { CompanyCard } from "../component/companyCard";
 import { Context } from '../store/appContext';
 
@@ -11,7 +11,16 @@ export const CompanyCarousel = ({sector, isGrid}) => {
     // Component Logic Variables
     const [currentIndex, setCurrentIndex] = useState(0); 
     const totalItems = sectorCompanies.length - 2; // los que hay -2
-    const itemsToShow = 3; 
+    const [itemsToShow, setItemsToShow] = useState(3); 
+
+    useEffect(() => {
+        if (sectorCompanies.length < 3) {
+            setItemsToShow(1);
+            console.log(itemsToShow);
+        } else {
+            setItemsToShow(3);
+        }
+    }, [])
     
     const handleMoveCarousel = (direction) => { 
         const newIndex = (currentIndex + direction + totalItems) % totalItems; 
@@ -53,8 +62,8 @@ export const CompanyCarousel = ({sector, isGrid}) => {
                             {
                                 sectorCompanies ? (
                                         sectorCompanies.map((company, index) => (
-                                            <div className="col-4 p-3"> 
-                                                <CompanyCard key={index} company={company} />
+                                            <div className="col-4 p-3" key={index}> 
+                                                <CompanyCard company={company} />
                                             </div>
                                         )
                                     )
@@ -75,8 +84,8 @@ export const CompanyCarousel = ({sector, isGrid}) => {
                             {
                                 sectorCompanies ? (
                                         sectorCompanies.map((company, index) => (
-                                            <div className="col-4 p-3"> 
-                                                <CompanyCard key={index} company={company} />
+                                            <div className="col-4 p-3" key={index}> 
+                                                <CompanyCard company={company} />
                                             </div>
                                         )
                                     )

@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import imagenRegistro from "../../img/zepda-web-img/registro_empresa.webp";
+import { Context } from '../store/appContext';
 
 export const RegistroEmpresa = () => {
+    const {actions} = useContext(Context);
     const [formData, setFormData] = useState({
         nombre: "",
         email: "",
@@ -40,38 +42,23 @@ export const RegistroEmpresa = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            const response = await fetch(process.env.BACKEND_URL + "api/companies/add", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(formData)
-            });
-            if (response.ok) {
-                const data = await response.json();
-                console.log("Company added:", data);
-                setSuccessMessage("Empresa registrada con éxito. ¡Gracias por formar parte de nuestro equipo!"); // Establece el mensaje de éxito
-                // Reset form
-                setFormData({
-                    nombre: "",
-                    email: "",
-                    direccion: "",
-                    pais: "",
-                    telefono: "",
-                    cif: "",
-                    web: "",
-                    sector: "",
-                    descripcion: "",
-                    
-                });
-                window.scrollTo(0, 0);
-            } else {
-                console.error("Failed to add company");
-            }
-        } catch (error) {
-            console.error("Error:", error);
+        const success = actions.registrarCompany(formData);
+        // Reset form
+        setFormData({
+            nombre: "",
+            email: "",
+            direccion: "",
+            pais: "",
+            telefono: "",
+            cif: "",
+            web: "",
+            sector: "",
+            descripcion: "",
+        });
+        if (success) {
+            setSuccessMessage("Empresa registrada con éxito. ¡Gracias por formar parte de nuestro equipo!");
         }
+        window.scrollTo(0, 0);
     };
 
     return (
@@ -109,9 +96,9 @@ export const RegistroEmpresa = () => {
                         <input type="text" className="form-control mt-3" name="web" value={formData.web} onChange={handleChange} placeholder="Sitio Web" required />
                         <select className="form-control mt-3" name="sector" value={formData.sector} onChange={handleChange} required>
                             <option value="">Selecciona tu sector</option>
-                            <option value="packaging">Packaging</option>
-                            <option value="transporte">Transporte</option>
-                            <option value="residuos">Gestión de residuos</option>
+                            <option value="Packaging">Packaging</option>
+                            <option value="Transportes">Transporte</option>
+                            <option value="Gestión de Residuos">Gestión de residuos</option>
                         </select>
                         <label htmlFor="logo" className="form-label mt-3">Logotipo</label>
                         <input type="file" className="form-control mt-3" id="logo" name="logo" accept="image/png, image/jpeg" onChange={handleFileChange} />

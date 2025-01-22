@@ -22,7 +22,7 @@
                 "direccion": "45 Innovation Blvd, Paris, France",
                 "descripcion": "Empresa dedicada a ofrecer soluciones de embalaje sostenible.",
                 "cif": "FR987654322",
-                "imagen": "logo-naitec-automotive.png"
+                "imagen": "https://github.com/4GeeksAcademy/ZEPDA_eco-logistics_finalProject/blob/dev2/src/front/img/logos/logo-naitec-automotive.png?raw=true"
             },
             {
                 "nombre": "PackBenefit",

@@ -9,7 +9,8 @@ const getState = ({ getStore, getActions, setStore }) => {
       companies: {},
       token: localStorage.getItem("token") || "",
       profile: JSON.parse(localStorage.getItem("profile")) || {},
-      favoriteCompanies: []
+      favoriteCompanies: [],
+      contrataciones: []
     },
     actions: {
       fetchNews: async (setLoading) => {
@@ -29,10 +30,11 @@ const getState = ({ getStore, getActions, setStore }) => {
         }
       },
       // --- CLOUDINARY ---
-      uploadImage: async (file) => {
+      uploadImage: async (file,type) => {
         const store = getStore();
         const formData = new FormData();
         formData.append('file', file);
+        formData.append('type', type);
       
         try {
           const response = await fetch(`${process.env.BACKEND_URL}api/upload`, {
@@ -180,6 +182,56 @@ const getState = ({ getStore, getActions, setStore }) => {
           console.log(error);
         }
       },
+      getDummyCompanies: async () => {
+        try {
+          // Fetch data from the server
+          const response = await fetch(`${process.env.BACKEND_URL}api/companies`, { method: 'GET' }); 
+          const data = await response.json();
+      
+          // Restructurar los datos para almacenarlos como un objeto separado por sectores
+          const companies = data.reduce((acc, company) => {
+            const sector = company.sector;
+            if (!acc[sector]) {
+              acc[sector] = [];
+            }
+            acc[sector].push(company);
+            return acc;
+          }, {});
+          console.log(companies);
+      
+          // Actualizar el store con los datos reestructurados
+          setStore({ companies });
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      registrarCompany: async (formData) => {
+        try {
+                    const response = await fetch(process.env.BACKEND_URL + "api/companies/add", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(formData)
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log("Company added:", data);
+                        const currentCompanies = getStore().companies;
+                        setStore({
+                          companies: [...currentCompanies, data],
+                        });
+                        return true;
+                    } else {
+                        console.error("Failed to add company");
+                        return false;
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    return false;
+                }
+      },
+      // ------------------  
       saveUserData: (user, token) => {
         localStorage.setItem("profile", JSON.stringify(user));
         localStorage.setItem("token", token);
@@ -413,6 +465,21 @@ const getState = ({ getStore, getActions, setStore }) => {
         const updatedFavorites = store.favoriteCompanies.filter(fav => fav.id !== company.id);
         setStore({ favoriteCompanies: updatedFavorites });
       },
+      createUser: async (user) => {
+        try {
+          const resp = await fetch(process.env.BACKEND_URL + "api/register", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(user),
+          });
+          const data = await resp.json();
+          return true;
+        } catch (err) {
+          console.log("Error sending customer to back backend", err);
+        }
+      },
       createCompany: async (user1) => {
         try {
           const resp = await fetch(process.env.BACKEND_URL + "api/registerCompany", {
@@ -427,8 +494,127 @@ const getState = ({ getStore, getActions, setStore }) => {
         } catch (err) {
           console.log("Error sending customer to back backend", err);
         }
-      }
+      },
+      associateInitialCompaniesImages: async () => {
+          try {
+              // Fetch data from the server
+              const response = await fetch(process.env.BACKEND_URL + 'api/initialCompanies-images', {
+                  method: 'GET',
+                  headers: {
+                      'Content-Type': 'application/json'
+                  }
+              });
+      
+              if (response.ok) {
+                  const data = await response.json();
+                              
+                  // Procesar las imágenes en el frontend
+                  for (const sector_dict of data) {
+                      for (const sector in sector_dict) {
+                          const companyList = sector_dict[sector];
+                          for (const company of companyList) {
+                              const imagePath = `src/front/img/logos/${company.imagen}`;
+
+                              // Crear un FormData para la carga de archivos
+                              const formData = new FormData();
+                              formData.append('file', imagePath);
+                              formData.append('type', 'company');
+      
+                              // Subir la imagen al servidor
+                              const uploadResponse = await fetch(process.env.BACKEND_URL + 'api/upload', {
+                                  method: 'POST',
+                                  body: formData
+                              });
+      
+                              if (uploadResponse.ok) {
+                                  const imageData = await uploadResponse.json();
+                                  console.log(imageData);
+      
+                                  // Asociar la imagen a la empresa
+                                  await fetch(process.env.BACKEND_URL + 'api/associate_image', {
+                                      method: 'PUT',
+                                      headers: {
+                                          'Content-Type': 'application/x-www-form-urlencoded'
+                                      },
+                                      body: new URLSearchParams({
+                                          'type': 'company',
+                                          'id': company.id,
+                                          'image_id': imageData.id
+                                      })
+                                  });
+                              }
+                          }
+                      }
+                  }
+      
+                  console.log('Images associated successfully');
+                  // Puedes actualizar el store con el resultado, si es necesario
+                  // setStore({ imagesAssociated: true });
+              } else {
+                  console.error('Failed to fetch initial companies:', response.statusText);
+              }
+          } catch (error) {
+              console.error('Error associating images:', error);
+          }
+      },
+      addFavorite: (company, user) => {
+        try {
+          const resp = fetch(process.env.BACKEND_URL + "api/favorites", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({company_id: company, user_id: user }),
+          });
+          const data = resp.json();
+          return true;
+        }catch(err){
+          console.log("Error sending favorite to back backend", err);
+        }
+  
+      },
+
+      removeFavorite: async (company, user) => {
+        const store = getStore();
+        try {
+            const resp = await fetch(process.env.BACKEND_URL + `api/favorites`, {
+                method: "DELETE",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: "Bearer " + store.token,
+                },
+                body: JSON.stringify({ company_id: company, user_id: user }),
+            });
+            if (resp.ok) {
+                const data = await resp.json();
+                return true;
+            } else {
+                console.error("Failed to remove favorite");
+                return false;
+            }
+        } catch (err) {
+            console.log("Error removing favorite from backend", err);
+            return false;
+        }
+    },
+
+      getFavorites: async (id) => {
+        try {
+          const resp = await fetch(process.env.BACKEND_URL + "api/favorites/"+id, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          const data = await resp.json();
+          return data;
+        } catch (err) {
+          console.log("Error sending customer to back backend", err);
+        }
+      },
+    
     }
+   
   };
 };
 
