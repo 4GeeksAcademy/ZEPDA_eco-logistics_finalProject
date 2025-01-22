@@ -4,7 +4,7 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 import os
 import app
 from flask import Flask, Blueprint, request, jsonify, url_for, current_app
-from api.models import db, User, Company, Image, Favorite
+from api.models import Hirings, db, User, Company, Image, Favorite
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 import requests
@@ -500,6 +500,61 @@ def remove_favorite():
     db.session.delete(favorite)
     db.session.commit()
     return jsonify({"message": "Favorite removed successfully"}), 200
+
+
+
+# #***********************************CONTRATACIONES***********************************************
+
+@api.route('/hirings', methods=['POST'])
+def add_hiring():
+    body = request.get_json()
+    user_id = body.get("user_id")
+    company_id = body.get("company_id")
+
+    hiring = Hirings(user_id=user_id, company_id=company_id)
+    db.session.add(hiring)
+    db.session.commit()
+
+    return jsonify(hiring.serialize()), 201
+
+
+@api.route('/hirings', methods=['GET'])
+def get_hirings():
+    hirings = Hirings.query.all()
+    hirings_serialized = [hiring.serialize() for hiring in hirings]
+    return jsonify(hirings_serialized), 200
+
+
+@api.route('/hirings/<int:id>', methods=['DELETE'])
+def remove_hiring(id):
+    hiring = Hirings.query.get(id)
+    if not hiring:
+        return jsonify({"message": "Hiring not found"}), 404
+
+    db.session.delete(hiring)
+    db.session.commit()
+    return jsonify({"message": "Hiring removed successfully"}), 200
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # @api.route('/profile/companies', methods=['POST'])

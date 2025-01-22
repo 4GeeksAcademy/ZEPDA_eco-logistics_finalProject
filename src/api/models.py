@@ -44,6 +44,29 @@ class Favorite(db.Model):
               "user_id": self.user_id,
               "company_id": self.company_id
        }
+    
+
+
+
+    
+#***********************************CONTRATACIONES***********************************************
+
+
+
+class Hirings(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    company_id = db.Column(db.Integer, db.ForeignKey('company.id'))
+
+    def __repr__(self):
+        return f'<Hiring {self.id}>'
+
+    def serialize(self):
+       return{
+              "id": self.id,
+              "user_id": self.user_id,
+              "company_id": self.company_id
+       }
                            
 
 #*******************************************USER***************************************************
@@ -57,6 +80,7 @@ class User(db.Model):
     descripcion = db.Column(db.String(500), unique=False, nullable=True)
     esta_activo = db.Column(db.Boolean(), unique=False, nullable=False)
     favorite_company = db.relationship('Favorite', backref='users_favorite', lazy=True)
+    hired_company = db.relationship('Hirings', backref='users_hired', lazy=True)
 
     image = db.relationship('Image', backref='user', uselist=False) # Relación uno a uno con Image
 
@@ -94,6 +118,7 @@ class Company(db.Model):
     descripcion = db.Column(db.Text, nullable=True)
     imagen_url = db.Column(db.String(200), nullable=True)
     favorited = db.relationship('Favorite', backref='company_favorite', lazy=True)
+    hired = db.relationship('Hirings', backref='company_hired', lazy=True)
     image = db.relationship('Image', backref='company', uselist=False) # Relación uno a uno con Image
 
 
