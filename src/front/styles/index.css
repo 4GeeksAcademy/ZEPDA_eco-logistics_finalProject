@@ -331,4 +331,12 @@ footer{
   background-color: #dcdcdc; 
   cursor: not-allowed;
 }
-
+.card-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2; /* Mostrar solo 3 líneas */
+  overflow: hidden;
+  font-size: 0.875rem;
+  flex-grow: 1;
+  text-overflow: ellipsis;
+}

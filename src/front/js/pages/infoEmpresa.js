@@ -1,42 +1,74 @@
 import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
+import { Button, Modal, Tooltip, OverlayTrigger } from "react-bootstrap";
+import { HiringContration } from "../component/hiringContrarion";
 
 export const InfoEmpresa = () => {
+    const location = useLocation();
+    const { company } = location.state; // Extrae los datos de la empresa desde el estado
+    const [show, setShow] = useState(false);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-    
-    };
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+    const token = localStorage.getItem("token");
+    const isLoggedIn = !!token;
+
+    const disabledMessage = "Necesitas loguearte para contratar servicios";
 
     return (
-        <>
-            <div className="container d-flex justify-content-center align-items-center mt-5">
-                <div className="card p-4 shadow-lg" style={{ maxWidth: "1000px", width: "100%" }}>
-                    <div className="d-flex justify-content-center">
-                        <img src="logo-itene-research.png" alt="ITENE Research Center Logo" style={{ maxWidth: "300px" }}/>
-                    </div>
-                    <div className="text-left mb-4">
-                        <div className="mb-4">
-                        <h3 className="mb-4">ITENE RESEARCH CENTER</h3>
-                        <h5>https://www.iteneuk.co.uk</h5>
+        <div className="container mt-5">
+            <h1 className="text-center">Información de la Empresa</h1>
+            <div className="company-details shadow p-3 mb-5 bg-white rounded mx-auto" style={{ maxWidth: '600px' }}>
+                <img
+                    src={company.imagen_url ? process.env.RUTA_LOGOS + `${company.imagen_url}` + "?raw=true" : "../zepdalogo.png"}
+                    alt={company.imagen_url ? 'logo: ' + process.env.RUTA_LOGOS + `${company.imagen_url}` + "?raw=true" : "../zepdalogo.png"}
+                    style={{ height: '150px', width: 'auto', maxWidth: '100%' }}
+                />
+                <h2 className="text-center">{company.nombre}</h2>
+                <p><strong>País:</strong> {company.pais}</p>
+                <p><strong>Descripción:</strong> {company.descripcion}</p>
+                <p><strong>Teléfono:</strong> {company.telefono}</p>
+                <p><strong>Web:</strong> <a href={company.web} target="_blank" rel="noopener noreferrer">{company.web}</a></p>
+                <p><strong>CIF:</strong> {company.cif}</p>
+                <p><strong>Dirección:</strong> {company.direccion}</p>
+
+                {!isLoggedIn ? (
+                    <OverlayTrigger
+                        placement="top"
+                        overlay={<Tooltip id="tooltip-disabled">{disabledMessage}</Tooltip>}
+                    >
+                        <div>
+                            <Button
+                                variant="secondary"
+                                onClick={handleShow}
+                                className="d-block mx-auto"
+                                disabled
+                            >
+                                Contratar Servicio
+                            </Button>
                         </div>
-                        <p>123 Packaging Ave, London, UK</p>
-                        <p>London</p>
-                        <p>United Kingdom</p>
-                        <p>+44 20 1234 5678</p>
-                        <p>contact@iteneuk.co.uk</p>
-                        <p>Centro líder en investigación y desarrollo de soluciones innovadoras de embalaje.</p>
-                        <button className="btn mt-5">Contratar Servicios</button>
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                    </div>
-                </div>
+                    </OverlayTrigger>
+                ) : (
+                    <Button
+                        variant="btn btn"
+                        onClick={handleShow}
+                        className="d-block mx-auto"
+                    >
+                        Contratar Servicio
+                    </Button>
+                )}
             </div>
-            
-        </>
+
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Contratación de Servicios</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <HiringContration handleClose={handleClose} />
+                </Modal.Body>
+            </Modal>
+        </div>
     );
 };
+

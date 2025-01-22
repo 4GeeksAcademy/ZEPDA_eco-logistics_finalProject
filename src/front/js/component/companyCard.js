@@ -1,16 +1,12 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { Context } from "../store/appContext";
-import naiteclogo from "../../img/naitec-logo.png"
-
+import { useNavigate } from "react-router-dom"; // Importa el hook useNavigate de React Router
 
 
 
 export const CompanyCard = ({company}) => {
+    const navigate = useNavigate();
 
-    
-    const navigateToQuienesSomos = () => {
-        window.location.href = "/info-empresa";
-    };
 
     const { actions,store } = useContext(Context);
     const [isFavorite, setIsFavorite] = useState(false);
@@ -28,7 +24,11 @@ export const CompanyCard = ({company}) => {
         }
         setIsFavorite(!isFavorite);
     }
-
+    
+    const navigateToQuienesSomos = () => {
+        // Aquí pasamos los datos de la empresa como estado
+        navigate("/info-empresa", { state: { company } });
+    };
     return (
         <>
             <div className="card rounded-2 shadow"> 
@@ -45,9 +45,7 @@ export const CompanyCard = ({company}) => {
                         <div className="fs-1 rounded-pill icon-hover clickable" onClick={() => handleAddFavorite(company,company.id)}>
                             <i className={isFavorite ? "fa-solid fa-heart text-success" : "fa-regular fa-heart"} />
                         </div>
-                    </div>
-
-                    
+                    </div> 
                     <button className="btn btn-success rounded-pill float-start" onClick={navigateToQuienesSomos}>info</button>
                 </div> 
             </div> 

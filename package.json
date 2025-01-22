@@ -75,6 +75,8 @@
 	"dependencies": {
 		"@cloudinary/react": "^1.13.1",
 		"@cloudinary/url-gen": "^1.21.0",
+		"@react-google-maps/api": "^2.20.5",
+		"axios": "^1.7.9",
 		"bootstrap": "^5.3.3",
 		"emailjs-com": "^3.2.0",
 		"jwt-decode": "^4.0.0",
