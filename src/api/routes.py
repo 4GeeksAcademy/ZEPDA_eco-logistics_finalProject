@@ -372,11 +372,11 @@ def add_company():
     return jsonify(new_company.serialize()), 201
 
 
-@api.route('/initial-companies', methods=['GET'])
+@api.route('/initial-companies', methods=['POST'])
 def get_initial_companies():
-    with open('src/front/utils/mockData_Companies.json', 'r', encoding='utf-8') as file:
-        data = json.load(file)
-    
+    # with open('src/front/utils/mockData_Companies.json', 'r', encoding='utf-8') as file:
+    #     data = json.load(file)
+    data = request.get_json()
     # Desglosamos los datos en una lista única
     companies = []
     for sector_dict in data:
