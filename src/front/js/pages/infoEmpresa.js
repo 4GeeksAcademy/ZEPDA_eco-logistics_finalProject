@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Button, Modal, Tooltip, OverlayTrigger } from "react-bootstrap";
 import { HiringContration } from "../component/hiringContrarion";
+
 export const InfoEmpresa = () => {
     const location = useLocation();
     const { company } = location.state; // Extrae los datos de la empresa desde el estado
@@ -18,8 +19,8 @@ export const InfoEmpresa = () => {
     return (
         <div className="container mt-5">
             <h1 className="text-center">Información de la Empresa</h1>
-            <div className="company-details shadow p-3 mb-5 bg-white rounded mx-auto" style={{ maxWidth: '600px' }}>
-                <img src={'../' + company.logo} alt={`Logo de ${company.nombre}`} style={{ height: '150px' }} />
+            <div className="company-details shadow p-3 mb-5 bg-white rounded mx-auto" style={{ maxWidth: '600px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                <img src={'../' + company.logo} alt={`Logo de ${company.nombre}`} style={{ height: '150px', maxWidth: '100%', objectFit: 'contain' }} />
                 <h2 className="text-center">{company.nombre}</h2>
                 <p><strong>País:</strong> {company.pais}</p>
                 <p><strong>Ubicación:</strong> {company.ubicacion}</p>
