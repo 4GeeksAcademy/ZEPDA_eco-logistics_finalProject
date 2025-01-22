@@ -29,6 +29,7 @@ export const InfoEmpresa = () => {
                 <p><strong>País:</strong> {company.pais}</p>
                 <p><strong>Descripción:</strong> {company.descripcion}</p>
                 <p><strong>Teléfono:</strong> {company.telefono}</p>
+                <p><strong>Email:</strong> {company.email}</p>
                 <p><strong>Web:</strong> <a href={company.web} target="_blank" rel="noopener noreferrer">{company.web}</a></p>
                 <p><strong>CIF:</strong> {company.cif}</p>
                 <p><strong>Dirección:</strong> {company.direccion}</p>
