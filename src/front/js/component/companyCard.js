@@ -5,15 +5,26 @@ import naiteclogo from "../../img/naitec-logo.png"
 
 
 
-export const CompanyCard = ({company}) => {
+export const CompanyCard = ({company, favoritedItem=false}, onRemoveFavorite) => {
+
+
+
+  
 
     
-    const navigateToQuienesSomos = () => {
+    const navigateToInfoEmpresa = () => {
         window.location.href = "/info-empresa";
     };
 
     const { actions,store } = useContext(Context);
-    const [isFavorite, setIsFavorite] = useState(false);
+    const [isFavorite, setIsFavorite] = useState(favoritedItem);
+    
+
+    useEffect(() => {
+        // Verifica si esta empresa está en el array de favoritos
+        const isFavorited = store.favoriteCompanies.some(fav => fav.id === company.id);
+        setIsFavorite(isFavorited);
+    }, [store.favoriteCompanies, company.id]);
 
     const handleAddFavorite = (company, id) => {
         if (!isFavorite) {
@@ -25,6 +36,10 @@ export const CompanyCard = ({company}) => {
             // actions.removeFavoriteCompany(company);
             actions.removeFavorite(id, store.profile.id);
             console.log('Removed from favorites');
+
+            if (onRemoveFavorite) {
+                onRemoveFavorite(id); // Notifica a FavoritesPanel que debe eliminar la empresa
+            }
         }
         setIsFavorite(!isFavorite);
     }
@@ -48,7 +63,7 @@ export const CompanyCard = ({company}) => {
                     </div>
 
                     
-                    <button className="btn btn-success rounded-pill float-start" onClick={navigateToQuienesSomos}>info</button>
+                    <button className="btn btn-success rounded-pill float-start" onClick={navigateToInfoEmpresa}>info</button>
                 </div> 
             </div> 
         </>

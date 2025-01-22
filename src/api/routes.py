@@ -479,15 +479,17 @@ def add_favorite():
     return jsonify(favorite.serialize()), 201
 
 
-@api.route("/favorites", methods=["GET"])
-def get_favorites():
-    favorites = Favorite.query.all()
-    favorites_serialized = [favorite.serialize() for favorite in favorites]
-    return jsonify(favorites_serialized), 200
+@api.route("/favorites/<int:id>", methods=["GET"])
+def get_favorites(id):
+    favorites = db.session.query(Favorite).join(Company).filter(Favorite.user_id==id).all()
+    favorited_ids = [favorite.company_id for favorite in favorites]
+    companies = Company.query.filter(Company.id.in_(favorited_ids)).all()
+    companies_serialize = [company.serialize() for company in companies]
+    return jsonify(companies_serialize), 200
 
 
 
-@api.route("/favorites/<int:id>", methods=["DELETE"])   
+@api.route("/favorites/delete", methods=["POST"])   
 def remove_favorite():
     data = request.get_json()
     company_id = data.get('company_id')
@@ -533,7 +535,7 @@ def remove_hiring(id):
 
     db.session.delete(hiring)
     db.session.commit()
-    return jsonify({"message": "Hiring removed successfully"}), 200
+    return jsonify({"message": "Hiring removed successfully"}), 200 
 
 
 
