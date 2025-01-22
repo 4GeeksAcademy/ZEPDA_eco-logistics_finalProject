@@ -36,7 +36,7 @@ export const CompanyCarousel = ({sector, isGrid}) => {
         switch(sectorId){
             case 'Packaging':
                 return <img className="imgservicios" src="../packaging-sostenible.webp" alt="img-packaging" />;
-            case 'Transporte':
+            case 'Transportes':
                 return <img className="imgservicios" src="../furgonetas-w.webp" alt="img-transporte" />;
             case 'Gestión de Residuos':
                 return <img className="imgservicios" src="../1533057826357.jpeg" alt="img-gestion-residuos" />;
