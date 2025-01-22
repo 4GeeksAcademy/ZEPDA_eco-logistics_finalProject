@@ -12,9 +12,6 @@ export const CompanyCard = ({company, favoritedItem=false}, onRemoveFavorite) =>
     const navigate = useNavigate();
 
     
-    const navigateToQuienesSomos = () => {
-        window.location.href = "/info-empresa";
-    };
 
     const { actions,store } = useContext(Context);
     const [isFavorite, setIsFavorite] = useState(favoritedItem);
