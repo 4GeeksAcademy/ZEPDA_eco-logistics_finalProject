@@ -144,7 +144,7 @@ def delete_image_endpoint(public_id):
 # ------------------
 
 
-@api.route('/test-email', methods=['GET'])
+@api.route('/test-email', methods=['POST'])
 def test_email():
     from app import mail
     try: 
@@ -345,11 +345,6 @@ def check_email():
     else:
         return jsonify({'exists': False})  # El correo no está registrado
     
-
-
-
-
-
 @api.route('/companies/add', methods=['POST'])
 def add_company():
     data = request.get_json()

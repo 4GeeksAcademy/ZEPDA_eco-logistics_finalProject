@@ -54,11 +54,7 @@ export const CompanyCard = ({ company, favoritedItem = false }, onRemoveFavorite
                                 <i className={isFavorite ? "fa-solid fa-heart text-success" : "fa-regular fa-heart"} />
                             </div>
                         )}
-
-
                     </div>
-
-
                     <button className="btn btn-success rounded-pill float-start" onClick={navigateToInfoEmpresa}>info</button>
                 </div>
             </div>

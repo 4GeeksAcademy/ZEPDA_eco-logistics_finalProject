@@ -66,7 +66,7 @@ export const InfoEmpresa = () => {
                     <Modal.Title>Contratación de Servicios</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <HiringContration handleClose={handleClose} />
+                    <HiringContration handleClose={handleClose} company={company}/>
                 </Modal.Body>
             </Modal>
         </div>
