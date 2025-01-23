@@ -1,16 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { Context } from "../store/appContext";
 import { HiringElement } from "./hiringElement";
 
 export const HiringsPanel = () => {
     const [elements, setElements] = useState([]);
+    const { store, actions } = useContext(Context);
 
     useEffect(() => {
-        const newElements = []; 
-        for (let i = 0; i < 10; i++) { 
-            newElements.push(<HiringElement key={i} num={i} />); 
-        } 
-        setElements(newElements);
-    }, [])
+        const fetchHirings = async () => {
+            await actions.getHirings(store.profile.id);
+            
+            const contrataciones = store.contrataciones.map((company, index) => (
+                <HiringElement key={index} num={index} company={company} />
+            ));
+            setElements(contrataciones);
+        };
+
+        fetchHirings();
+    }, []);
 
     return (
         <>

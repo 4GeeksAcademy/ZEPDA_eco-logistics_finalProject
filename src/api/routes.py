@@ -512,7 +512,7 @@ def add_hiring():
     body = request.get_json()
     user_id = body.get("user_id")
     company_id = body.get("company_id")
-
+    
     hiring = Hirings(user_id=user_id, company_id=company_id)
     db.session.add(hiring)
     db.session.commit()

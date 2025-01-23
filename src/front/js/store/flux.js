@@ -620,22 +620,29 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 
 
-      addHiring: (company, user) => {
+      addHiring: async (company, user) => {
         try {
-          const resp = fetch(process.env.BACKEND_URL + "api/hirings", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({company_id: company, user_id: user }),
-          });
-          const data = resp.json();
-          return true;
-        }catch(err){
-          console.log("Error sending hiring to back backend", err);
+            const resp = await fetch(process.env.BACKEND_URL + "/api/hirings", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ company_id: company, user_id: user }),
+            });
+    
+            if (resp.ok) {
+                const data = await resp.json();
+                console.log("Contratación añadida:", data);
+                return true;
+            } else {
+                console.error("Error al añadir contratación:", await resp.json());
+                return false;
+            }
+        } catch (err) {
+            console.error("Error enviando contratación al backend:", err);
+            return false;
         }
-  
-      },
+    },
 
       removeHiring: async (companyId, userId) => {
         const store = getStore();
@@ -666,23 +673,28 @@ const getState = ({ getStore, getActions, setStore }) => {
     },
 
       getHirings: async (id) => {
+
+        const store = getStore();
+        console.log(id)
         try {
+          
           const resp = await fetch(process.env.BACKEND_URL + "api/hirings/"+id, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
+              Authorization: "Bearer " + store.token
             },
           });
           const data = await resp.json();
           setStore({ contrataciones: data });
-          
+          console.log(data);
         } catch (err) {
           console.log("Error sending customer to backend", err);
         }
       },
 
 
-      
+
 
       loadInitialCompanies: async () => {
         try {
