@@ -618,6 +618,84 @@ const getState = ({ getStore, getActions, setStore }) => {
         }
       },
 
+
+
+      addHiring: async (company, user) => {
+        try {
+            const resp = await fetch(process.env.BACKEND_URL + "/api/hirings", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ company_id: company, user_id: user }),
+            });
+    
+            if (resp.ok) {
+                const data = await resp.json();
+                console.log("Contratación añadida:", data);
+                return true;
+            } else {
+                console.error("Error al añadir contratación:", await resp.json());
+                return false;
+            }
+        } catch (err) {
+            console.error("Error enviando contratación al backend:", err);
+            return false;
+        }
+    },
+
+      removeHiring: async (companyId, userId) => {
+        const store = getStore();
+        try {
+            const resp = await fetch(`${process.env.BACKEND_URL}api/hirings/delete`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + store.token,
+                },
+                body: JSON.stringify({ company_id: companyId, user_id: userId }),
+            });
+            if (resp.ok) {
+                const updatedHirings = store.contrataciones.filter(
+                    (company) => company.id !== companyId
+                );
+                setStore({ contrataciones: updatedHirings }); // Actualiza el store
+                console.log(`Removed company with ID ${companyId} from hirings.`);
+                return true;
+            } else {
+                console.error("Failed to remove hiring");
+                return false;
+            }
+        } catch (err) {
+            console.log("Error removing hiring from backend", err);
+            return false;
+        }
+    },
+
+      getHirings: async (id) => {
+
+        const store = getStore();
+        console.log(id)
+        try {
+          
+          const resp = await fetch(process.env.BACKEND_URL + "api/hirings/"+id, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + store.token
+            },
+          });
+          const data = await resp.json();
+          setStore({ contrataciones: data });
+          console.log(data);
+        } catch (err) {
+          console.log("Error sending customer to backend", err);
+        }
+      },
+
+
+
+
       loadInitialCompanies: async () => {
         try {
           const response = await fetch(process.env.BACKEND_URL + "api/companies", { method: 'GET' });

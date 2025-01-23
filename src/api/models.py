@@ -80,7 +80,7 @@ class User(db.Model):
     descripcion = db.Column(db.String(500), unique=False, nullable=True)
     esta_activo = db.Column(db.Boolean(), unique=False, nullable=False)
     favorite_company = db.relationship('Favorite', backref='users_favorite', lazy=True)
-    hired_company = db.relationship('Hirings', backref='users_hired', lazy=True)
+    hired_company = db.relationship('Hirings', backref='users_hiring', lazy=True)
 
     image = db.relationship('Image', backref='user', uselist=False) # Relación uno a uno con Image
 

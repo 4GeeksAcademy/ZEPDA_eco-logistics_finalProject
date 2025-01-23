@@ -507,12 +507,12 @@ def remove_favorite():
 
 # #***********************************CONTRATACIONES***********************************************
 
-@api.route('/hirings', methods=['POST'])
+@api.route("/hirings", methods=["POST"])
 def add_hiring():
     body = request.get_json()
     user_id = body.get("user_id")
     company_id = body.get("company_id")
-
+    
     hiring = Hirings(user_id=user_id, company_id=company_id)
     db.session.add(hiring)
     db.session.commit()
@@ -520,22 +520,29 @@ def add_hiring():
     return jsonify(hiring.serialize()), 201
 
 
-@api.route('/hirings', methods=['GET'])
-def get_hirings():
-    hirings = Hirings.query.all()
-    hirings_serialized = [hiring.serialize() for hiring in hirings]
-    return jsonify(hirings_serialized), 200
+@api.route("/hirings/<int:id>", methods=["GET"])
+def get_hirings(id):
+    hirings = db.session.query(Hirings).join(Company).filter(Hirings.user_id==id).all()
+    hired_ids = [hirings.company_id for hirings in hirings]
+    companies = Company.query.filter(Company.id.in_(hired_ids)).all()
+    companies_serialize = [company.serialize() for company in companies]
+    return jsonify(companies_serialize), 200
 
 
-@api.route('/hirings/<int:id>', methods=['DELETE'])
-def remove_hiring(id):
-    hiring = Hirings.query.get(id)
-    if not hiring:
-        return jsonify({"message": "Hiring not found"}), 404
 
-    db.session.delete(hiring)
+@api.route("/hirings/delete", methods=["POST"])   
+def remove_hiring():
+    data = request.get_json()
+    company_id = data.get('company_id')
+    user_id = data.get('user_id')
+    
+    hirings = Hirings.query.filter_by(company_id=company_id, user_id=user_id).first()
+    if not hirings:
+        return jsonify({"message": "hiring not found"}), 404
+
+    db.session.delete(hirings)
     db.session.commit()
-    return jsonify({"message": "Hiring removed successfully"}), 200 
+    return jsonify({"message": "hiring removed successfully"}), 200
 
 
 
