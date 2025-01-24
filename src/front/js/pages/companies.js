@@ -13,7 +13,7 @@ export const Companies = () => {
             case 'packaging':
                 return 'Packaging';
             case 'transporte':
-                return 'Transporte';
+                return 'Transportes';
             case 'gestion-de-residuos':
                 return 'Gestión de Residuos';
             default:

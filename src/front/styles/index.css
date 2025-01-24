@@ -65,7 +65,18 @@ h1, h2, h3, h4{
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center;
+    object-position: center center;
+  }
+
+  @media (max-width: 768px) {
+    .jumbotron-carousel {
+      height: 200px; /* Ajusta la altura para dispositivos móviles */
+    }
+  
+    .jumbotron-carousel .carousel-item img {
+      object-fit: cover; /* Mantén el enfoque */
+      object-position: center; /* Centra la imagen */
+    }
   }
   
 
@@ -137,13 +148,11 @@ footer{
 
 /* Contacto */
 
-.contacto-img-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.contacto-img{
+  width: 100%; 
   height: 400px;
-  overflow: hidden;
-  
+  object-fit: cover;
+  object-position: center;
 }
 
 .imagen-registro-empresa {
@@ -331,4 +340,38 @@ footer{
   background-color: #dcdcdc; 
   cursor: not-allowed;
 }
+.card-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2; /* Mostrar solo 3 líneas */
+  overflow: hidden;
+  font-size: 0.875rem;
+  flex-grow: 1;
+  text-overflow: ellipsis;
+}
+
+.imagen-contratado {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 25%; /* Asegura que la imagen ocupa 1/4 */
+}
+
+.imagen-hiring {
+  max-height: 100%; /* Asegura que la imagen no se salga */
+  max-width: 100%;
+}
+
+.info-hiring {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+}
+
+.check-delete-bar {
+  width: 100%;
+}
+
+
 

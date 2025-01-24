@@ -4,7 +4,7 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 import os
 import app
 from flask import Flask, Blueprint, request, jsonify, url_for, current_app
-from api.models import db, User, Company, Image, Favorite
+from api.models import Hirings, db, User, Company, Image, Favorite
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 import requests
@@ -231,7 +231,7 @@ def reset_password():
 
 @api.route('/news', methods=['GET'])
 def get_news():
-    url = "https://newsapi.org/v2/everything?q=sostenibilidad+medioambiental&apiKey=66922d250edf41b0be44aae6d0911a11&language=es"
+    url = "https://newsapi.org/v2/everything?q=sostenibilidad+medioambiental+empresas&apiKey=66922d250edf41b0be44aae6d0911a11&language=es"
     response = requests.request("GET", url)
     if response.status_code == 200:
         news_data = response.json()
@@ -372,11 +372,11 @@ def add_company():
     return jsonify(new_company.serialize()), 201
 
 
-@api.route('/initial-companies', methods=['GET'])
+@api.route('/initial-companies', methods=['POST'])
 def get_initial_companies():
-    with open('src/front/utils/mockData_Companies.json', 'r', encoding='utf-8') as file:
-        data = json.load(file)
-    
+    # with open('src/front/utils/mockData_Companies.json', 'r', encoding='utf-8') as file:
+    #     data = json.load(file)
+    data = request.get_json()
     # Desglosamos los datos en una lista única
     companies = []
     for sector_dict in data:
@@ -400,7 +400,7 @@ def get_initial_companies():
         db.session.add(new_company)
         db.session.commit()
 
-    return jsonify({"message": "Initial companies added"}), 201
+    return jsonify({companies}), 201
     
 
 if __name__ == '__main__':
@@ -479,15 +479,17 @@ def add_favorite():
     return jsonify(favorite.serialize()), 201
 
 
-@api.route("/favorites", methods=["GET"])
-def get_favorites():
-    favorites = Favorite.query.all()
-    favorites_serialized = [favorite.serialize() for favorite in favorites]
-    return jsonify(favorites_serialized), 200
+@api.route("/favorites/<int:id>", methods=["GET"])
+def get_favorites(id):
+    favorites = db.session.query(Favorite).join(Company).filter(Favorite.user_id==id).all()
+    favorited_ids = [favorite.company_id for favorite in favorites]
+    companies = Company.query.filter(Company.id.in_(favorited_ids)).all()
+    companies_serialize = [company.serialize() for company in companies]
+    return jsonify(companies_serialize), 200
 
 
 
-@api.route("/favorites/<int:id>", methods=["DELETE"])   
+@api.route("/favorites/delete", methods=["POST"])   
 def remove_favorite():
     data = request.get_json()
     company_id = data.get('company_id')
@@ -500,6 +502,68 @@ def remove_favorite():
     db.session.delete(favorite)
     db.session.commit()
     return jsonify({"message": "Favorite removed successfully"}), 200
+
+
+
+# #***********************************CONTRATACIONES***********************************************
+
+@api.route("/hirings", methods=["POST"])
+def add_hiring():
+    body = request.get_json()
+    user_id = body.get("user_id")
+    company_id = body.get("company_id")
+    
+    hiring = Hirings(user_id=user_id, company_id=company_id)
+    db.session.add(hiring)
+    db.session.commit()
+
+    return jsonify(hiring.serialize()), 201
+
+
+@api.route("/hirings/<int:id>", methods=["GET"])
+def get_hirings(id):
+    hirings = db.session.query(Hirings).join(Company).filter(Hirings.user_id==id).all()
+    hired_ids = [hirings.company_id for hirings in hirings]
+    companies = Company.query.filter(Company.id.in_(hired_ids)).all()
+    companies_serialize = [company.serialize() for company in companies]
+    return jsonify(companies_serialize), 200
+
+
+
+@api.route("/hirings/delete", methods=["POST"])   
+def remove_hiring():
+    data = request.get_json()
+    company_id = data.get('company_id')
+    user_id = data.get('user_id')
+    
+    hirings = Hirings.query.filter_by(company_id=company_id, user_id=user_id).first()
+    if not hirings:
+        return jsonify({"message": "hiring not found"}), 404
+
+    db.session.delete(hirings)
+    db.session.commit()
+    return jsonify({"message": "hiring removed successfully"}), 200
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # @api.route('/profile/companies', methods=['POST'])
