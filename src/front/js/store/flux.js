@@ -206,6 +206,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         }
       },
       registrarCompany: async (formData) => {
+        const store = getStore();
         try {
           const response = await fetch(process.env.BACKEND_URL + "api/companies/add", {
             method: "POST",
@@ -217,11 +218,19 @@ const getState = ({ getStore, getActions, setStore }) => {
           if (response.ok) {
             const data = await response.json();
             console.log("Company added:", data);
+
+            // Se agrega la empresa en su respectivo sector:
             const currentCompanies = getStore().companies;
-            setStore({
-              companies: [...currentCompanies, data],
-            });
-            return true;
+            const sector = data.sector;
+            console.log("Sector: ", sector, ";Current companies: ", currentCompanies);
+            // si no hay todavía empresas de dicho sector, se añade el sector a la estructura:
+            if (!store.companies[sector]) {
+              store.companies[sector] = [];
+            }
+            // Se almacena 'a mano' en el store: (usando el operador de propagación '...')
+            store.companies[sector] = [...store.companies[sector], data];
+            console.log("COMPANY ADDED TO STORE");
+            return data.id;
           } else {
             console.error("Failed to add company");
             return false;

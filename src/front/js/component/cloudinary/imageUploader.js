@@ -84,7 +84,7 @@ export const ImageUploader = ({ type, id, handleUpdate, setImage, image = null }
     return (
         <div className='row'>
             <div className='col-9'>
-                <p className="text-start mb-2">Imagen de Perfil</p> 
+                <p className="text-start mb-2">Imagen de {type.toUpperCase()}</p> 
                 <form onSubmit={handleUpload}>
                     <input className="form-control form-control-sm mb-3" ref={fileInputRef} type="file" onChange={handleFileChange} />
                     <div className="float-end mb-2">
