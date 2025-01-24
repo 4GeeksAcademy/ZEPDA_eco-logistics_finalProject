@@ -27,12 +27,12 @@ export const UserPanel = ({ user }) => {
 
     return (
         <>
-            <div className="col-6 p-3"> 
+            <div className="col-12 col-md-6 p-3"> 
                 <h1 className="text-start fw-normal fs-5 mb-3">BIENVENIDO {user.nombre.toUpperCase()}</h1>
                 <div className="card rounded-2 shadow" style={{ height: '50vh' }}> 
                     <div className="card-header border-0 bg-white rounded-2 rounded-bottom-0 border-bottom"> 
                         <div className='row p-3'>
-                            <div className='col-4'>
+                            <div className='col-12 col-md-4'>
                                 <img src={imageUrl || userPic} className="imgcontainer rounded-circle border border-2 shadow-sm" alt="user-image" style={{width:150,height:150}}/>
                             </div>
                             <div className='col-8 my-auto'>

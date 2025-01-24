@@ -18,14 +18,14 @@ export const FavoritesPanel = () => {
 
     return (
         <>
-            <div className="col-12 p-3">
+            <div className="p-3">
                 <h1 className="text-start fw-normal fs-5 mb-3">FAVORITOS</h1>
                 <div className="container rounded-2 shadow" style={{ width: '100%' }}>
                     <div className="row row-cols-auto">
                         {
                             store.favoriteCompanies && store.favoriteCompanies.length > 0 ? (
                                 store.favoriteCompanies.map((company, index) => (
-                                    <div className="col-4 p-3" key={index}>
+                                    <div className="col-12 col-md-4 p-3" key={index}>
                                         <CompanyCard company={company} favoritedItem={true} />
                                     </div>
                                 ))
