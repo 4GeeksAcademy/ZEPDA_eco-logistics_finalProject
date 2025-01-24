@@ -48,8 +48,7 @@ export const HiringContration = ({ handleClose, company }) => {
                             setSuccess("");
                         }
                     );
-
-               
+                                   
                 setTimeout(() => {
                     setSuccess("");
                     handleClose();
