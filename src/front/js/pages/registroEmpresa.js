@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import imagenRegistro from "../../img/zepda-web-img/registro_empresa.webp";
 import { Context } from '../store/appContext';
 import { ImageUploader } from "../component/cloudinary/imageUploader";
@@ -20,12 +20,19 @@ export const RegistroEmpresa = (backUpImage = null) => {
     const [successMessage, setSuccessMessage] = useState(""); // Estado para el mensaje de éxito
 
     // Datos de la imagen
+    const childRef = useRef();
     const [updateImage, setUpdateImage] = useState(false);
     const [imageData, setImageData] = useState({ 
         imageID: '', 
         publicID: '', 
         imageURL: ''
     });
+
+    const callChildFunction_clearImage = () => {
+        if (childRef.current) {
+          childRef.current.clearImage();
+        }
+    };
 
     useEffect(() => {
         // console.log(backUpImage, show);
@@ -70,6 +77,7 @@ export const RegistroEmpresa = (backUpImage = null) => {
         const companyID = await actions.registrarCompany(formData);
         console.log("New company ID: ", companyID);
         await handleUploadImage(true, companyID);
+        callChildFunction_clearImage(); // Función forward: limpia el input y la imagen
         // Reset form
         setFormData({
             nombre: "",
@@ -135,7 +143,7 @@ export const RegistroEmpresa = (backUpImage = null) => {
 
                     <div className="container mt-4 col-12 col-md-8 card shadow">
                         <h4 className="mt-2 text-center">FORMULARIO DE REGISTRO</h4>
-                        <ImageUploader type="company" id={undefined} handleUpdate={setUpdateImage} setImage={setImageData} image={imageData} />
+                        <ImageUploader ref={childRef} type="company" id={undefined} handleUpdate={setUpdateImage} setImage={setImageData} image={imageData} />
                         <form onSubmit={handleSubmit}>                            
                             <input type="text" className="form-control mt-3" name="nombre" value={formData.nombre} onChange={handleChange} placeholder="Nombre de la Empresa" required />
                             <input type="email" className="form-control mt-3" name="email" value={formData.email} onChange={handleChange} placeholder="Correo Electrónico" required />

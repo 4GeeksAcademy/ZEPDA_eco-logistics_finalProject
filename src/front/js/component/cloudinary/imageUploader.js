@@ -1,12 +1,16 @@
-import React, { useRef, useEffect, useState, useContext } from 'react';
+import React, { useRef, useEffect, useState, useContext, forwardRef, useImperativeHandle } from 'react';
 import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { Context } from "../../store/appContext";
 
-export const ImageUploader = ({ type, id, handleUpdate, setImage, image = null }) => {
+export const ImageUploader = forwardRef(({ type, id, handleUpdate, setImage, image = nul}, ref) => {
     const { actions } = useContext(Context);
     const [file, setFile] = useState(null);
     const [fileUploaded, setFileUploaded] = useState(false);
     const fileInputRef = useRef(null);
+
+    useImperativeHandle(ref, () => ({
+        clearImage
+    }));
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
@@ -51,9 +55,9 @@ export const ImageUploader = ({ type, id, handleUpdate, setImage, image = null }
         }
     };
 
-    const handleTrashImage = async (e) => {
+    const clearImage = () => {
         if (fileUploaded) {
-            resetImage();
+            // resetImage();
             setFile(null);
             if (fileInputRef.current) {
                 fileInputRef.current.value = '';
@@ -64,7 +68,15 @@ export const ImageUploader = ({ type, id, handleUpdate, setImage, image = null }
             publicID: '',
             imageURL: ''
         });
-        handleUpdate(true);
+        handleUpdate(false);
+    }
+
+    const handleTrashImage = async (e) => {
+        if (fileUploaded) {
+            resetImage();
+        }
+        clearImage(); // Limpia el input 
+        handleUpdate(true); // Borra la imagen
     };
 
     useEffect(() => {
@@ -112,4 +124,4 @@ export const ImageUploader = ({ type, id, handleUpdate, setImage, image = null }
             </div>
         </div>
     );
-};
+});
