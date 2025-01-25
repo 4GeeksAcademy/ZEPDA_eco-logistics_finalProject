@@ -364,7 +364,7 @@ def add_company():
         direccion=data['direccion'],
         descripcion=data['descripcion'],
         cif=data['cif'],
-        imagen_url=data['imagen']
+        imagen_url=None
     )
     
     db.session.add(new_company)

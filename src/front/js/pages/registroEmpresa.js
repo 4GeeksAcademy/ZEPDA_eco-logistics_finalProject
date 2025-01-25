@@ -14,8 +14,8 @@ export const RegistroEmpresa = ({companyImage}) => {
         cif: "",
         web: "",
         sector: "",
-        descripcion: "",
-        imagen: ""
+        descripcion: ""
+        // imagen: ""
     });
     const [successMessage, setSuccessMessage] = useState(""); // Estado para el mensaje de éxito
 
@@ -55,17 +55,17 @@ export const RegistroEmpresa = ({companyImage}) => {
     };
    
 
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setFormData({
-                ...formData,
-                imagen: reader.result
-            });
-        };
-        reader.readAsDataURL(file);
-    };
+    // const handleFileChange = (e) => {
+    //     const file = e.target.files[0];
+    //     const reader = new FileReader();
+    //     reader.onloadend = () => {
+    //         setFormData({
+    //             ...formData,
+    //             imagen: reader.result
+    //         });
+    //     };
+    //     reader.readAsDataURL(file);
+    // };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -83,7 +83,7 @@ export const RegistroEmpresa = ({companyImage}) => {
             cif: "",
             web: "",
             sector: "",
-            descripcion: "",
+            descripcion: ""
         });
         if (companyID) {
             setSuccessMessage("Empresa registrada con éxito. ¡Gracias por formar parte de nuestro equipo!");

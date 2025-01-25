@@ -10,9 +10,14 @@ export const CompanyCard = ({ company, favoritedItem = false }, onRemoveFavorite
     const [isFavorite, setIsFavorite] = useState(favoritedItem);
 
     useEffect(() => {
+        console.log(company.image.url);
         // Detecta el cambio en actions.updateUser()
         if (company.image !== null && company.image !== undefined) {
-            setImageUrl(company.image.url); 
+            if (company.image.url.includes('cloudinary')) {
+                setImageUrl(company.image.url); 
+            } else {
+                setImageUrl(process.env.RUTA_LOGOS + `${imageUrl}` + "?raw=true");
+            }                 
         } else {
             setImageUrl('');
         }
@@ -47,7 +52,7 @@ export const CompanyCard = ({ company, favoritedItem = false }, onRemoveFavorite
         <>
             <div className="card rounded-2 shadow">
                 <div className="card-header border-0 bg-white rounded-2 rounded-bottom">
-                    <img className="img-fluid rounded mx-auto d-block" src={imageUrl ? process.env.RUTA_LOGOS + `${imageUrl}` + "?raw=true" : "../zepdalogo.png"} alt={'logo: ' + imageUrl ? process.env.RUTA_LOGOS + `${imageUrl}` + "?raw=true" : "../zepdalogo.png"} style={{ height: '10vh' }} />
+                    <img className="img-fluid rounded mx-auto d-block" src={imageUrl ? imageUrl : "../zepdalogo.png"} alt={'logo: ' + imageUrl ? imageUrl : "../zepdalogo.png"} style={{ height: '10vh' }} />
                 </div>
                 <div className="card-body bg-light pt-0 rounded-2 rounded-top rounded-top-0">
                     <div className="d-flex justify-content-between">
