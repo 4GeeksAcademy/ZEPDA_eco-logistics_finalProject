@@ -2,14 +2,24 @@ import React, { useRef, useEffect, useState, useContext, forwardRef, useImperati
 import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { Context } from "../../store/appContext";
 
-export const ImageUploader = forwardRef(({ type, id, handleUpdate, setImage, image = nul}, ref) => {
+export const ImageUploader = forwardRef(({ type, backUpImage = null}, ref) => {
     const { actions } = useContext(Context);
     const [file, setFile] = useState(null);
     const [fileUploaded, setFileUploaded] = useState(false);
     const fileInputRef = useRef(null);
 
+    // Datos de la imagen
+    const [updateImage, setUpdateImage] = useState(false);
+    const [imageData, setImageData] = useState({ 
+        imageID: '', 
+        publicID: '', 
+        imageURL: ''
+    });
+
     useImperativeHandle(ref, () => ({
-        clearImage
+        clearImage,
+        handleUploadImage,
+        setInitialImage
     }));
 
     const handleFileChange = (e) => {
@@ -23,7 +33,7 @@ export const ImageUploader = forwardRef(({ type, id, handleUpdate, setImage, ima
 
     const resetImage = async () => {
         try {
-            await actions.deleteImage(image.publicID);
+            await actions.deleteImage(imageData.publicID);
         } catch (error) {
             alert('Error borrando la imagen anterior.');
         }
@@ -39,14 +49,14 @@ export const ImageUploader = forwardRef(({ type, id, handleUpdate, setImage, ima
             }
             try {
                 const response = await actions.uploadImage(file, type);
-                setImage({
+                setImageData({
                     imageID: response.id,
                     publicID: response.public_id,
                     imageURL: response.url
                 });
                 console.log(response);
                 setFile(null);
-                handleUpdate(true);
+                setUpdateImage(true);
                 setFileUploaded(true); // Se ha subido una imagen al servidor
                 // alert('¡Imagen subida exitosamente!');
             } catch (error) {
@@ -63,12 +73,12 @@ export const ImageUploader = forwardRef(({ type, id, handleUpdate, setImage, ima
                 fileInputRef.current.value = '';
             }
         }
-        setImage({
+        setImageData({
             imageID: '',
             publicID: '',
             imageURL: ''
         });
-        handleUpdate(false);
+        setUpdateImage(false);
     }
 
     const handleTrashImage = async (e) => {
@@ -76,10 +86,49 @@ export const ImageUploader = forwardRef(({ type, id, handleUpdate, setImage, ima
             resetImage();
         }
         clearImage(); // Limpia el input 
-        handleUpdate(true); // Borra la imagen
+        setUpdateImage(true); // Borra la imagen
     };
 
+    // Consecuencia final de la actualización de imagen
+    const handleUploadImage = async (saveImage, modelID) => {
+        // Si ha modificado la image: sube una nueva o borra la actual
+        console.log('Revisando imagen...', updateImage);
+        if (updateImage) {
+            console.log('¡Actualizando imagen!', saveImage);
+            // Si presiona en 'Guardar y salir'
+            if (saveImage) {
+                console.log('asociando imagen', imageData.imageID || null,' a ', type, ': ', modelID || null);
+                await actions.associateImage(type, modelID, imageData.imageID);
+            }
+            // Si presiona en 'Cancelar'
+            else {
+                if (imageData.publicID) {
+                    console.log('borrando imagen descartada', imageData.publicID);
+                    await actions.deleteImage(imageData.publicID);
+                } 
+            }
+        }
+    }
+
+    const setInitialImage = () => {
+        // Valores de imagen previa si existen:
+        if (backUpImage !== null) {
+            setImageData({ 
+                imageID: backUpImage.id, 
+                publicID: backUpImage.public_id, 
+                imageURL: backUpImage.url
+            });
+        } else {
+            setImageData({ 
+                imageID: '', 
+                publicID: '', 
+                imageURL: ''
+            });
+        }
+    }
+
     useEffect(() => {
+        // Control para el refresco de ventana:
         const handleBeforeUnload = (event) => {
             event.preventDefault();
             handleTrashImage();  // Llama a tu método de limpieza
@@ -103,7 +152,7 @@ export const ImageUploader = forwardRef(({ type, id, handleUpdate, setImage, ima
                         {file &&
                             <Button type="submit" variant="success" disabled={!file} className='px-3 py-1 m-0 fs-6'>Subir Imagen</Button>
                         }
-                        {image.imageURL &&
+                        {imageData.imageURL &&
                             <OverlayTrigger
                                 overlay={
                                     <Tooltip id="button-tooltip">
@@ -111,7 +160,7 @@ export const ImageUploader = forwardRef(({ type, id, handleUpdate, setImage, ima
                                     </Tooltip>
                                 }
                             >
-                                <Button variant="danger" disabled={!image.imageURL} className='px-3 py-1 ms-2' onClick={handleTrashImage}><i className="fa-solid fa-trash fs-6 p-0"></i></Button>
+                                <Button variant="danger" disabled={!imageData.imageURL} className='px-3 py-1 ms-2' onClick={handleTrashImage}><i className="fa-solid fa-trash fs-6 p-0"></i></Button>
                             </OverlayTrigger>
                         }
                     </div>
@@ -119,7 +168,7 @@ export const ImageUploader = forwardRef(({ type, id, handleUpdate, setImage, ima
             </div>
             <div className='col-3 mb-3'>
                 <div className="imgcontainer rounded-circle border border-2 shadow-sm mt-2" style={{ height: '100px', width: '100px' }}>
-                    <img className="imgservicios" src={image.imageURL || "rigo-baby.jpg"} alt="Imagen" />
+                    <img className="imgservicios" src={imageData.imageURL || "rigo-baby.jpg"} alt="Imagen" />
                 </div>
             </div>
         </div>

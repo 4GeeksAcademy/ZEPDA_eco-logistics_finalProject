@@ -3,7 +3,7 @@ import imagenRegistro from "../../img/zepda-web-img/registro_empresa.webp";
 import { Context } from '../store/appContext';
 import { ImageUploader } from "../component/cloudinary/imageUploader";
 
-export const RegistroEmpresa = (backUpImage = null) => {
+export const RegistroEmpresa = ({companyImage}) => {
     const {actions} = useContext(Context);
     const [formData, setFormData] = useState({
         nombre: "",
@@ -19,36 +19,31 @@ export const RegistroEmpresa = (backUpImage = null) => {
     });
     const [successMessage, setSuccessMessage] = useState(""); // Estado para el mensaje de éxito
 
-    // Datos de la imagen
+    // Referencias para <imageUploader />
     const childRef = useRef();
-    const [updateImage, setUpdateImage] = useState(false);
-    const [imageData, setImageData] = useState({ 
-        imageID: '', 
-        publicID: '', 
-        imageURL: ''
-    });
 
     const callChildFunction_clearImage = () => {
         if (childRef.current) {
-          childRef.current.clearImage();
+            childRef.current.clearImage();
         }
     };
 
-    useEffect(() => {
-        // console.log(backUpImage, show);
-        if (backUpImage !== null) {
-            setImageData({ 
-                imageID: backUpImage.id, 
-                publicID: backUpImage.public_id, 
-                imageURL: backUpImage.url
-            });
-        } else {
-            setImageData({ 
-                imageID: '', 
-                publicID: '', 
-                imageURL: ''
-            });
+    const callChildFunction_handleUploadImage = async (saveImage, modelID) => {
+        if (childRef.current) {
+            await childRef.current.handleUploadImage(saveImage, modelID);
         }
+    };
+
+    const callChildFunction_setInitialImage = () => {
+        if (childRef.current) {
+            childRef.current.setInitialImage();
+        }
+    };
+
+    // -----------
+
+    useEffect(() => {
+        callChildFunction_setInitialImage();
     }, [])
 
     const handleChange = (e) => {
@@ -76,7 +71,7 @@ export const RegistroEmpresa = (backUpImage = null) => {
         e.preventDefault();
         const companyID = await actions.registrarCompany(formData);
         console.log("New company ID: ", companyID);
-        await handleUploadImage(true, companyID);
+        await callChildFunction_handleUploadImage(true, companyID);
         callChildFunction_clearImage(); // Función forward: limpia el input y la imagen
         // Reset form
         setFormData({
@@ -95,27 +90,6 @@ export const RegistroEmpresa = (backUpImage = null) => {
         }
         window.scrollTo(0, 0);
     };
-
-    // Consecuencia final de la actualización de imagen
-    const handleUploadImage = async (saveImage, companyID) => {
-        // Si ha modificado la image: sube una nueva o borra la actual
-        console.log('Revisando imagen...', updateImage);
-        if (updateImage) {
-            console.log('¡Actualizando imagen!', saveImage);
-            // Si presiona en 'Guardar y salir'
-            if (saveImage) {
-                console.log('asociando imagen', imageData.imageID || null,' a empresa', companyID || null);
-                await actions.associateImage('company', companyID, imageData.imageID);
-            }
-            // Si presiona en 'Cancelar'
-            else {
-                if (imageData.publicID) {
-                    console.log('borrando imagen descartada', imageData.publicID);
-                    await actions.deleteImage(imageData.publicID);
-                } 
-            }
-        }
-    }
 
     return (
         <>
@@ -143,7 +117,7 @@ export const RegistroEmpresa = (backUpImage = null) => {
 
                     <div className="container mt-4 col-12 col-md-8 card shadow">
                         <h4 className="mt-2 text-center">FORMULARIO DE REGISTRO</h4>
-                        <ImageUploader ref={childRef} type="company" id={undefined} handleUpdate={setUpdateImage} setImage={setImageData} image={imageData} />
+                        <ImageUploader ref={childRef} type="company" id={undefined} backUpImage={companyImage} />
                         <form onSubmit={handleSubmit}>                            
                             <input type="text" className="form-control mt-3" name="nombre" value={formData.nombre} onChange={handleChange} placeholder="Nombre de la Empresa" required />
                             <input type="email" className="form-control mt-3" name="email" value={formData.email} onChange={handleChange} placeholder="Correo Electrónico" required />
@@ -158,8 +132,12 @@ export const RegistroEmpresa = (backUpImage = null) => {
                                 <option value="Transportes">Transporte</option>
                                 <option value="Gestión de Residuos">Gestión de residuos</option>
                             </select>
+                            {/* 
+                            DEPRECATED: 
                             <label htmlFor="logo" className="form-label mt-3">Logotipo</label>
-                            <input type="file" className="form-control mt-3" id="logo" name="logo" accept="image/png, image/jpeg" onChange={handleFileChange} />
+                            <input type="file" className="form-control mt-3" id="logo" name="logo" accept="image/png, image/jpeg" onChange={handleFileChange} /> 
+                            */}
+                            <hr />
                             <textarea className="form-control mt-3" name="descripcion" value={formData.descripcion} onChange={handleChange} rows="5" placeholder="Describe detalladamente las funciones de tu empresa" required></textarea>
                             <button type="submit" className="btn btn-success m-3">Enviar</button>
                         </form>
