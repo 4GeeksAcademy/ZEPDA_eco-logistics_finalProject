@@ -1,4 +1,4 @@
- {
+{
 	"name": "react-hello-webapp",
 	"engines": {
 		"node": "16.x"
@@ -79,6 +79,7 @@
 		"axios": "^1.7.9",
 		"bootstrap": "^5.3.3",
 		"emailjs-com": "^3.2.0",
+		"google-maps-react": "^2.0.6",
 		"jwt-decode": "^4.0.0",
 		"prop-types": "^15.6.1",
 		"react": "^16.8.4",

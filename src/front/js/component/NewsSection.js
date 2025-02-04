@@ -5,42 +5,41 @@ import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 export const NewsSection = () => {
   const { actions, store } = useContext(Context);
   const [loading, setLoading] = useState(true);
-  const [currentIndex, setCurrentIndex] = useState(0); // Para gestionar el índice actual de las noticias a mostrar
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     actions.fetchNews(setLoading);
   }, []);
 
   useEffect(() => {
-    // Cambiar de noticias automáticamente cada 5 segundos
     const interval = setInterval(() => {
-      nextSlide(); // Llamamos a nextSlide para cambiar el índice
+      nextSlide();
     }, 12000);
 
-    // Limpiar el intervalo al desmontarse el componente
     return () => clearInterval(interval);
-  }, [currentIndex]);
+  }, []);
 
-  // Función para avanzar al siguiente conjunto de 4 noticias
   const nextSlide = () => {
-    if (currentIndex + 4 < store.news.length) {
-      setCurrentIndex(currentIndex + 4);
-    } else {
-      setCurrentIndex(0); // Si llegamos al final, volvemos al principio
-    }
+    setCurrentIndex(prevIndex => {
+      const newIndex = prevIndex + 4;
+      return newIndex < store.news.length ? newIndex : 0;
+    });
   };
 
-  // Función para retroceder al conjunto anterior de 4 noticias
   const prevSlide = () => {
-    if (currentIndex - 4 >= 0) {
-      setCurrentIndex(currentIndex - 4);
-    } else {
-      setCurrentIndex(store.news.length - 4); // Si estamos al principio, vamos al final
-    }
+    setCurrentIndex(prevIndex => {
+      const newIndex = prevIndex - 4;
+      return newIndex >= 0 ? newIndex : store.news.length - 4;
+    });
   };
 
-  // Imagen por defecto si no se carga la original
-  const defaultImage = "https://via.placeholder.com/200";
+  const defaultimgs = 'https://example.com/path/to/default-image.jpg';
+  // Manejador de error para la imagen
+  const handleImageError = (e) => {
+    // Usamos una URL de imagen predeterminada en caso de error
+    e.target.src = defaultimgs;
+    e.target.alt = "Imagen no disponible"; // Texto alternativo
+  };
 
   return (
     <div className="container mt-5 news-section position-relative">
@@ -51,8 +50,8 @@ export const NewsSection = () => {
         ) : store.news.length > 0 ? (
           <div className="row">
             {/* Mostrar 4 noticias por vez */}
-            {store.news.slice(currentIndex, currentIndex + 4).map((article, index) => (
-              <div className="col-md-3 mb-4" key={article.title}>
+            {store.news.slice(currentIndex, Math.min(currentIndex + 4, store.news.length)).map((article, index) => (
+              <div className="col-md-3 mb-4" key={`article.title-${index}`}>
                 <div className="card h-100">
                   {/* Link a la fuente completa del artículo */}
                   <a
@@ -63,14 +62,14 @@ export const NewsSection = () => {
                   >
                     <div className="overflow-hidden">
                       <img
-                        src={article.urlToImage || defaultImage} // Usamos la imagen por defecto si no hay imagen
+                        src={article.urlToImage || defaultimgs}
                         className="card-img-top img-fluid"
                         alt={`news-${index}`}
+                        onError={handleImageError} // Aquí llamamos a la función que maneja el error
                         style={{
-                          objectFit: "cover", // Asegura que la imagen no se deforme
-                          height: "200px", // Fija la altura de la imagen
+                          objectFit: "cover",
+                          height: "200px",
                         }}
-                        onError={(e) => { e.target.src = defaultImage; }} // Si la imagen falla, se carga la imagen por defecto
                       />
                     </div>
                     <div className="card-body d-flex flex-column">

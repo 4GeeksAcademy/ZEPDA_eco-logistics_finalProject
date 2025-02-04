@@ -189,7 +189,20 @@ def request_reset_password():
             sender=sender_email,
             recipients=[email]
         )
-        msg.html = f'<p>Haz clic para restablecer la contraseña: <a href="{reset_link}">Restablecer contraseña</a></p>'
+        msg.html = f"""
+    <html>
+        <body style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; text-align: center;">
+            <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                <h2 style="color: #333333;">Restablecimiento de Contraseña</h2>
+                <p style="color: #555555; font-size: 16px;">Hemos recibido una solicitud para restablecer tu contraseña. Si no solicitaste este cambio, puedes ignorar este correo.</p>
+                <p style="color: #555555; font-size: 16px;">Para restablecer tu contraseña, haz clic en el siguiente enlace:</p>
+                <a href="{reset_link}" style="display: inline-block; background-color: #4CAF50; color: white; padding: 15px 30px; font-size: 18px; text-decoration: none; border-radius: 5px; margin-top: 20px;">Restablecer Contraseña</a>
+                <p style="color: #888888; font-size: 14px; margin-top: 20px;">Este enlace será válido por 5 minutos.</p>
+                <p style="color: #888888; font-size: 14px;">Si no solicitaste este cambio, puedes ignorar este correo.</p>
+            </div>
+        </body>
+    </html>
+"""
         mail.send(msg)
 
         return jsonify({"message": "Correo enviado exitosamente"})

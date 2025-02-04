@@ -24,7 +24,6 @@ export const LoginRegisterModal = ({ showModal, handleCloseModal, actions }) => 
   const [isFormValid, setIsFormValid] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showRegistrationModal, setShowRegistrationModal] = useState(false);
-  const [loginAttemts,setLoginAttempts] = useState(0);
   const [showForgotPassword,setShowForgotPassword] = useState(false);
   const navigate = useNavigate();
 
@@ -60,7 +59,6 @@ export const LoginRegisterModal = ({ showModal, handleCloseModal, actions }) => 
       setErrorMessage("");
       setSuccessMessage("");
       setIsLogin(true);
-      setLoginAttempts(0);
     }
   }, [showModal]);
 
@@ -97,7 +95,6 @@ export const LoginRegisterModal = ({ showModal, handleCloseModal, actions }) => 
         navigate("/dashboard-user");
       },);
     } else {
-      setLoginAttempts((prev) => prev + 1);
       setErrorMessage("Usuario o contraseña incorrectos.");
     }
   };
@@ -265,14 +262,12 @@ export const LoginRegisterModal = ({ showModal, handleCloseModal, actions }) => 
   <Button variant="secondary" type="submit" disabled={!isFormValid}>
     Iniciar sesión
   </Button>
-  {loginAttemts >= 3 && (
     <span
       style={{ cursor: 'pointer', textDecoration: 'underline' }}
       onClick={() => setShowForgotPassword(true)}
     >
       ¿Olvidaste tu contraseña?
     </span>
-  )}
 </div>
 
             </form>
