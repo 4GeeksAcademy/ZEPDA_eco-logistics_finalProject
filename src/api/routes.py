@@ -231,7 +231,7 @@ def reset_password():
 
 @api.route('/news', methods=['GET'])
 def get_news():
-    url = "https://newsapi.org/v2/everything?q=sostenibilidad+medioambiental&apiKey=66922d250edf41b0be44aae6d0911a11&language=es"
+    url = "https://newsapi.org/v2/everything?q=sostenibilidad+medioambiental+empresas&apiKey=66922d250edf41b0be44aae6d0911a11&language=es"
     response = requests.request("GET", url)
     if response.status_code == 200:
         news_data = response.json()
@@ -364,7 +364,7 @@ def add_company():
         direccion=data['direccion'],
         descripcion=data['descripcion'],
         cif=data['cif'],
-        imagen_url=data['imagen']
+        imagen_url=None
     )
     
     db.session.add(new_company)

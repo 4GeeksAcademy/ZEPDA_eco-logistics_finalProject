@@ -27,12 +27,12 @@ export const UserPanel = ({ user }) => {
 
     return (
         <>
-            <div className="col-6 p-3"> 
+            <div className="col-12 col-md-6 p-3"> 
                 <h1 className="text-start fw-normal fs-5 mb-3">BIENVENIDO {user.nombre.toUpperCase()}</h1>
                 <div className="card rounded-2 shadow" style={{ height: '50vh' }}> 
                     <div className="card-header border-0 bg-white rounded-2 rounded-bottom-0 border-bottom"> 
                         <div className='row p-3'>
-                            <div className='col-4'>
+                            <div className='col-12 col-md-4'>
                                 <img src={imageUrl || userPic} className="imgcontainer rounded-circle border border-2 shadow-sm" alt="user-image" style={{width:150,height:150}}/>
                             </div>
                             <div className='col-8 my-auto'>
@@ -42,9 +42,9 @@ export const UserPanel = ({ user }) => {
                             </div>
                         </div>
                     </div> 
-                    <div className="card-body bg-light pt-0 rounded-2 rounded-top rounded-top-0 pb-2"> 
+                    <div className="card-body bg-light pt-0 rounded-2 rounded-top-0 pb-1 d-flex flex-column justify-content-between"> 
                         <p className="mt-2 text-start">{user.descripcion || mockDesc}</p>
-                        <div className="d-flex justify-content-between position-absolute bottom-0 w-100 start-0 px-3 pb-1">
+                        <div className="d-flex justify-content-between">
                             <p className="card-text m-0 text-secondary text-start">Usuario desde {user.admission_day || getStringDate()}</p> 
                             <a href="#" className="text-success float-end" onClick={(e) => { e.preventDefault(); handleOpenModal(); }}>
                                 Editar usuario
@@ -54,7 +54,7 @@ export const UserPanel = ({ user }) => {
                 </div>
             </div>
 
-            <EditUser show={showModal} openModal={handleOpenModal} closeModal={handleCloseModal} backUpImage={user.image} />
+            <EditUser show={showModal} openModal={handleOpenModal} closeModal={handleCloseModal} userImage={user.image} />
         </>
     );
 };

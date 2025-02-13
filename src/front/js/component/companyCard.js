@@ -1,17 +1,30 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom"; // Importa el hook useNavigate de React Router
+
 export const CompanyCard = ({ company, favoritedItem = false }, onRemoveFavorite) => {
     const navigate = useNavigate();
+    const [imageUrl, setImageUrl] = useState('');
 
     const { actions, store } = useContext(Context);
     const [isFavorite, setIsFavorite] = useState(favoritedItem);
 
     useEffect(() => {
+        console.log(company.image.url);
+        // Detecta el cambio en actions.updateUser()
+        if (company.image !== null && company.image !== undefined) {
+            if (company.image.url.includes('cloudinary')) {
+                setImageUrl(company.image.url); 
+            } else {
+                setImageUrl(process.env.RUTA_LOGOS + `${imageUrl}` + "?raw=true");
+            }                 
+        } else {
+            setImageUrl('');
+        }
         // Verifica si esta empresa está en el array de favoritos
         const isFavorited = store.favoriteCompanies.some(fav => fav.id === company.id);
         setIsFavorite(isFavorited);
-    }, [store.favoriteCompanies, company.id]);
+    }, [store.favoriteCompanies, company.id, company.image]);
 
     const handleAddFavorite = (company, id) => {
         if (!isFavorite) {
@@ -39,7 +52,7 @@ export const CompanyCard = ({ company, favoritedItem = false }, onRemoveFavorite
         <>
             <div className="card rounded-2 shadow">
                 <div className="card-header border-0 bg-white rounded-2 rounded-bottom">
-                    <img className="img-fluid rounded mx-auto d-block" src={company.imagen_url ? process.env.RUTA_LOGOS + `${company.imagen_url}` + "?raw=true" : "../zepdalogo.png"} alt={'logo: ' + company.imagen_url ? process.env.RUTA_LOGOS + `${company.imagen_url}` + "?raw=true" : "../zepdalogo.png"} style={{ height: '10vh' }} />
+                    <img className="img-fluid rounded mx-auto d-block" src={imageUrl ? imageUrl : "../zepdalogo.png"} alt={'logo: ' + imageUrl ? imageUrl : "../zepdalogo.png"} style={{ height: '10vh' }} />
                 </div>
                 <div className="card-body bg-light pt-0 rounded-2 rounded-top rounded-top-0">
                     <div className="d-flex justify-content-between">

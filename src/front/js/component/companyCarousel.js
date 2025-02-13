@@ -62,7 +62,7 @@ export const CompanyCarousel = ({sector, isGrid}) => {
                             {
                                 sectorCompanies ? (
                                         sectorCompanies.map((company, index) => (
-                                            <div className="col-4 p-3" key={index}> 
+                                            <div className="col-8 col-md-4 p-3" key={index}> 
                                                 <CompanyCard company={company} />
                                             </div>
                                         )
